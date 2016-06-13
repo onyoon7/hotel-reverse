@@ -4,13 +4,32 @@ const eslint = require('gulp-eslint');
 const exec = require('child_process').exec;
 
 const paths = {
-  android: ['*.js'],
+  android: ['index.android.js'],
 };
 
 gulp.task('eslint', () =>
   gulp.src([paths.android[0], '!node_modules/**'])
   .pipe(eslint({
-    'parser': 'babel-eslint',
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "plugins": [
+        "react"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended"
+    ],
+    "rules": {
+        "indent": ["error", 2],
+        "quotes": ["error", "single"],
+        "comma-dangle": ["error", "only-multiline"],
+        "semi": ["error", "always", { "omitLastInOneLineBlock": true}]
+    }
   }))
   .pipe(eslint.format())
   .pipe(eslint.failAfterError())
