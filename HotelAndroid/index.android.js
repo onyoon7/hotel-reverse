@@ -9,36 +9,70 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  ListView,
 } from 'react-native';
+import Button from 'react-native-button';
+/*const DropDown = require('react-native-dropdown');*/
+//const {
+  //Select,
+  //Option,
+  //OptionList,
+  //updatePosition
+//} = DropDown;
 
 class HotelAndroid extends Component {
+  static defaultProps = {
+    ds: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2})
+  }
+
+  state = {
+    dataSource: this.props.ds.cloneWithRows(['지역', '체크인', '체크아웃', '객실수', '투숙객']),
+    location: ''
+  }
+
+/*  componentDidMount() {*/
+    //updatePosition(this.refs['SELECT1']);
+    //updatePosition(this.refs['OPTIONLIST']);
+  //}
+
+  //_getOptionList() {
+    //return this.refs['OPTIONLIST'];
+  //}
+
+  //_location(area) {
+    //this.setState({
+      //...this.state,
+      //location: area
+    //});
+  /*}*/
+
+  _handlePress() {
+    console.log('pressed!');
+  }
+
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          Welcome to React Native!
+          HOTEL REVERSE
         </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Shake or press menu button for dev menu
-        </Text>
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={(rowData) =>
+            <Text>{rowData}</Text>
+          }
+        />
+
+        <Button
+          style={{fontSize: 20, color: 'white'}}
+          containerStyle={{padding:10, height:45, overflow:'hidden', borderRadius:4, backgroundColor: 'green'}}
+          onPress={() => this._handlePress()}>
+          호텔 검색
+        </Button>
       </View>
     );
   }
-}
-
-const App = () => {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.welcome}>
-        Hello World!
-        Hoi!
-      </Text>
-    </View>
-  );
 }
 
 const styles = StyleSheet.create({
@@ -51,6 +85,7 @@ const styles = StyleSheet.create({
   welcome: {
     fontSize: 20,
     textAlign: 'center',
+    color: '#000',
     margin: 10,
   },
   instructions: {
@@ -60,4 +95,4 @@ const styles = StyleSheet.create({
   },
 });
 
-AppRegistry.registerComponent('HotelAndroid', () => App);
+AppRegistry.registerComponent('HotelAndroid', () => HotelAndroid);
