@@ -1,0 +1,22 @@
+# Basic settings
+language: node_js
+node_js:
+  - "4.4"
+
+# Test script options
+before_script:
+# - npm install -g gulp
+script: ./client/gulp ./server/gulp eslint
+
+# Notify CI results
+notifications:
+  email: false
+
+services :
+  - mongodb
+
+after_success:
+  console.log("💃  Congratulation!! You are succeed!!  - From. Travis")
+
+after_faile :
+  console.log("😭  OTL ... You are failed. Try again - From. Travis")
