@@ -1,0 +1,3 @@
+rootProject.name = 'HotelAndroid'
+
+include ':app'
