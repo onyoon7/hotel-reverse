@@ -26,7 +26,6 @@ gulp.task('eslint', () =>
     ],
     "rules": {
         "indent": ["error", 2],
-        "quotes": ["error", "single"],
         "comma-dangle": ["error", "only-multiline"],
         "semi": ["error", "always", { "omitLastInOneLineBlock": true}]
     }
