@@ -47,6 +47,20 @@ class HotelAndroid extends Component {
     });
   }
 
+  _adult(number) {
+    this.setState({
+      ...this.state,
+      adult: number
+    });
+  }
+
+  _child(number) {
+    this.setState({
+      ...this.state,
+      child: number
+    });
+  }
+
   _handlePress() {
     console.log('pressed!');
   }
@@ -88,6 +102,31 @@ class HotelAndroid extends Component {
             </Select>
           </View>
 
+          <View style={styles.rowContainer}>
+            <Text style={styles.label}>투숙객</Text>
+            <Select
+              width={50}
+              ref="SELECT3"
+              optionListRef={this._getOptionList.bind(this)}
+              defaultValue="성인수를 선택해주세요"
+              onSelect={this._adult.bind(this)}>
+              <Option>1</Option>
+              <Option>2</Option>
+              <Option>3</Option>
+            </Select>
+
+            <Select
+              width={50}
+              ref="SELECT4"
+              optionListRef={this._getOptionList.bind(this)}
+              defaultValue="아동수를 선택해주세요"
+              onSelect={this._child.bind(this)}>
+              <Option>1</Option>
+              <Option>2</Option>
+              <Option>3</Option>
+            </Select>
+          </View>
+
           <OptionList ref="OPTIONLIST"/>
         </View>
 
@@ -117,6 +156,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   label: {
+    width: 50,
     textAlign: 'left',
     margin: 10,
   },
