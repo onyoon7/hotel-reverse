@@ -6,14 +6,11 @@ node_js:
 # Test script options
 before_script:
 # - npm install -g gulp
-script: ./client/gulp ./server/gulp eslint
+script: cd server && gulp eslint
 
 # Notify CI results
 notifications:
   email: false
-
-services :
-  - mongodb
 
 after_success:
   console.log("💃  Congratulation!! You are succeed!!  - From. Travis")
