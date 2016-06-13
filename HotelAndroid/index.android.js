@@ -13,13 +13,11 @@ import {
   ListView,
 } from 'react-native';
 import Button from 'react-native-button';
-/*const DropDown = require('react-native-dropdown');*/
-//const {
-  //Select,
-  //Option,
-  //OptionList,
-  //updatePosition
-//} = DropDown;
+import DropDown, {
+  Select,
+  Option,
+  OptionList,
+} from 'react-native-selectme';
 
 class HotelAndroid extends Component {
   static defaultProps = {
@@ -31,21 +29,23 @@ class HotelAndroid extends Component {
     location: ''
   }
 
-/*  componentDidMount() {*/
-    //updatePosition(this.refs['SELECT1']);
-    //updatePosition(this.refs['OPTIONLIST']);
-  //}
+  _getOptionList() {
+    return this.refs['OPTIONLIST'];
+  }
 
-  //_getOptionList() {
-    //return this.refs['OPTIONLIST'];
-  //}
+  _location(area) {
+    this.setState({
+      ...this.state,
+      location: area
+    });
+  }
 
-  //_location(area) {
-    //this.setState({
-      //...this.state,
-      //location: area
-    //});
-  /*}*/
+  _roomNumber(number) {
+    this.setState({
+      ...this.state,
+      roomNumber: number
+    });
+  }
 
   _handlePress() {
     console.log('pressed!');
@@ -53,46 +53,77 @@ class HotelAndroid extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
+      <View style={{flex: 1}}>
+        <Text style={styles.appName}>
           HOTEL REVERSE
         </Text>
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={(rowData) =>
-            <Text>{rowData}</Text>
-          }
-        />
 
-        <Button
-          style={{fontSize: 20, color: 'white'}}
-          containerStyle={{padding:10, height:45, overflow:'hidden', borderRadius:4, backgroundColor: 'green'}}
-          onPress={() => this._handlePress()}>
-          호텔 검색
-        </Button>
+        <View style={{flex: 1}}>
+          <View style={styles.rowContainer}>
+            <Text style={styles.label}>지역</Text>
+            <Select
+              width={250}
+              ref="SELECT1"
+              optionListRef={this._getOptionList.bind(this)}
+              defaultValue="지역을 선택해주세요"
+              onSelect={this._location.bind(this)}>
+              <Option>서울</Option>
+              <Option>대전</Option>
+              <Option>대구</Option>
+              <Option>제주</Option>
+            </Select>
+          </View>
+
+          <View style={styles.rowContainer}>
+            <Text style={styles.label}>객실수</Text>
+            <Select
+              width={250}
+              ref="SELECT2"
+              optionListRef={this._getOptionList.bind(this)}
+              defaultValue="객실수를 선택해주세요"
+              onSelect={this._roomNumber.bind(this)}>
+              <Option>1</Option>
+              <Option>2</Option>
+              <Option>3</Option>
+            </Select>
+          </View>
+
+          <OptionList ref="OPTIONLIST"/>
+        </View>
+
+        <View style={{margin: 10}}>
+          <Button style={styles.button}
+            containerStyle={{padding:10, height:45, overflow:'hidden', borderRadius:4, backgroundColor: 'green'}}
+            onPress={() => this._handlePress()}>
+            호텔 검색
+          </Button>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  rowContainer: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    margin: 10,
   },
-  welcome: {
+  appName: {
     fontSize: 20,
     textAlign: 'center',
     color: '#000',
     margin: 10,
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  label: {
+    textAlign: 'left',
+    margin: 10,
   },
+  button: {
+    fontSize: 20,
+    color: 'white',
+  }
 });
 
 AppRegistry.registerComponent('HotelAndroid', () => HotelAndroid);
