@@ -5,16 +5,6 @@
 
 var db = require('../db');
 
-
-
-  app.post('/user/contract/', clientController.getContract);
-  app.delete('/user/contract/:userid/:contractid', clientController.cancelContract);
-  
-
-
-
-
-
 var userController = {
   singUp: function(req, res) {
     var client_ID = req.body.client_ID;
