@@ -9,7 +9,6 @@
     "react": "^15.1.0",
     "react-native": "0.27.2",
     "react-native-button": "^1.6.0",
-    "react-native-selectme": "^1.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^6.0.4",
