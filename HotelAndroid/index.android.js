@@ -12,9 +12,10 @@ import {
   View,
   DatePickerAndroid,
   TouchableWithoutFeedback,
+  TouchableNativeFeedback,
   Picker,
-  Item,
 } from 'react-native';
+const Item = Picker.Item;
 import Button from 'react-native-button';
 
 class HotelAndroid extends Component {
@@ -79,7 +80,7 @@ class HotelAndroid extends Component {
           HOTEL REVERSE
         </Text>
 
-        <View style={{flex: 1}}>
+        <View>
           <View style={styles.rowContainer}>
             <Text style={styles.label}>지역</Text>
             <Picker style={{width: 100}}
@@ -121,6 +122,7 @@ class HotelAndroid extends Component {
 
           <View style={styles.rowContainer}>
             <Text style={styles.label}>객실수</Text>
+
             <Button
               onPress={() => this._decRoomNumber()}>
               -&nbsp;
@@ -133,9 +135,9 @@ class HotelAndroid extends Component {
           </View>
         </View>
 
-        <View style={{margin: 10}}>
-          <Button style={styles.button}
-            containerStyle={{padding:10, height:45, overflow:'hidden', borderRadius:4, backgroundColor: 'green'}}
+        <View style={styles.rowContainer}>
+          <Button style={styles.searchBtnText}
+            containerStyle={styles.searchBtn}
             onPress={() => this._handlePress()}>
             호텔 검색
           </Button>
@@ -162,9 +164,22 @@ const styles = StyleSheet.create({
     width: 60,
     textAlign: 'left',
     margin: 10,
+    color: 'black',
   },
-  button: {
-    fontSize: 20,
+  searchBtn: {
+    width: 150,
+    padding:10,
+    height: 30,
+    overflow: 'hidden',
+    borderColor: 'black',
+    borderWidth: 2,
+    borderStyle: 'solid',
+    backgroundColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  searchBtnText: {
+    fontSize: 15,
     color: 'white',
   },
 });
