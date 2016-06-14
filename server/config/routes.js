@@ -112,8 +112,9 @@ module.exports = function (app, express) {
   app.post('/manager/signup', managerController.singUp);
   app.post('/manager/signin', managerController.signIn);
 
+  // startDate: yyyymmdd, endDate: yyyymmdd
   app.get('/manager/bidinfo', managerController.bidInfo);
-  app.post('/manager/bidinfo/:yyyymmdd/:yyyymmdd', managerController.bidInfoInterval);
+  app.post('/manager/bidinfo/:startDate/:endDate', managerController.bidInfoInterval);
 
   app.post('/manager/bid', managerController.bid);
   app.post('/manager/hotel', managerController.update);
@@ -121,13 +122,14 @@ module.exports = function (app, express) {
   
   // user(admin)
   app.get('/admin', adminController.home);
-  app.post('/admin/signin', adminController.singIn);
+  // app.post('/admin/signin', adminController.singIn);
   
-  app.delete('/admin/:userid', adminController.deleteUser);
+  // don't need I think, app.delete('/admin/:userid', adminController.deleteUser);
   app.delete('/admin/:hotelid', adminController.deleteHotel);
   
+  // startDate: yyyymmdd, endDate: yyyymmdd
   app.get('/admin/pendingbid', adminController.pendingBid);
-  app.post('/admin/bidinfo/:yyyymmdd/:yyyymmdd', adminController.contractedBid);
+  app.post('/admin/bidinfo/:startDate/:endDate', adminController.contractedBid);
 
   app.get('/admin/hotels', adminController.getHotels);
   app.post('/admin/hotels/:hotelid', adminController.getHotel);
