@@ -10,7 +10,6 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
   DatePickerAndroid,
   TouchableWithoutFeedback,
 } from 'react-native';
@@ -28,6 +27,7 @@ class HotelAndroid extends Component {
     checkinText: '체크인 날짜 선택',
     checkoutDate: new Date(),
     checkoutText: '체크아웃 날짜 선택',
+    roomNumber: 1,
   }
 
   _getOptionList() {
@@ -41,25 +41,22 @@ class HotelAndroid extends Component {
     });
   }
 
-  _roomNumber(number) {
-    this.setState({
-      ...this.state,
-      roomNumber: number
-    });
+  _incRoomNumber() {
+    if (this.state.roomNumber < 9) {
+      this.setState({
+        ...this.state,
+        roomNumber: this.state.roomNumber+1,
+      });
+    }
   }
 
-  _adult(number) {
-    this.setState({
-      ...this.state,
-      adult: number
-    });
-  }
-
-  _child(number) {
-    this.setState({
-      ...this.state,
-      child: number
-    });
+  _decRoomNumber() {
+    if (this.state.roomNumber > 1) {
+      this.setState({
+        ...this.state,
+        roomNumber: this.state.roomNumber-1,
+      });
+    }
   }
 
   _handlePress() {
@@ -71,7 +68,7 @@ class HotelAndroid extends Component {
       var newState = {};
       const {action, year, month, day} = await DatePickerAndroid.open(options);
       if (action === DatePickerAndroid.dismissedAction) {
-        newState[stateKey + 'Text'] = 'dismissed';
+        //newState[stateKey + 'Text'] = 'dismissed';
       } else {
         var date = new Date(year, month, day);
         newState[stateKey + 'Text'] = date.toLocaleDateString();
@@ -137,41 +134,15 @@ class HotelAndroid extends Component {
 
           <View style={styles.rowContainer}>
             <Text style={styles.label}>객실수</Text>
-            <Select
-              width={250}
-              ref="SELECT2"
-              optionListRef={this._getOptionList.bind(this)}
-              defaultValue="객실수를 선택"
-              onSelect={this._roomNumber.bind(this)}>
-              <Option>1</Option>
-              <Option>2</Option>
-              <Option>3</Option>
-            </Select>
-          </View>
-
-          <View style={styles.rowContainer}>
-            <Text style={styles.label}>투숙객</Text>
-            <Select
-              width={70}
-              ref="SELECT3"
-              optionListRef={this._getOptionList.bind(this)}
-              defaultValue="성인수"
-              onSelect={this._adult.bind(this)}>
-              <Option>1</Option>
-              <Option>2</Option>
-              <Option>3</Option>
-            </Select>
-
-            <Select
-              width={70}
-              ref="SELECT4"
-              optionListRef={this._getOptionList.bind(this)}
-              defaultValue="아동수"
-              onSelect={this._child.bind(this)}>
-              <Option>1</Option>
-              <Option>2</Option>
-              <Option>3</Option>
-            </Select>
+            <Button
+              onPress={() => this._decRoomNumber()}>
+              -&nbsp;
+            </Button>
+            <Text>{this.state.roomNumber}</Text>
+            <Button
+              onPress={() => this._incRoomNumber()}>
+              &nbsp;+
+            </Button>
           </View>
 
           <OptionList ref="OPTIONLIST"/>
