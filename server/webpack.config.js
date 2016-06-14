@@ -2,6 +2,10 @@ const webpack = require('webpack');
 const path = require('path');
 const es2015 = require('babel-preset-es2015');
 
+
+// const babel-loader = require('babel-loader');
+
+//babel-loader : https://github.com/babel/babel-loader
 module.exports = {
   devtool: 'eval-source-map',
   entry: {
