@@ -12,13 +12,10 @@ import {
   View,
   DatePickerAndroid,
   TouchableWithoutFeedback,
+  Picker,
+  Item,
 } from 'react-native';
 import Button from 'react-native-button';
-import DropDown, {
-  Select,
-  Option,
-  OptionList,
-} from 'react-native-selectme';
 
 class HotelAndroid extends Component {
   state = {
@@ -28,17 +25,6 @@ class HotelAndroid extends Component {
     checkoutDate: new Date(),
     checkoutText: '체크아웃 날짜 선택',
     roomNumber: 1,
-  }
-
-  _getOptionList() {
-    return this.refs['OPTIONLIST'];
-  }
-
-  _location(area) {
-    this.setState({
-      ...this.state,
-      location: area
-    });
   }
 
   _incRoomNumber() {
@@ -61,6 +47,12 @@ class HotelAndroid extends Component {
 
   _handlePress() {
     console.log('pressed!');
+  }
+
+  onValueChange(key: string, value: string) {
+    const newState = {};
+    newState[key] = value;
+    this.setState(newState);
   }
 
   async showPicker(stateKey, options) {
@@ -90,17 +82,13 @@ class HotelAndroid extends Component {
         <View style={{flex: 1}}>
           <View style={styles.rowContainer}>
             <Text style={styles.label}>지역</Text>
-            <Select
-              width={250}
-              ref="SELECT1"
-              optionListRef={this._getOptionList.bind(this)}
-              defaultValue="지역을 선택"
-              onSelect={this._location.bind(this)}>
-              <Option>서울</Option>
-              <Option>대전</Option>
-              <Option>대구</Option>
-              <Option>제주</Option>
-            </Select>
+            <Picker style={{width: 100}}
+              selectedValue={this.state.location}
+              onValueChange={this.onValueChange.bind(this, 'location')}
+              mode="dropdown">
+              <Item label="서울" value="seoul" />
+              <Item label="제주" value="jeju" />
+            </Picker>
           </View>
 
           <View style={styles.rowContainer}>
@@ -129,7 +117,6 @@ class HotelAndroid extends Component {
                 <Text style={styles.text}>{this.state.checkoutText}</Text>
               </View>
             </TouchableWithoutFeedback>
-
           </View>
 
           <View style={styles.rowContainer}>
@@ -144,8 +131,6 @@ class HotelAndroid extends Component {
               &nbsp;+
             </Button>
           </View>
-
-          <OptionList ref="OPTIONLIST"/>
         </View>
 
         <View style={{margin: 10}}>
@@ -181,7 +166,7 @@ const styles = StyleSheet.create({
   button: {
     fontSize: 20,
     color: 'white',
-  }
+  },
 });
 
 AppRegistry.registerComponent('HotelAndroid', () => HotelAndroid);
