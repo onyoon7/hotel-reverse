@@ -1,13 +1,7 @@
 /*-------------------------------------------------------------------
   <routes.js>
-    - define all the routes to the server  
+    - define all the routes to the server
  *-------------------------------------------------------------------*/
-
-
-// var linksController = require('../links/linkController.js');
-// var userController = require('../users/userController.js');
-// var helpers = require('./helpers.js'); // our custom middleware
-
 
 /*
   1. user(customer)
@@ -92,57 +86,60 @@
       * method: post
       * url: /admin/info
  */
+
+import {clientController, managerController, adminController} from '../controllers/index';
+
 module.exports = function (app, express) {
 
   // client
   //  - instead of client_ID, use client_Email
   //  - because not all clients are members (in this case, no client_ID)
-  //  
+  //
   //  - client can send booking_Num
-  //  - that's because when sending contract info, booking_Num 
-  app.post('/client/signup', clientController.signUp);
-  app.post('/client/signin', clientController.signIn);
+  //  - that's because when sending contract info, booking_Num
+/*  app.post('/client/signup', clientController.signUp);*/
+  //app.post('/client/signin', clientController.signIn);
 
-  app.put('/client/bid/:client_Email', clientController.makeContract);
-  app.post('/client/bid/:client_Email', clientController.getAllcontracts);
-  app.post('/client/bid/:client_Email/:booking_Num', clientController.getContract);
-  app.delete('/client/bid/:client_Email/:booking_Num', clientController.cancelContract);
-  
-  app.post('/client/feedback/:client_Email/:booking_Num', clientController.makeFeedback)
+  //app.put('/client/bid/:client_Email', clientController.makeContract);
+  //app.post('/client/bid/:client_Email', clientController.getAllcontracts);
+  //app.post('/client/bid/:client_Email/:booking_Num', clientController.getContract);
+  //app.delete('/client/bid/:client_Email/:booking_Num', clientController.cancelContract);
 
-  app.post('/client/info/:client_Email', clientController.updateInfo);
+  //app.post('/client/feedback/:client_Email/:booking_Num', clientController.makeFeedback);
+
+  //app.post('/client/info/:client_Email', clientController.updateInfo);
 
 
-  // hotel
-  app.post('/hotel/signup', managerController.singUp);
-  app.post('/hotel/signin', managerController.signIn);
+  //// hotel
+  //app.post('/hotel/signup', managerController.singUp);
+  //app.post('/hotel/signin', managerController.signIn);
 
-  // startDate: yyyymmdd, endDate: yyyymmdd
-  app.post('/hotel/bid/:hotel_ID', managerController.bidInfo);
-  app.post('/hotel/bid/:hotel_ID/:startDate/:endDate', managerController.bidInfoInterval);
+  //// startDate: yyyymmdd, endDate: yyyymmdd
+  //app.post('/hotel/bid/:hotel_ID', managerController.bidInfo);
+  //app.post('/hotel/bid/:hotel_ID/:startDate/:endDate', managerController.bidInfoInterval);
 
-  app.put('/hotel/:booking_Num', managerController.bid);
-  app.post('/hotel/update/:hotel_ID', managerController.update);
-  
-  
-  // admin
-  app.get('/admin', adminController.home);
-  // app.post('/admin/signin', adminController.singIn);
-  
-  // don't need I think, app.delete('/admin/:userid', adminController.deleteUser);
-  app.delete('/admin/:hotelid', adminController.deleteHotel);
-  
-  // startDate: yyyymmdd, endDate: yyyymmdd
-  app.get('/admin/pendingbid', adminController.pendingBid);
-  app.get('/admin/bidinfo/:startDate/:endDate', adminController.contractedBid);
+  //app.put('/hotel/:booking_Num', managerController.bid);
+  //app.post('/hotel/update/:hotel_ID', managerController.update);
 
-  app.get('/admin/hotels', adminController.getHotels);
-  app.post('/admin/hotels/:hotel_ID', adminController.getHotel);
-  app.get('/admin/hotels/subArea_Name', adminController.getHotelsByRegion);
 
-  app.get('/admin/clients', adminController.getClients);
-  app.post('admin/clients/:client_Email', adminController.getClient);
+  //// admin
+  //app.get('/admin', adminController.home);
+  //// app.post('/admin/signin', adminController.singIn);
 
-  //app.post('/admin/info', adminController.updateAdmin);
+  //// don't need I think, app.delete('/admin/:userid', adminController.deleteUser);
+  //app.delete('/admin/:hotelid', adminController.deleteHotel);
+
+  //// startDate: yyyymmdd, endDate: yyyymmdd
+  //app.get('/admin/pendingbid', adminController.pendingBid);
+  //app.get('/admin/bidinfo/:startDate/:endDate', adminController.contractedBid);
+
+  //app.get('/admin/hotels', adminController.getHotels);
+  //app.post('/admin/hotels/:hotel_ID', adminController.getHotel);
+  //app.get('/admin/hotels/subArea_Name', adminController.getHotelsByRegion);
+
+  //app.get('/admin/clients', adminController.getClients);
+  //app.post('admin/clients/:client_Email', adminController.getClient);
+
+  ////app.post('/admin/info', adminController.updateAdmin);
 
 };
