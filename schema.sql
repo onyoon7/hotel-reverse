@@ -15,7 +15,7 @@ CREATE TABLE `Client` (
 );
 
 CREATE TABLE `Deal` (
-  `booking_Num` int(128) NOT NULL,
+  `booking_Num` int(128) AUTO_INCREMENT,
   `client_Index` int,
   `checkIn_Date` DATE NOT NULL,
   `checkOut_Date` DATE NOT NULL,
@@ -36,7 +36,9 @@ CREATE TABLE `Hotel` (
   `hotel_ID` varchar(128) NOT NULL ,
   `hotel_PW` varchar(128) NOT NULL ,
   `hotel_Name` varchar(128) NOT NULL ,
-  `hotel_Location` varchar(128) NOT NULL ,
+  `hotel_Address` varchar(128) NOT NULL ,
+  `mainArea_Name` varchar(128) NOT NULL ,
+  `subArea_Name` varchar(128) NOT NULL ,
   `hotel_Rate` int(10) NOT NULL ,
   `mgr_Name` varchar(128) NOT NULL ,
   `booking_Num` int,
