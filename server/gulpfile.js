@@ -1,6 +1,7 @@
 'use strict';
 
 const gulp = require('gulp');
+const webpack = require('webpack-stream');
 const eslint = require('gulp-eslint')
 const nodemon = require('gulp-nodemon');
 const paths = {
@@ -23,13 +24,17 @@ gulp.task('eslint',() =>
     }
   }))
   .pipe(eslint.format())
-)
+);
 
-gulp.task('watch', () =>{
+gulp.task('watch', () => {
   gulp.watch(paths.server[0],['eslint']);
   gulp.watch(paths.manager[0],['eslint']);
   gulp.watch(paths.admin[0],['eslint']);
-})
+});
+
+gulp.task('webpack', () =>
+  gulp.src('').pipe(webpack(require('./webpack.config.js')))
+);
 
 gulp.task('serve', () => {
   nodemon({
@@ -38,4 +43,4 @@ gulp.task('serve', () => {
   });
 });
 
-gulp.task('default', ['eslint','serve','watch']);
+gulp.task('default', ['webpack', 'eslint', 'serve', 'watch']);
