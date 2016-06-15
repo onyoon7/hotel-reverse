@@ -87,14 +87,12 @@
       * url: /admin/info
  */
 
-
-import {clientController, hotelController, adminController} from '../controllers/index';
-
-
+import clientController from '../controllers/clientController';
+import managerController from '../controllers/hotelController';
+import adminController from '../controllers/adminController';
 
 export default function (app, express) {
 
-console.log('cc: ', clientController);
   // client
   //  - instead of client_ID, use client_Email
   //  - because not all clients are members (in this case, no client_ID)
