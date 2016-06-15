@@ -40,7 +40,8 @@ class HotelSearch extends Component {
   }
 
   _handlePress() {
-    console.log('pressed!');
+    this.props.navigator.push({id: 'bid'});
+    console.log('nav: ', this.props.navigator);
   }
 
   onValueChange(key: string, value: string) {
