@@ -10,7 +10,8 @@ CREATE TABLE `Client` (
   `client_Email` varchar(128) NOT NULL ,
   `billingInfo` varchar(128) NOT NULL ,
   `member` boolean NOT NULL default 0,
-  PRIMARY KEY (`client_Index`)
+  PRIMARY KEY (`client_Index`),
+  UNIQUE KEY (`client_Email`)
 );
 
 CREATE TABLE `Deal` (
@@ -27,7 +28,6 @@ CREATE TABLE `Deal` (
   PRIMARY KEY (`booking_Num`),
   CONSTRAINT `fk_client` FOREIGN KEY (`client_Index`) REFERENCES `Client` (`client_Index`)
   ON DELETE CASCADE
-  ON UPDATE CASCADE
 );
 
 
