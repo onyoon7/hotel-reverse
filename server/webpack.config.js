@@ -1,24 +1,29 @@
-var webpack = require('webpack'); 
-var path = require('path');
+const webpack = require('webpack');
+const path = require('path');
+const es2015 = require('babel-preset-es2015');
 
 module.exports = {
-  devtool: 'inline-source-map', entry: [
-    'webpack-dev-server/client?http://127.0.0.1:8080/', 'webpack/hot/only-dev-server',
-    './src'
-  ], output: {
+  devtool: 'eval-source-map',
+  entry: {
+    manager: './manager/index.js',
+    admin : './admin/index.js'
+  },
+  output: {
     path: path.join(__dirname, 'public'),
-    filename: 'bundle.js' },
-    resolve: {
-      modulesDirectories: ['node_modules', 'src'], extensions: ['', '.js']
-    }, module: {
-      loaders: [
-        {
-          test: /\.jsx?$/,
-          exclude: /node_modules/,
-          loaders: ['react-hot', 'babel?presets[]=react,presets[]=es2015']
+    filename:   '[name].bundle.js',
+  },
+  module : {
+    loaders : [
+      {
+        test : /\.jsx?$/,
+        exclude : /(node_modules|bower_components)/,
+        loader : 'babel-loader',
+        query: {
+          plugins: ['transform-runtime'],
+          cacheDirectory: true,
+          presets: ['es2015'],
         }
-      ] },
-      plugins: [
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin() ]
-};
+      }
+    ]
+  }
+}
