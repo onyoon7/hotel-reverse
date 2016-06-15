@@ -94,33 +94,38 @@
  */
 module.exports = function (app, express) {
 
-  // user(customer)
-  app.post('/user/signup', userController.signUp);
-  app.post('/user/signin', userController.signIn);
+  // client
+  //  - instead of client_ID, use client_Email
+  //  - because not all clients are members (in this case, no client_ID)
+  //  
+  //  - client can send booking_Num
+  //  - that's because when sending contract info, booking_Num 
+  app.post('/client/signup', clientController.signUp);
+  app.post('/client/signin', clientController.signIn);
 
-  app.put('/user/contract/:userid', userController.makeContract);
-  app.get('/user/contract/:userid', userController.getAllcontracts);
-  app.post('/user/contract/:userid/:contractid', userController.getContract);
-  app.delete('/user/contract/:userid/:contractid', userController.cancelContract);
+  app.put('/client/bid/:client_Email', clientController.makeContract);
+  app.post('/client/bid/:client_Email', clientController.getAllcontracts);
+  app.post('/client/bid/:client_Email/:booking_Num', clientController.getContract);
+  app.delete('/client/bid/:client_Email/:booking_Num', clientController.cancelContract);
   
-  app.post('/user/feedback/:userid/:contractid', userController.makeFeedback)
+  app.post('/client/feedback/:client_Email/:booking_Num', clientController.makeFeedback)
 
-  app.post('/user/info/:userid', userController.updateInfo);
+  app.post('/client/info/:client_Email', clientController.updateInfo);
 
 
-  // user(hotel manager)
-  app.post('/manager/signup', managerController.singUp);
-  app.post('/manager/signin', managerController.signIn);
+  // hotel
+  app.post('/hotel/signup', managerController.singUp);
+  app.post('/hotel/signin', managerController.signIn);
 
   // startDate: yyyymmdd, endDate: yyyymmdd
-  app.get('/manager/bidinfo', managerController.bidInfo);
-  app.post('/manager/bidinfo/:startDate/:endDate', managerController.bidInfoInterval);
+  app.post('/hotel/bid/:hotel_ID', managerController.bidInfo);
+  app.post('/hotel/bid/:hotel_ID/:startDate/:endDate', managerController.bidInfoInterval);
 
-  app.post('/manager/bid', managerController.bid);
-  app.post('/manager/hotel', managerController.update);
+  app.put('/hotel/:booking_Num', managerController.bid);
+  app.post('/hotel/update/:hotel_ID', managerController.update);
   
   
-  // user(admin)
+  // admin
   app.get('/admin', adminController.home);
   // app.post('/admin/signin', adminController.singIn);
   
@@ -129,15 +134,15 @@ module.exports = function (app, express) {
   
   // startDate: yyyymmdd, endDate: yyyymmdd
   app.get('/admin/pendingbid', adminController.pendingBid);
-  app.post('/admin/bidinfo/:startDate/:endDate', adminController.contractedBid);
+  app.get('/admin/bidinfo/:startDate/:endDate', adminController.contractedBid);
 
   app.get('/admin/hotels', adminController.getHotels);
-  app.post('/admin/hotels/:hotelid', adminController.getHotel);
-  app.get('/admin/hotels/region', adminController.getHotelsByRegion);
+  app.post('/admin/hotels/:hotel_ID', adminController.getHotel);
+  app.get('/admin/hotels/subArea_Name', adminController.getHotelsByRegion);
 
-  app.get('/admin/users', adminController.getUsers);
-  app.post('admin/users/:userid', adminController.getUser);
+  app.get('/admin/clients', adminController.getClients);
+  app.post('admin/clients/:client_Email', adminController.getClient);
 
-  app.post('/admin/info', adminController.updateAdmin);
+  //app.post('/admin/info', adminController.updateAdmin);
 
 };
