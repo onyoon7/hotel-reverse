@@ -35,3 +35,12 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+
+# webpack build files
+server/public
+
+# gulp babel files
+server/build
+
+# gulp cache
+.gulp-cache
