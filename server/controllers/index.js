@@ -5,7 +5,7 @@
 
 var db = require('../db');
 
-var userController = {
+var clientController = {
   singUp: function(req, res) {
     var client_ID = req.body.client_ID;
     var client_PW = req.body.client_PW;
@@ -14,32 +14,30 @@ var userController = {
     var billingInfo = req.body.billingInfo;
     var member = 1;
 
-    var query1 = 'INSERT INTO Client ';
-    var query2 = '(client_ID, client_PW, client_Name, client_Email, billingInfo, member) ';
-    var query3 = 'VALUES (' + client_ID + ', ' + client_PW + ', ' + 
-                              client_Name + ', ' + client_Email + ', ' + 
-                              billingInfo + ', ' + member + ')';
-    var query = query1 + query2 + query3;
+    var query1 = 'INSERT INTO Client SET ';
+    var query2 = 'client_ID=?, client_PW=?, client_Name=?, client_Email=?, billingInfo=?, member=?';
+    var data = [client_ID, client_PW, client_Name, client_Email, billingInfo, member];
+    var query = query1 + query2;
 
-    db.connection.query(query, function(error, results, fields) {
+    db.connection.query(query, data, function(error, results, fields) {
       if (error) {
         console.log('error code: ' + error.code +
                     ', faild to insert new user');
       } else {
-        console.log('query: ' + query);
-        console.log('successfully inserted');
+        console.log('(signUp)new customer successfully registered');
         res.send(results);
       }
     })    
   },
 
   signIn: function(req, res) {
-    var id = req.body.Client_ID;
-    var pwd = req.body.Client_PW;
+    var id = req.body.client_ID;
+    var pwd = req.body.client_PW;
 
-    var query = 'SELECT Client_ID, Client_PW from Client';
+    var query = 'SELECT * FROM Client WHERE client_ID=? AND client_PW=?';
+    var data = [id, pwd];
 
-    db.connection.query(query, function(error, results, fields) {
+    db.connection.query(query, data, function(error, results, fields) {
 
       if (error) {
         console.log('error code: ' + error.code +
@@ -72,20 +70,22 @@ var userController = {
         console.log(results);
 
         client_Index = results[0];
+
+        var secondQ = "SELECT * FROM deal WHERE client_Index=" + client_Index;
+        db.connection.query(secondQ, function(error, results, fields) {
+          if (error) {
+            console.log('error code: ' + error.code +
+                        ', failed to retreive all deals');
+          } else {
+            console.log('query: ' + query);
+            console.log(results);
+            res.send(results);
+          }
+        })
+
       }
     })
 
-    var secondQ = "SELECT * FROM deal WHERE client_Index=" + client_Index;
-    db.connection.query(secondQ, function(error, results, fields) {
-      if (error) {
-        console.log('error code: ' + error.code +
-                    ', failed to retreive all deals');
-      } else {
-        console.log('query: ' + query);
-        console.log(results);
-        res.send(results);
-      }
-    })
 
   },
 
@@ -105,19 +105,21 @@ var userController = {
         console.log(results);
 
         client_Index = results[0];
-      }
-    })
 
-    var secondQ = "SELECT * FROM deal WHERE client_Index=" + client_Index +
-                  "AND booking_Num=" + booking_Num;
-    db.connection.query(secondQ, function(error, results, fields) {
-      if (error) {
-        console.log('error code: ' + error.code +
-                    ', failed to retreive all deals');
-      } else {
-        console.log('query: ' + query);
-        console.log(results);
-        res.send(results);
+        // to avoid async problem
+        var secondQ = "SELECT * FROM deal WHERE client_Index=" + client_Index +
+                      "AND booking_Num=" + booking_Num;
+        db.connection.query(secondQ, function(error, results, fields) {
+          if (error) {
+            console.log('error code: ' + error.code +
+                        ', failed to retreive all deals');
+          } else {
+            console.log('query: ' + query);
+            console.log(results);
+            res.send(results);
+          }
+        })     
+
       }
     })
 
@@ -146,25 +148,29 @@ var userController = {
         console.log('query: ' + query);
         client_Index = results[0];
         console.log('query result: ' + client_Index);
+      
+
+        var query1 = 'INSERT INTO deal SET ';
+        var query2 = 'client_Index=?, checkIn_Date=?, checkOut_Date=?, mainArea_Name=?, subArea_Name=?, ';
+        var query3 = 'bid_Price=?, bid_StartTime=?, bid_EndTime=?, bid_Transaction=?';
+        var query4 = [client_Index, checkIn_Date, checkOut_Date, mainArea_Name, subArea_Name, bid_Price, bid_StartTime, bid_EndTime, bid_Transaction];
+
+        var secondQ = query1 + query2 + query3 + query4;
+        db.connection.query(secondQ, function(error, results, fields) {
+          if (error) {
+            console.log('error code: ' + error.code);
+          } else {
+            console.log('query: ' + query);
+            console.log(results);
+            // give back the inserted result
+            res.send(results);
+          }
+        })
+
       }
     });
 
-    var query1 = 'INSERT INTO deal ';
-    var query2 = '(client_Index, checkIn_Date, checkOut_Date, mainArea_Name, subArea_Name, ';
-    var query3 = 'bid_Price, bid_StartTime, bid_EndTime, bid_Transaction) ';
-    var query4 = 'VALUES (' + bid_Price + ', ' + bid_StartTime + ', ' + bid_EndTime + ', ' + bid_Transaction +')';
 
-    var secondQ = query1 + query2 + query3 + query4;
-    db.connection.query(secondQ, function(error, results, fields) {
-      if (error) {
-        console.log('error code: ' + error.code);
-      } else {
-        console.log('query: ' + query);
-        console.log(results);
-        // give back the inserted result
-        res.send(results);
-      }
-    })
   },
 
 
@@ -211,7 +217,7 @@ var userController = {
 };
 
 
-var managerController = {
+var hotelController = {
   signUp: function(req, res) {
     var hotel_ID = req.body.hotel_ID;
     var hotel_PW = req.body.hotel_PW;
@@ -220,14 +226,12 @@ var managerController = {
     var hotel_Rate = req.body.hotel_Rate;
     var mgr_Name = req.body.mgr_Name;
 
-    var query1 = 'INSERT INTO Hotel ';
-    var query2 = '(hotel_ID, hotel_PW, hotel_Name, hotel_Location, hotel_Rate, mgr_Name) ';
-    var query3 = 'VALUES (' + hotel_ID + ', ' + hotel_PW + ', ' + 
-                              hotel_Name + ', ' + hotel_Location + ', ' + 
-                              hotel_Rate + ', ' + mgr_Name + ')';
-    var query = query1 + query2 + query3;
+    var query1 = 'INSERT INTO Hotel SET ';
+    var query2 = 'hotel_ID=?, hotel_PW=?, hotel_Name=?, hotel_Location=?, hotel_Rate=?, mgr_Name=?';
+    var data = [hotel_ID, hotel_PW, hotel_Name, hotel_Location, hotel_Rate, mgr_Name];
+    var query = query1 + query2;
 
-    db.connection.query(query, function(error, results, fields) {
+    db.connection.query(query, data, function(error, results, fields) {
       if (error) {
         console.log('error code: ' + error.code +
                     ', faild to insert new hotel');
@@ -266,12 +270,13 @@ var managerController = {
   },
 
   bidInfo: function(req, res) {
-    var subArea_Name = req.body.subArea_Name;
+    var hotel_ID = req.params.hotel_ID;
+    var subArea_Name;
 
-    var query = 'SELECT * FROM deal WHERE bid_Transaction=0 AND subArea_Name=' + subArea_Name;
+    
+    var firstQ = 'SELECT subArea_Name FROM Hotel WHERE hotel_ID=' + hotel_ID;
 
     db.connection.query(query, function(error, results, fields) {
-
       if (error) {
         console.log('error code: ' + error.code +
                     ', failed to retreive bid information');
@@ -279,15 +284,33 @@ var managerController = {
         console.log('query: ' + query);
         console.log(results);
 
-        res.send(results);
+        subArea_Name = results[0];
+
+        var secondQ = 'SELECT * FROM deal WHERE bid_Transaction=0 AND subArea_Name=' + subArea_Name;
+
+        db.connection.query(query, function(error, results, fields) {
+
+          if (error) {
+            console.log('error code: ' + error.code +
+                        ', failed to retreive bid information');
+          } else {
+            console.log('query: ' + query);
+            console.log(results);
+
+            res.send(results);
+          }
+        })
+
       }
     })
+
+
   },
 
   bidInfoInterval: function(req, res) {
-    var hotel_ID = req.body.hotel_ID;
-    var startDate = req.body.startDate;
-    var endDate = req.body.endDate;
+    var hotel_ID = req.params.hotel_ID;
+    var startDate = req.params.startDate;
+    var endDate = req.params.endDate;
     
     var query1 = 'SELECT * FROM Deal where hotel_ID=' + hotel_ID + ' AND ';
     var query2 = 'bid_Transaction=1 AND ';
@@ -319,7 +342,8 @@ var managerController = {
 
 
   update: function(req, res) {
-    var hotel_ID = req.body.hotel_ID;
+    var hotel_ID = req.params.hotel_ID;
+
     var hotel_PW = req.body.hotel_PW;
     var hotel_Name = req.body.hotel_Name;
     var hotel_Location = req.body.hotel_Location;
@@ -359,31 +383,6 @@ var adminController = {
   },
   
   // admin도 signin할 것인가?
-  // signIn: function(req, res) {
-  //   // encryption? later...
-  //   // don't we need admin authentication?
-  //   var id = req.body.Client_ID;
-  //   var pwd = req.body.Client_PW;
-
-  //   var query = 'SELECT cliend_ID, client_PW from Client';
-
-  //   db.connection.query(query, function(error, results, fields) {
-
-  //     if (error) {
-  //       console.log('error code: ' + error.code +
-  //                   ' ,failed to retrieve user informaton');
-  //     } else {
-  //       console.log('query: ' + query);
-  //       console.log(results);
-
-  //       if (results.length === 0) {
-  //         res.send('Wrong ID or Password!');
-  //       } else {
-  //         res.send('Successfully loged in');
-  //       }
-  //     }
-  //   })
-  // },
 
   pendingBid: function(req, res) {
     var query = 'SELECT * FROM Deal where bid_Transaction=0';
@@ -424,6 +423,7 @@ var adminController = {
     })
   },
 
+
   getHotels: function(req, res) {
     var query = 'SELECT * from Hotel';
 
@@ -439,30 +439,15 @@ var adminController = {
     })
   },
 
-  getHotelsByRegion: function(req, res) {
-    var region = req.params.region;
-    var query = 'SELECT * from Hotel where subArea_Name=' + region;
-
-    db.connection.query(query, function(error, results, fields) {
-      if (error) {
-        console.log("error code: " + error.code +
-                    ", fail to get Hotel information(" + region + ")");
-      } else {
-        console.log('query: ' + query);
-        console.log(results);
-        res.send(results);
-      }
-    })
-  },
 
   getHotel: function(req, res) {
-    var hotelId = req.params.hotelId;
-    var query = 'SELECT * from Hotel where hotel_ID=' + hotelId;
+    var hotelId = req.params.hotel_ID;
+    var query = 'SELECT * from Hotel where hotel_ID=' + hotel_ID;
 
     db.connection.query(query, function(error, results, fields) {
       if (error) {
         console.log("error code: " + error.code +
-                    ", fail to get Hotel Information(" + hotelId + ")");
+                    ", fail to get Hotel Information(" + hotel_ID + ")");
       } else {
         console.log('query: ' + query);
         console.log(results);
@@ -471,20 +456,40 @@ var adminController = {
     })
   },
 
+
+  getHotelsByRegion: function(req, res) {
+    var subArea_Name = req.params.subArea_Name;
+    var query = 'SELECT * from Hotel where subArea_Name=' + subArea_Name;
+
+    db.connection.query(query, function(error, results, fields) {
+      if (error) {
+        console.log("error code: " + error.code +
+                    ", fail to get Hotel information(" + subArea_Name + ")");
+      } else {
+        console.log('query: ' + query);
+        console.log(results);
+        res.send(results);
+      }
+    })
+  },
+
+
+
   deleteHotel: function(req, res) {
-    var hotelId = req.params.hotelId;
-    var query = 'DELETE FROM Hotel WHERE hotel_ID=' + hotelId;
+    var hotel_ID = req.params.hotel_ID;
+    var query = 'DELETE FROM Hotel WHERE hotel_ID=' + hotel_ID;
 
     db.connection.query(query, function(error, results, fields) {
       if (error) {
         console.log('error code: ' + error.code +
-                    ', failed to delete hotel(' + hotelId + ')');
+                    ', failed to delete hotel(' + hotel_ID + ')');
       } else {
         console.log('query: ' + query);
         console.log('successfully deleted');
       }
     })
   },
+
 
   getClients: function(req, res) {
     var guery = 'SELECT * FROM Client';
@@ -517,26 +522,7 @@ var adminController = {
     })
   },
 
-  // updateAdmin: function(req, res) {
 
-  // }
 
 };
-
-  // app.get('/admin', adminController.home);
-  // app.post('/admin/signin', adminController.singIn);
-  
-  // app.delete('/admin/:userId', adminController.deleteUser);
-  // app.delete('/admin/:hotelId', adminController.deleteHotel);
-  
-  // app.get('/admin/pendingbid', adminController.pendingBid);
-  // app.post('/admin/bidinfo/:startDate/:endDate', adminController.contractedBid);
-
-  // app.get('/admin/hotels', adminController.getHotels);
-  // app.post('/admin/hotels/:hotelid', adminController.getHotel);
-  // app.get('/admin/hotels/:region', adminController.getHotelsByRegion);
-
-  // app.get('/admin/clients', adminController.getClients);
-  // app.post('admin/clients/:client_Email', adminController.getClient);
-
-  // app.post('/admin/info', adminController.updateAdmin);
+ 
