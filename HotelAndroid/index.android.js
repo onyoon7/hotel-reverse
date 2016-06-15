@@ -8,9 +8,13 @@ import React, { Component } from 'react';
 import {
   AppRegistry,
   Navigator,
+  BackAndroid,
 } from 'react-native';
 
 import HotelSearch from './hotelSearch';
+import HotelBid from './hotelBid';
+
+let _navigator;
 
 class HotelAndroid extends Component {
 
@@ -19,6 +23,8 @@ class HotelAndroid extends Component {
     switch (route.id) {
       case 'search':
         return (<HotelSearch navigator={navigator}/>);
+      case 'bid':
+        return (<HotelBid navigator={navigator}/>);
     }
   }
 
@@ -30,5 +36,14 @@ class HotelAndroid extends Component {
     );
   }
 }
+
+BackAndroid.addEventListener('hardwareBackPress', () => {
+  if (_navigator.getCurrentRoutes().length === 1) {
+    return false;
+  }
+
+  _navigator.pop();
+  return true;
+});
 
 AppRegistry.registerComponent('HotelAndroid', () => HotelAndroid);
