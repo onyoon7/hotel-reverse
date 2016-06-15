@@ -12,6 +12,7 @@ module.exports = {
     path: path.join(__dirname, 'public'),
     filename:   '[name].bundle.js',
   },
+  watch: true,
   module : {
     loaders : [
       {
