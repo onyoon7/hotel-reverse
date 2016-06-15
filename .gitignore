@@ -38,3 +38,9 @@ jspm_packages
 
 # webpack build files
 server/public
+
+# gulp babel files
+server/build
+
+# gulp cache
+.gulp-cache
