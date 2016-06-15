@@ -21,12 +21,10 @@ module.exports.connection = mysql.createConnection({
 
 
 module.exports.connection.connect(function(err) {
-  
   if (err) {
     console.log('error connecting...');
     return;
   }
 
   console.log('successfully connected to database...');
-
 });

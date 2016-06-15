@@ -3,7 +3,7 @@
 
  */
 
-var db = require('../db');
+let db = require('../db');
 
 let api = {
   clientController: {

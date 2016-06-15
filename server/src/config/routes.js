@@ -89,7 +89,8 @@
 
 import {clientController, managerController, adminController} from '../controllers/index';
 
-module.exports = function (app, express) {
+console.log('cc: ', clientController);
+export default function (app, express) {
 
   // client
   //  - instead of client_ID, use client_Email
@@ -97,7 +98,7 @@ module.exports = function (app, express) {
   //
   //  - client can send booking_Num
   //  - that's because when sending contract info, booking_Num
-/*  app.post('/client/signup', clientController.signUp);*/
+  app.post('/client/signup', clientController.signUp);
   //app.post('/client/signin', clientController.signIn);
 
   //app.put('/client/bid/:client_Email', clientController.makeContract);

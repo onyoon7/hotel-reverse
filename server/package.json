@@ -10,8 +10,7 @@
     "babel-plugin-transform-runtime": "^6.9.0",
     "body-parser": "^1.13.3",
     "morgan": "^1.7.0",
-    "mysql": "^2.11.1",
-    "request": "^2.72.0"
+    "mysql": "^2.11.1"
   },
   "devDependencies": {
     "babel-core": "^6.9.1",
