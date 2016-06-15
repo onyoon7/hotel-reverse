@@ -87,9 +87,10 @@
       * url: /admin/info
  */
 
-import {clientController, managerController, adminController} from '../controllers/index';
+import clientController from '../controllers/clientController';
+import managerController from '../controllers/hotelController';
+import adminController from '../controllers/adminController';
 
-console.log('cc: ', clientController);
 export default function (app, express) {
 
   // client
