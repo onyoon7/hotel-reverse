@@ -16,8 +16,7 @@ export default {
 
     db.connection.query(query, data, function(error, results, fields) {
       if (error) {
-        console.log('error code: ' + error.code +
-                    ', faild to insert new user');
+        console.log('error: ', error, 'faild to insert new user');
       } else {
         console.log('(signUp)new customer successfully registered');
         res.send(results);

@@ -90,8 +90,11 @@
 import clientController from '../controllers/clientController';
 import managerController from '../controllers/hotelController';
 import adminController from '../controllers/adminController';
+import dealController from '../controllers/dealController';
 
 export default function (app, express) {
+
+  app.post('/deal/bid', dealController.bid);
 
   // client
   //  - instead of client_ID, use client_Email
@@ -106,13 +109,13 @@ export default function (app, express) {
 
   app.post('/client/bid/:client_Email', clientController.getAllContracts);
   app.post('/client/bid/:client_Email/:booking_Num', clientController.getContract);
-  
+
   //app.delete('/client/bid/:client_Email/:booking_Num', clientController.cancelContract);
   //app.post('/client/feedback/:client_Email/:booking_Num', clientController.makeFeedback);
 
   app.post('/client/info/:client_Email', clientController.updateInfo);
 
-  //// hotel
+  // hotel
   app.post('/hotel/signup', hotelController.signUp);
   app.post('/hotel/signin', hotelController.signIn);
 
@@ -123,12 +126,11 @@ export default function (app, express) {
   //app.put('/hotel/:booking_Num', hotelController.bid);
   app.post('/hotel/update/:hotel_ID', hotelController.updateInfo);
 
+  app.put('/hotel/:booking_Num', managerController.bid);
+  app.post('/hotel/update/:hotel_ID', managerController.update);
 
-  //// admin
-  //app.get('/admin', adminController.home);
-  //// app.post('/admin/signin', adminController.singIn);
 
-  //// don't need I think, app.delete('/admin/:userid', adminController.deleteUser);
+  // don't need I think, app.delete('/admin/:userid', adminController.deleteUser);
   app.delete('/admin/:hotel_ID', adminController.deleteHotel);
 
   // startDate: yyyy-mm-dd, endDate: yyyy-mm-dd
@@ -142,8 +144,7 @@ export default function (app, express) {
   app.get('/admin/clients', adminController.getClients);
   app.get('/admin/clients/:client_Email', adminController.getClient);
 
-  ////app.post('/admin/info', adminController.updateAdmin);
-
+  //app.post('/admin/info', adminController.updateAdmin);
 };
 
 
