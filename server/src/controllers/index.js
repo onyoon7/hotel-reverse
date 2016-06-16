@@ -130,6 +130,8 @@ let api = {
 
     makeContract: function(req, res) {
 
+      console.log("Welcome to makeContract");
+      
       var client_Email = req.params.client_Email;
       var client_Index;
 

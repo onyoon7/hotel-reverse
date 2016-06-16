@@ -13,6 +13,8 @@ import {
 
 import HotelSearch from './hotelSearch';
 import HotelBid from './hotelBid';
+import GetLatestBidInfo from './getLatestBidInfo';
+import ThanksALot from './thanksALot';
 
 let _navigator;
 
@@ -25,13 +27,17 @@ class HotelAndroid extends Component {
         return (<HotelSearch navigator={navigator}/>);
       case 'bid':
         return (<HotelBid navigator={navigator}/>);
+      case 'bidInfo':
+        return (<GetLatestBidInfo navigator={navigator}/>);
+      case 'thanks':
+        return (<ThanksALot navigator={navigator}/>);
     }
   }
 
   render() {
     return (
       <Navigator
-        initialRoute={{id: 'search'}}
+        initialRoute={{id: 'bidInfo'}}
         renderScene={this.navigatorRenderScene}/>
     );
   }
