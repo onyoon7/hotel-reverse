@@ -14,13 +14,13 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'hotelReverse<>',
+  password: 'root',
   database: 'hotelreverse'
 });
 
 connection.connect(function(err) {
   if (err) {
-    console.log('error connecting...');
+    console.log('can`t connect to mysql database');
     return;
   }
   console.log('successfully connected to database...');

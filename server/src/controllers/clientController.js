@@ -96,6 +96,7 @@ export default {
     var firstData = [client_Email];
 
     db.connection.query(firstQ, firstData, function(error, results, fields) {
+
       if (error) {
         console.log('error code: ' + error.code +
                     ', failed to retreive client_Index from Client');

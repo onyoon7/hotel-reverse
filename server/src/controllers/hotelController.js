@@ -41,6 +41,7 @@ export default {
 
     db.connection.query(query, data, function(error, results, fields) {
 
+
       if (error) {
         console.log('error code: ' + error.code +
                     ' ,failed to retrieve user informaton');
