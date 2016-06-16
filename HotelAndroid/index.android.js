@@ -13,9 +13,10 @@ import {
 
 import HotelSearch from './hotelSearch';
 import HotelBid from './hotelBid';
+import GetLatestBidInfo from './getLatestBidInfo';
+import ThanksALot from './thanksALot';
 import HotelSignin from './hotelSignin';
 import Register from './register';
-
 
 let _navigator;
 
@@ -66,18 +67,22 @@ class HotelAndroid extends Component {
       case 'search':
         return (<HotelSearch navigator={navigator} onChange={this.searchStateChagned}/>);
       case 'bid':
-        return (<HotelBid navigator={navigator} onChange={this.bidStateChagned}/>);
+        return (<HotelBid navigator={navigator} onChange={this.bidStateChagned}/>);    
       case 'signin':
         return (<HotelSignin navigator={navigator} onChange={this.signinStateChagned}/>);
       case 'register':
-        return (<Register navigator={navigator} location={this.state.location} {...route.passPorps}/>);
+        return (<Register navigator={navigator} location={this.state.location}/>);
+      case 'bidInfo':
+        return (<GetLatestBidInfo navigator={navigator}/>);
+      case 'thanks':
+        return (<ThanksALot navigator={navigator}/>);
     }
   }
 
   render() {
     return (
       <Navigator
-        initialRoute={{id: 'search'}}
+        initialRoute={{id: 'bidInfo'}}
         renderScene={this.navigatorRenderScene}/>
     );
   }
