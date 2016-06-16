@@ -57,27 +57,33 @@ let api = {
     },
 
     getAllContracts: function(req, res) {
-      var client_Email = req.body.client_Email;
+
+      var client_Email = req.params.client_Email;
       var client_Index;
 
-      var firstQ = "SELECT client_Index FROM Client where client_Email=" + client_Email;
-      db.connection.query(firstQ, function(error, results, fields) {
+      console.log('client_Email: ' + client_Email);
+
+      var firstQ = "SELECT client_Index FROM Client where client_Email=?";
+      var firstData = [client_Email];
+
+      db.connection.query(firstQ, firstData, function(error, results, fields) {
         if (error) {
           console.log('error code: ' + error.code +
                       ', failed to retreive client_Index from Client');
         } else {
-          console.log('query: ' + query);
+
+          console.log('query: ' + firstQ);
           console.log(results);
 
           client_Index = results[0];
-
-          var secondQ = "SELECT * FROM deal WHERE client_Index=" + client_Index;
-          db.connection.query(secondQ, function(error, results, fields) {
+          var secondQ = "SELECT * FROM deal WHERE client_Index=?";
+          var secondData = [client_Index];
+          db.connection.query(secondQ, secondData, function(error, results, fields) {
             if (error) {
               console.log('error code: ' + error.code +
                           ', failed to retreive all deals');
             } else {
-              console.log('query: ' + query);
+              console.log('query: ' + secondQ);
               console.log(results);
               res.send(results);
             }
@@ -87,30 +93,33 @@ let api = {
     },
 
     getContract: function(req, res) {
-      var client_Email = req.body.client_Email;
-      var booking_Num = req.body.booking_Num;
+
+      var client_Email = req.params.client_Email;
+      var booking_Num = req.params.booking_Num;
       var client_Index;
 
-      var firstQ = "SELECT client_Index FROM Client where client_Email=" + client_Email;
-      db.connection.query(firstQ, function(error, results, fields) {
+      var firstQ = "SELECT client_Index FROM Client where client_Email=?";
+      var firstData = [client_Email];
+
+      db.connection.query(firstQ, firstData, function(error, results, fields) {
         if (error) {
           console.log('error code: ' + error.code +
                       ', failed to retreive client_Index from Client');
         } else {
-          console.log('query: ' + query);
+          console.log('query: ' + firstQ);
           console.log(results);
 
           client_Index = results[0];
 
           // to avoid async problem
-          var secondQ = "SELECT * FROM deal WHERE client_Index=" + client_Index +
-                        "AND booking_Num=" + booking_Num;
-          db.connection.query(secondQ, function(error, results, fields) {
+          var secondQ = "SELECT * FROM deal WHERE client_Index=? AND booking_Num=?";
+          var secondData = [client_Index, booking_Num];
+          db.connection.query(secondQ, secondData, function(error, results, fields) {
             if (error) {
               console.log('error code: ' + error.code +
                           ', failed to retreive all deals');
             } else {
-              console.log('query: ' + query);
+              console.log('query: ' + secondQ);
               console.log(results);
               res.send(results);
             }
@@ -120,7 +129,8 @@ let api = {
     },
 
     makeContract: function(req, res) {
-      var client_Email = req.body.client_Email;
+
+      var client_Email = req.params.client_Email;
       var client_Index;
 
       var checkIn_Date = req.body.checkIn_Date;
@@ -129,31 +139,34 @@ let api = {
       var subArea_Name = req.body.subArea_Name;
 
       var bid_Price = req.body.bid_Price;
-      var bid_StartTime = req.body.bid_StartTime;
-      var bid_EndTime = req.body.bid_EndTime;
+      // var bid_StartTime = req.body.bid_StartTime;
+      // var bid_EndTime = req.body.bid_EndTime;
       var bid_Transaction = 1;
 
-      var firstQ = 'SELECT client_Index from Client WHERE client_Email=' + client_Email;
-      db.connection.query(firstQ, function(error, results, fields) {
+      var firstQ = 'SELECT client_Index from Client WHERE client_Email=?';
+      var firstData = [client_Email];
+
+      db.connection.query(firstQ, firstData, function(error, results, fields) {
         if (error) {
           console.log('error code: ' + error.code);
         } else {
-          console.log('query: ' + query);
-          client_Index = results[0];
-          console.log('query result: ' + client_Index);
-
+          console.log('query: ' + firstQ, firstData);
+          client_Index = results[0].client_Index;
+          console.log('client_Index: ', client_Index);
 
           var query1 = 'INSERT INTO deal SET ';
           var query2 = 'client_Index=?, checkIn_Date=?, checkOut_Date=?, mainArea_Name=?, subArea_Name=?, ';
-          var query3 = 'bid_Price=?, bid_StartTime=?, bid_EndTime=?, bid_Transaction=?';
-          var query4 = [client_Index, checkIn_Date, checkOut_Date, mainArea_Name, subArea_Name, bid_Price, bid_StartTime, bid_EndTime, bid_Transaction];
+          var query3 = 'bid_Price=?, bid_StartTime=now(), bid_EndTime=now()+interval 1 day, bid_Transaction=?';
+          var secondData = [client_Index, checkIn_Date, checkOut_Date, mainArea_Name, subArea_Name, bid_Price, bid_Transaction];
 
-          var secondQ = query1 + query2 + query3 + query4;
-          db.connection.query(secondQ, function(error, results, fields) {
+          var secondQ = query1 + query2 + query3;
+          console.log(secondQ, secondData);
+
+          db.connection.query(secondQ, secondData, function(error, results, fields) {
             if (error) {
               console.log('error code: ' + error.code);
             } else {
-              console.log('query: ' + query);
+              console.log('query: ' + secondQ, secondData);
               console.log(results);
               // give back the inserted result
               res.send(results);
@@ -173,29 +186,27 @@ let api = {
     },
 
     updateInfo: function(req, res) {
+      var client_Email = req.params.client_Email;
+
       var client_ID = req.body.client_ID;
       var client_PW = req.body.client_PW;
       var client_Name = req.body.client_Name;
-      var client_Email = req.body.client_Email;
       var billingInfo = req.body.billingInfo;
       var member = req.body.member;
 
-      var query_header = 'UPDATE Client SET ';
-      var query1 = 'client_PW=' + client_PW + ', ';
-      var query2 = 'client_Name=' + client_Name + ', ';
-      var query3 = 'client_Email=' + client_Email + ', ';
-      var query4 = 'billingInfo=' + billingInfo + ', ';
-      var query5 = 'member=' + member + ' ';
-      var query_trailer = 'WHERE Client_ID=' + Client_ID;
+      var query1 = 'UPDATE Client SET ';
+      var query2 = 'client_PW=?, client_Name=?, client_Email=?, billingInfo=?, member=? WHERE client_ID=?';
+      var data = [client_PW, client_Name, client_Email, billingInfo, member, client_ID];
 
-      var query = query_header + query1 + query2 + query3 + query4 + query5 + query_trailer;
+      var query = query1 + query2;
 
-      db.connection.query(query, function(error, results, fields) {
+      db.connection.query(query, data, function(error, results, fields) {
         if (error) {
           console.log('error code: ' + error.code +
                       ', failed to update client information');
         } else {
-          console.log('query: ' + query);
+
+          console.log('query: ' + query, data);
           console.log(results);
           res.send(results);
         }
@@ -205,16 +216,21 @@ let api = {
 
   hotelController: {
     signUp: function(req, res) {
+
+
       var hotel_ID = req.body.hotel_ID;
       var hotel_PW = req.body.hotel_PW;
       var hotel_Name = req.body.hotel_Name;
-      var hotel_Location = req.body.hotel_Location;
+      var hotel_Address = req.body.hotel_Address;
+      var mainArea_Name = req.body.mainArea_Name;
+      var subArea_Name = req.body.subArea_Name;
       var hotel_Rate = req.body.hotel_Rate;
       var mgr_Name = req.body.mgr_Name;
 
       var query1 = 'INSERT INTO Hotel SET ';
-      var query2 = 'hotel_ID=?, hotel_PW=?, hotel_Name=?, hotel_Location=?, hotel_Rate=?, mgr_Name=?';
-      var data = [hotel_ID, hotel_PW, hotel_Name, hotel_Location, hotel_Rate, mgr_Name];
+      var query2 = 'hotel_ID=?, hotel_PW=?, hotel_Name=?, hotel_Address=?, mainArea_Name=?, subArea_Name=?, hotel_Rate=?, mgr_Name=?';
+      var data = [hotel_ID, hotel_PW, hotel_Name, hotel_Address, mainArea_Name, subArea_Name, hotel_Rate, mgr_Name];
+      
       var query = query1 + query2;
 
       db.connection.query(query, data, function(error, results, fields) {
@@ -231,12 +247,15 @@ let api = {
 
     signIn: function(req, res) {
       // encryption? later...
-      var id = req.body.Hotel_ID;
-      var pwd = req.body.Hotel_PW;
+      var hotel_ID = req.body.hotel_ID;
+      var hotel_PW = req.body.hotel_PW;
 
-      var query = 'SELECT Hotel_ID, Hotel_PW from Hotel';
+      console.log('hotel_ID: ' + hotel_ID);
 
-      db.connection.query(query, function(error, results, fields) {
+      var query = 'SELECT * from Hotel where hotel_ID=? AND hotel_PW=?';
+      var data = [hotel_ID, hotel_PW];
+
+      db.connection.query(query, data, function(error, results, fields) {
 
         if (error) {
           console.log('error code: ' + error.code +
@@ -321,31 +340,30 @@ let api = {
     },
 
 
-    update: function(req, res) {
+    updateInfo: function(req, res) {d
       var hotel_ID = req.params.hotel_ID;
 
       var hotel_PW = req.body.hotel_PW;
       var hotel_Name = req.body.hotel_Name;
-      var hotel_Location = req.body.hotel_Location;
+      var hotel_Address = req.body.hotel_Address;
+      var mainArea_Name = req.body.mainArea_Name;
+      var subArea_Name = req.body.subArea_Name;
       var hotel_Rate = req.body.hotel_Rate;
       var mgr_Name = req.body.mgr_Name;
 
-      var query_header = 'UPDATE Hotel SET ';
-      var query1 = 'hotel_PW=' + hotel_PW + ', ';
-      var query2 = 'hotel_Name=' + hotel_Name + ', ';
-      var query3 = 'hotel_Location=' + hotel_Location + ', ';
-      var query4 = 'hotel_Rate=' + hotel_Rate + ', ';
-      var query5 = 'mgr_Name=' + mgr_Name + ' ';
-      var query_trailer = 'WHERE hotel_ID=' + hotel_ID;
+      var query1 = 'UPDATE Hotel SET ';
+      var query2 = 'hotel_PW=?, hotel_Name=?, hotel_Address=?, mainArea_Name=?, subArea_Name=?, hotel_Rate=?, mgr_Name=? ';
+      var query3 = 'WHERE hotel_ID=?';
+      var data = [hotel_PW, hotel_Name, hotel_Address, mainArea_Name, subArea_Name, hotel_Rate, mgr_Name, hotel_ID];
 
-      var query = query_header + query1 + query2 + query3 + query4 + query5 + query_trailer;
+      var query = query1 + query2 + query3;
 
-      db.connection.query(query, function(error, results, fields) {
+      db.connection.query(query, data, function(error, results, fields) {
         if (error) {
           console.log('error code: ' + error.code +
                       ', failed to update hotel information');
         } else {
-          console.log('query: ' + query);
+          console.log('query: ' + query, data);
           console.log(results);
           res.send(results);
         }
@@ -376,15 +394,17 @@ let api = {
 
     contractedBid: function(req, res) {
       var startDate = req.params.startDate;
-      var endDate = req.params.endDate;
+      var endDate = req.body.endDate;
 
-      var query1 = 'SELECT * FROM Deal where bid_Transaction=1 AND';
-      var query2 = '(bid_StartTime > ' + startDate + ' AND ';
-      var query3 = 'bid_EndTime < ' + endDate + ')';
+      var startTime = startDate + ' 00:00:00';
+      var endTime = endDate + ' 23:59:59';
 
-      var query = query1 + query2 + query3;
+      var query1 = 'SELECT * FROM Deal where bid_Transaction=1 AND ';
+      var query2 = 'bid_StartTime>? AND bid_EndTime<?';
+      var query = query1 + query2;
+      var data = [startTime, endTime];
 
-      db.connection.query(query, function(error, results, fields) {
+      db.connection.query(query, data, function(error, results, fields) {
         if (error) {
           console.log("error code: " + error.code +
                       " ,fail to get contracted bid info");
@@ -412,10 +432,11 @@ let api = {
     },
 
     getHotel: function(req, res) {
-      var hotelId = req.params.hotel_ID;
-      var query = 'SELECT * from Hotel where hotel_ID=' + hotel_ID;
+      var hotel_ID = req.params.hotel_ID;
+      var query = 'SELECT * from Hotel where hotel_ID=?';
+      var data = [hotel_ID];
 
-      db.connection.query(query, function(error, results, fields) {
+      db.connection.query(query, data, function(error, results, fields) {
         if (error) {
           console.log("error code: " + error.code +
                       ", fail to get Hotel Information(" + hotel_ID + ")");
@@ -429,9 +450,10 @@ let api = {
 
     getHotelsByRegion: function(req, res) {
       var subArea_Name = req.params.subArea_Name;
-      var query = 'SELECT * from Hotel where subArea_Name=' + subArea_Name;
+      var query = 'SELECT * from Hotel where subArea_Name=?';
+      var data = [subArea_Name];
 
-      db.connection.query(query, function(error, results, fields) {
+      db.connection.query(query, data, function(error, results, fields) {
         if (error) {
           console.log("error code: " + error.code +
                       ", fail to get Hotel information(" + subArea_Name + ")");
@@ -445,21 +467,24 @@ let api = {
 
     deleteHotel: function(req, res) {
       var hotel_ID = req.params.hotel_ID;
-      var query = 'DELETE FROM Hotel WHERE hotel_ID=' + hotel_ID;
+      var query = 'DELETE FROM Hotel WHERE hotel_ID=?';
+      var data = [hotel_ID];
 
-      db.connection.query(query, function(error, results, fields) {
+      db.connection.query(query, data, function(error, results, fields) {
         if (error) {
           console.log('error code: ' + error.code +
                       ', failed to delete hotel(' + hotel_ID + ')');
         } else {
           console.log('query: ' + query);
-          console.log('successfully deleted');
+          var msg = 'successfully deleted(hotel_ID): ' + hotel_ID; 
+          console.log(msg);
+          res.send(msg);
         }
       });
     },
 
     getClients: function(req, res) {
-      var guery = 'SELECT * FROM Client';
+      var query = 'SELECT * FROM Client';
 
       db.connection.query(query, function(error, results, fields) {
         if (error) {
@@ -475,9 +500,10 @@ let api = {
 
     getClient: function(req, res) {
       var client_Email = req.params.client_Email;
-      var query = 'SELECT * FROM Client where client_Email=' + client_Email;
+      var query = 'SELECT * FROM Client where client_Email=?';
+      var data = [client_Email];
 
-      db.connection.query(query, function(error, results, fields) {
+      db.connection.query(query, data, function(error, results, fields) {
         if (error) {
           console.log('error code: ' + error.code +
                       ', failed to get client info');
