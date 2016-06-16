@@ -87,11 +87,14 @@
       * url: /admin/info
  */
 
-import {clientController, managerController, adminController} from '../controllers/index';
 
-console.log('cc: ', clientController);
+import {clientController, hotelController, adminController} from '../controllers/index';
+
+
+
 export default function (app, express) {
 
+console.log('cc: ', clientController);
   // client
   //  - instead of client_ID, use client_Email
   //  - because not all clients are members (in this case, no client_ID)
@@ -99,28 +102,28 @@ export default function (app, express) {
   //  - client can send booking_Num
   //  - that's because when sending contract info, booking_Num
   app.post('/client/signup', clientController.signUp);
-  //app.post('/client/signin', clientController.signIn);
+  app.post('/client/signin', clientController.signIn);
 
-  //app.put('/client/bid/:client_Email', clientController.makeContract);
-  //app.post('/client/bid/:client_Email', clientController.getAllcontracts);
-  //app.post('/client/bid/:client_Email/:booking_Num', clientController.getContract);
+  app.put('/client/bid/:client_Email', clientController.makeContract);
+
+  app.post('/client/bid/:client_Email', clientController.getAllContracts);
+  app.post('/client/bid/:client_Email/:booking_Num', clientController.getContract);
+  
   //app.delete('/client/bid/:client_Email/:booking_Num', clientController.cancelContract);
-
   //app.post('/client/feedback/:client_Email/:booking_Num', clientController.makeFeedback);
 
-  //app.post('/client/info/:client_Email', clientController.updateInfo);
-
+  app.post('/client/info/:client_Email', clientController.updateInfo);
 
   //// hotel
-  //app.post('/hotel/signup', managerController.singUp);
-  //app.post('/hotel/signin', managerController.signIn);
+  app.post('/hotel/signup', hotelController.signUp);
+  app.post('/hotel/signin', hotelController.signIn);
 
   //// startDate: yyyymmdd, endDate: yyyymmdd
-  //app.post('/hotel/bid/:hotel_ID', managerController.bidInfo);
-  //app.post('/hotel/bid/:hotel_ID/:startDate/:endDate', managerController.bidInfoInterval);
+  //app.post('/hotel/bid/:hotel_ID', hotelController.bidInfo);
+  //app.post('/hotel/bid/:hotel_ID/:startDate/:endDate', hotelController.bidInfoInterval);
 
-  //app.put('/hotel/:booking_Num', managerController.bid);
-  //app.post('/hotel/update/:hotel_ID', managerController.update);
+  //app.put('/hotel/:booking_Num', hotelController.bid);
+  app.post('/hotel/update/:hotel_ID', hotelController.updateInfo);
 
 
   //// admin
@@ -128,19 +131,22 @@ export default function (app, express) {
   //// app.post('/admin/signin', adminController.singIn);
 
   //// don't need I think, app.delete('/admin/:userid', adminController.deleteUser);
-  //app.delete('/admin/:hotelid', adminController.deleteHotel);
+  app.delete('/admin/:hotel_ID', adminController.deleteHotel);
 
-  //// startDate: yyyymmdd, endDate: yyyymmdd
-  //app.get('/admin/pendingbid', adminController.pendingBid);
-  //app.get('/admin/bidinfo/:startDate/:endDate', adminController.contractedBid);
+  // startDate: yyyy-mm-dd, endDate: yyyy-mm-dd
+  app.get('/admin/pendingbid', adminController.pendingBid);
+  app.get('/admin/bidinfo/:startDate/:endDate', adminController.contractedBid);
 
-  //app.get('/admin/hotels', adminController.getHotels);
-  //app.post('/admin/hotels/:hotel_ID', adminController.getHotel);
-  //app.get('/admin/hotels/subArea_Name', adminController.getHotelsByRegion);
+  app.get('/admin/hotels', adminController.getHotels);
+  app.get('/admin/hotels/:hotel_ID', adminController.getHotel);
+  app.get('/admin/hotelarea/:subArea_Name', adminController.getHotelsByRegion);
 
-  //app.get('/admin/clients', adminController.getClients);
-  //app.post('admin/clients/:client_Email', adminController.getClient);
+  app.get('/admin/clients', adminController.getClients);
+  app.get('/admin/clients/:client_Email', adminController.getClient);
 
   ////app.post('/admin/info', adminController.updateAdmin);
 
 };
+
+
+
