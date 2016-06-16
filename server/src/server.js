@@ -29,3 +29,4 @@ app.listen(app.get('port'), function() {
               'press Ctrl-C to terminate.');
 });
 
+export default app;
