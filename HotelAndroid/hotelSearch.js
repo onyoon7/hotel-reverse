@@ -10,15 +10,23 @@ import {
 } from 'react-native';
 const Item = Picker.Item;
 import Button from 'react-native-button';
+import HotelSignin from './hotelSignin';
+const ACCESS_TOKEN = 'access_token';
+
 
 class HotelSearch extends Component {
-  state = {
-    location: '',
-    checkinDate: new Date(),
-    checkinText: '체크인 날짜 선택',
-    checkoutDate: new Date(),
-    checkoutText: '체크아웃 날짜 선택',
-    roomNumber: 1,
+  constructor(props){
+    super(props);
+
+    this.state = {
+      location: '',
+      checkinDate: new Date(),
+      checkinText: '체크인 날짜 선택',
+      checkoutDate: new Date(),
+      checkoutText: '체크아웃 날짜 선택',
+      roomNumber: 1,
+      accessToken : "",
+    }
   }
 
   _incRoomNumber() {
@@ -41,7 +49,7 @@ class HotelSearch extends Component {
 
   _handlePress() {
     this.props.navigator.push({id: 'bid'});
-    console.log('nav: ', this.props.navigator);
+    this.props.onChange(this.state.location,this.state.client_email, this.state.checkinText, this.state.checkoutText, this.state.roomNumber);
   }
 
   onValueChange(key: string, value: string) {
@@ -87,7 +95,9 @@ class HotelSearch extends Component {
           </View>
 
           <View style={styles.rowContainer}>
+
             <Text style={styles.label}>체크인</Text>
+
             <TouchableWithoutFeedback
                 onPress={this.showPicker.bind(this, 'checkin', {
                   date: this.state.checkinDate,

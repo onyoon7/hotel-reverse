@@ -87,14 +87,15 @@
       * url: /admin/info
  */
 
-
-import {clientController, hotelController, adminController} from '../controllers/index';
-
-
+import clientController from '../controllers/clientController';
+import hotelController from '../controllers/hotelController';
+import adminController from '../controllers/adminController';
+import dealController from '../controllers/dealController';
 
 export default function (app, express) {
 
-console.log('cc: ', clientController);
+  app.post('/deal/bid', dealController.bid);
+
   // client
   //  - instead of client_ID, use client_Email
   //  - because not all clients are members (in this case, no client_ID)
@@ -108,13 +109,13 @@ console.log('cc: ', clientController);
 
   app.post('/client/bid/:client_Email', clientController.getAllContracts);
   app.post('/client/bid/:client_Email/:booking_Num', clientController.getContract);
-  
+
   //app.delete('/client/bid/:client_Email/:booking_Num', clientController.cancelContract);
   //app.post('/client/feedback/:client_Email/:booking_Num', clientController.makeFeedback);
 
   app.post('/client/info/:client_Email', clientController.updateInfo);
 
-  //// hotel
+  // hotel
   app.post('/hotel/signup', hotelController.signUp);
   app.post('/hotel/signin', hotelController.signIn);
 
@@ -125,12 +126,7 @@ console.log('cc: ', clientController);
   //app.put('/hotel/:booking_Num', hotelController.bid);
   app.post('/hotel/update/:hotel_ID', hotelController.updateInfo);
 
-
-  //// admin
-  //app.get('/admin', adminController.home);
-  //// app.post('/admin/signin', adminController.singIn);
-
-  //// don't need I think, app.delete('/admin/:userid', adminController.deleteUser);
+  // don't need I think, app.delete('/admin/:userid', adminController.deleteUser);
   app.delete('/admin/:hotel_ID', adminController.deleteHotel);
 
   // startDate: yyyy-mm-dd, endDate: yyyy-mm-dd
@@ -144,9 +140,5 @@ console.log('cc: ', clientController);
   app.get('/admin/clients', adminController.getClients);
   app.get('/admin/clients/:client_Email', adminController.getClient);
 
-  ////app.post('/admin/info', adminController.updateAdmin);
-
+  //app.post('/admin/info', adminController.updateAdmin);
 };
-
-
-
