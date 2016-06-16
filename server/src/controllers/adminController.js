@@ -23,15 +23,17 @@ export default {
 
   contractedBid: function(req, res) {
     var startDate = req.params.startDate;
-    var endDate = req.params.endDate;
+    var endDate = req.body.endDate;
 
-    var query1 = 'SELECT * FROM Deal where bid_Transaction=1 AND';
-    var query2 = '(bid_StartTime > ' + startDate + ' AND ';
-    var query3 = 'bid_EndTime < ' + endDate + ')';
+    var startTime = startDate + ' 00:00:00';
+    var endTime = endDate + ' 23:59:59';
 
-    var query = query1 + query2 + query3;
+    var query1 = 'SELECT * FROM Deal where bid_Transaction=1 AND ';
+    var query2 = 'bid_StartTime>? AND bid_EndTime<?';
+    var query = query1 + query2;
+    var data = [startTime, endTime];
 
-    db.connection.query(query, function(error, results, fields) {
+    db.connection.query(query, data, function(error, results, fields) {
       if (error) {
         console.log("error code: " + error.code +
                     " ,fail to get contracted bid info");
@@ -59,10 +61,11 @@ export default {
   },
 
   getHotel: function(req, res) {
-    var hotelId = req.params.hotel_ID;
-    var query = 'SELECT * from Hotel where hotel_ID=' + hotel_ID;
+    var hotel_ID = req.params.hotel_ID;
+    var query = 'SELECT * from Hotel where hotel_ID=?';
+    var data = [hotel_ID];
 
-    db.connection.query(query, function(error, results, fields) {
+    db.connection.query(query, data, function(error, results, fields) {
       if (error) {
         console.log("error code: " + error.code +
                     ", fail to get Hotel Information(" + hotel_ID + ")");
@@ -76,9 +79,10 @@ export default {
 
   getHotelsByRegion: function(req, res) {
     var subArea_Name = req.params.subArea_Name;
-    var query = 'SELECT * from Hotel where subArea_Name=' + subArea_Name;
+    var query = 'SELECT * from Hotel where subArea_Name=?';
+    var data = [subArea_Name];
 
-    db.connection.query(query, function(error, results, fields) {
+    db.connection.query(query, data, function(error, results, fields) {
       if (error) {
         console.log("error code: " + error.code +
                     ", fail to get Hotel information(" + subArea_Name + ")");
@@ -92,21 +96,24 @@ export default {
 
   deleteHotel: function(req, res) {
     var hotel_ID = req.params.hotel_ID;
-    var query = 'DELETE FROM Hotel WHERE hotel_ID=' + hotel_ID;
+    var query = 'DELETE FROM Hotel WHERE hotel_ID=?';
+    var data = [hotel_ID];
 
-    db.connection.query(query, function(error, results, fields) {
+    db.connection.query(query, data, function(error, results, fields) {
       if (error) {
         console.log('error code: ' + error.code +
                     ', failed to delete hotel(' + hotel_ID + ')');
       } else {
         console.log('query: ' + query);
-        console.log('successfully deleted');
+        var msg = 'successfully deleted(hotel_ID): ' + hotel_ID;
+        console.log(msg);
+        res.send(msg);
       }
     });
   },
 
   getClients: function(req, res) {
-    var guery = 'SELECT * FROM Client';
+    var query = 'SELECT * FROM Client';
 
     db.connection.query(query, function(error, results, fields) {
       if (error) {
@@ -122,9 +129,10 @@ export default {
 
   getClient: function(req, res) {
     var client_Email = req.params.client_Email;
-    var query = 'SELECT * FROM Client where client_Email=' + client_Email;
+    var query = 'SELECT * FROM Client where client_Email=?';
+    var data = [client_Email];
 
-    db.connection.query(query, function(error, results, fields) {
+    db.connection.query(query, data, function(error, results, fields) {
       if (error) {
         console.log('error code: ' + error.code +
                     ', failed to get client info');
@@ -135,4 +143,5 @@ export default {
       }
     });
   }
-};
+}
+;

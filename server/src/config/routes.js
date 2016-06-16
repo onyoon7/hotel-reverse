@@ -88,7 +88,7 @@
  */
 
 import clientController from '../controllers/clientController';
-import managerController from '../controllers/hotelController';
+import hotelController from '../controllers/hotelController';
 import adminController from '../controllers/adminController';
 import dealController from '../controllers/dealController';
 
@@ -126,10 +126,6 @@ export default function (app, express) {
   //app.put('/hotel/:booking_Num', hotelController.bid);
   app.post('/hotel/update/:hotel_ID', hotelController.updateInfo);
 
-  app.put('/hotel/:booking_Num', managerController.bid);
-  app.post('/hotel/update/:hotel_ID', managerController.update);
-
-
   // don't need I think, app.delete('/admin/:userid', adminController.deleteUser);
   app.delete('/admin/:hotel_ID', adminController.deleteHotel);
 
@@ -146,6 +142,3 @@ export default function (app, express) {
 
   //app.post('/admin/info', adminController.updateAdmin);
 };
-
-
-
