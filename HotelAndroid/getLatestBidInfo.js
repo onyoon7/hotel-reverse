@@ -29,7 +29,7 @@ class GetLatestBidInfo extends Component {
 
   _convertDate(date) {
     var newDate;
-    var d = date.split("/"); 
+    var d = date.split("/");
     var y = d.splice(-1)[0];
 
     d.splice(0, 0, y);
@@ -39,11 +39,11 @@ class GetLatestBidInfo extends Component {
   }
 
   _handlePress(where, bidInfo, client_Email) {
-  
+
     switch (where) {
       case 'thanks':
         axios({
-          url: 'http://192.168.1.9:4444/client/bid/' + client_Email,
+          url: 'http://192.168.1.4:4444/client/bid/' + client_Email,
           method: 'put',
           data: {
             checkIn_Date: bidInfo.checkIn_Date,
@@ -70,15 +70,15 @@ class GetLatestBidInfo extends Component {
   render() {
     const bidInfo = {
       // checkIn_Date: this.props.searchData.checkIn_Date,
-      // checkOut_Date: this.props.searchData.checkOut_Date,     
+      // checkOut_Date: this.props.searchData.checkOut_Date,
       checkIn_Date: this._convertDate(this.props.searchData.checkIn_Date),
-      checkOut_Date: this._convertDate(this.props.searchData.checkOut_Date),            
+      checkOut_Date: this._convertDate(this.props.searchData.checkOut_Date),
       mainArea_Name: this.props.searchData.mainArea_Name,
       subArea_Name: this.props.bidData.subArea_Name,
       bid_Price: +this.props.bidData.bid_Price,
     };
 
-    const client_Email = '000a@gmail.com';
+    const client_Email = this.props.signinData.client_Email;
 
     console.log(this.props.searchData);
     console.log(this.props.searchData.checkIn_Date);
@@ -195,7 +195,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     color: 'white'
-  }  
+  }
 });
 
 export default GetLatestBidInfo;

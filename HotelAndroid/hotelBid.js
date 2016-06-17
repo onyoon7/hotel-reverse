@@ -23,7 +23,7 @@ class HotelBid extends Component {
 
 
    _handlePress() {
-     this.props.navigator.push({id: 'bidInfo'});
+     this.props.navigator.push({id: 'signin'});
      this.props.onChange(this.state.hotel_Rate, this.state.subArea_Name, this.state.bid_Price);
    }
 
@@ -45,14 +45,14 @@ class HotelBid extends Component {
              onValueChange={this.onValueChange.bind(this, 'subArea_Name')}
              mode="dropdown">
              <Item label="강남" value="강남" />
-             <Item label="명동" value="명" />
+             <Item label="명동" value="명동" />
            </Picker>
          </View>
 
          <View style={styles.rowContainer}>
            <Text style={styles.label}>호텔등급</Text>
            <Picker style={{width: 100}}
-             selectedValue={this.state.subArea_Name}
+             selectedValue={this.state.hotel_Rate}
              onValueChange={this.onValueChange.bind(this, 'hotel_Rate')}
              mode="dropdown">
              <Item label="1" value="1" />
