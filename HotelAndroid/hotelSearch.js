@@ -31,7 +31,7 @@ class HotelSearch extends Component {
 
   _convertDate(date) {
     var newDate;
-    var d = date.split("/"); 
+    var d = date.split("/");
     var y = d.splice(-1)[0];
 
     d.splice(0, 0, y);
@@ -102,7 +102,7 @@ class HotelSearch extends Component {
               onValueChange={this.onValueChange.bind(this, 'mainArea_Name')}
               mode="dropdown">
               <Item label="서울" value="서울" />
-              <Item label="제주" value="제" />
+              <Item label="제주" value="제주" />
             </Picker>
           </View>
 
