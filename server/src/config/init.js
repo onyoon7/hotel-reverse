@@ -189,4 +189,6 @@ setTimeout(function(){
       }
     })
   }
+
+  connection.end();
 }, 1000);
