@@ -88,7 +88,7 @@ class HotelAndroid extends Component {
       case 'search':
         return (<HotelSearch navigator={navigator} onChange={this.searchStateChanged}/>);
       case 'bid':
-        return (<HotelBid navigator={navigator} onChange={this.bidStateChanged}/>);
+        return (<HotelBid navigator={navigator} onChange={this.bidStateChanged} searchData={this.state.searchData}/>);
       case 'signin':
         return (<HotelSignin navigator={navigator} onChange={this.signinStateChanged}/>);
       case 'register':
