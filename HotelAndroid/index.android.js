@@ -25,39 +25,60 @@ class HotelAndroid extends Component {
     super(props);
 
     this.state = {
-      location : '',
-      client_email : '',
-      checkinText : '체크인 날짜 선택',
-      checkoutText : '체크아웃 날짜 선택',
-      roomNumber: 1,
-      hotel_Rate : 3,
-      hotel_SubArea : '강남',
-      bidding_Price : 35000,
+      searchData: {
+        location : '',
+        checkinText : '체크인 날짜 선택',
+        checkoutText : '체크아웃 날짜 선택',
+        roomNumber: 1
+      },
+      bidData: {
+        hotel_Rate : 3,
+        hotel_SubArea : '강남',
+        bidding_Price : 35000
+      },
+      signinData: {
+        client_email : ''
+      }
+
     };
-    // this.stateChagned = this.stateChagned.bind(this);
-    // this.navigatorRenderScene = this.navigatorRenderScene.bind(this);
+
+    this.searchStateChanged = this.searchStateChanged.bind(this);
+    this.bidStateChanged = this.bidStateChanged.bind(this);
+    this.signinStateChanged = this.signinStateChanged.bind(this);
+    this.navigatorRenderScene = this.navigatorRenderScene.bind(this);
+
   }
 
-  searchStateChagned(location, checkinText, checkoutText, roomNumber) {
-    this.setState({
+  searchStateChanged(location, checkinText, checkoutText, roomNumber) {
+    searchData = {
       location : location,
       checkinText : checkinText,
       checkoutText : checkoutText,
-      roomNumber: roomNumber,
+      roomNumber: roomNumber
+    }
+    this.setState({
+      searchData : searchData
     });
   }
 
-  bidStateChagned(hotel_Rate, hotel_SubArea, bidding_Price) {
-    this.setState({
+  bidStateChanged(hotel_Rate, hotel_SubArea, bidding_Price) {
+    bidData = {
       hotel_Rate : hotel_Rate,
       hotel_SubArea : hotel_SubArea,
       bidding_Price : bidding_Price
+    }
+    this.setState({
+      bidData: bidData
     });
   }
 
-  signinStateChagned(client_email) {
+  signinStateChanged(client_email) {
+    signinData ={
+      client_email : client_email
+    }
+
     this.setState({
-      client_email : client_email,
+      signinData : signinData
     });
   }
 
@@ -65,15 +86,15 @@ class HotelAndroid extends Component {
     _navigator = navigator;
     switch (route.id) {
       case 'search':
-        return (<HotelSearch navigator={navigator} onChange={this.searchStateChagned}/>);
+        return (<HotelSearch navigator={navigator} onChange={this.searchStateChanged}/>);
       case 'bid':
-        return (<HotelBid navigator={navigator} onChange={this.bidStateChagned}/>);    
+        return (<HotelBid navigator={navigator} onChange={this.bidStateChanged}/>);
       case 'signin':
-        return (<HotelSignin navigator={navigator} onChange={this.signinStateChagned}/>);
+        return (<HotelSignin navigator={navigator} onChange={this.signinStateChanged}/>);
       case 'register':
-        return (<Register navigator={navigator} location={this.state.location}/>);
+        return (<Register navigator={navigator}/>);
       case 'bidInfo':
-        return (<GetLatestBidInfo navigator={navigator}/>);
+        return (<GetLatestBidInfo navigator={navigator} searchData={this.state.searchData} bidData={this.state.bidData} signinData={this.state.signinData}/>);
       case 'thanks':
         return (<ThanksALot navigator={navigator}/>);
     }
@@ -82,7 +103,7 @@ class HotelAndroid extends Component {
   render() {
     return (
       <Navigator
-        initialRoute={{id: 'bidInfo'}}
+        initialRoute={{id: 'search'}}
         renderScene={this.navigatorRenderScene}/>
     );
   }

@@ -33,7 +33,6 @@ class HotelBid extends Component {
      this.setState(newState);
    }
    render() {
-          console.log('location in Bid : ' +this.props.location)
      return (
        <View style={{flex: 1}}>
          <Text style={styles.appName}>
