@@ -14,7 +14,7 @@ var mysql = require('mysql');
 module.exports.connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: 'lion0787',
+  password: '1008',
   database: 'hotelreverse'
 });
 

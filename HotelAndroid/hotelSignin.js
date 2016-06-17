@@ -8,15 +8,14 @@ import {
   AsyncStorage,
 } from 'react-native';
 import Register from './register';
-
-const ACCESS_TOKEN = 'access_token';
+import axios from 'axios'
 
 class HotelSignin extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      client_email : "",
+      client_Email : "",
       password : "",
       error : "",
     }
@@ -24,86 +23,36 @@ class HotelSignin extends Component {
 
 // ----- the token related to client login ----- //
 
-  redirect(routeName, token) {
-      this.props.navigator.push({
-        id : routeName,
-        passProps : {
-          accessToken : token,//token
-        }
-      })
-    }
 
-  async storeToken(accessToken) {
-    try {
-      await AsyncStorage.setItem(ACCESS_TOKEN, accessToken);
-      this.getToken();
-    } catch(error) {
-      console.log("something went wrong")
-    }
-  }
 
-  async getToken(accessToken) {
-    try {
-      let token = await AsyncStorage.getItem(ACCESS_TOKEN);
-      console.log('token is : ' + token)
-    } catch(error) {
-      console.log("something went wrong")
-    }
-  }
-
-  async removeToken(accessToken) {
-    try {
-      await AsyncStorage.removeItem(ACCESS_TOKEN);
-      this.getToken();
-    } catch(error) {
-      console.log("something went wrong")
-    }
-  }
-
-  async onLoginPressed() {
-    try {
-      let response = await fetch('', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          session:{
-            clientemail: this.state.email,
-            password: this.state.password,
-          }
-        })
-      });
-      let res = await response.text();
-      if (response.status >= 200 && response.status < 300) {
-        //Handle success
-        this.setState({error : ""});
-        let accessToken = res;
-        //On success we will store the access_token in the AsyncStorage
-        this.storeToken(accessToken);
-        console.log('res token : ' + accessToken);
-        this.redirect('check', accessToken);
-      } else {
-        //Handle error
-        let error = res;
-        throw error;
-      }
-    } catch(error) {
-      this.removeToken();
-      this.setState({error: error});
-      console.log("error " + error);
-      this.setState({showProgress: false});
-    }
-  }
 
 // -------------------------------------------- //
 
-  _handlePress(routeName) {
-    this.props.navigator.push({
-      id : routeName,
-    })
-    // this.props.onChange(this.state.client_email);
+  _handlePress(where) {
+    let email = this.state.client_Email;
+    let password = this.state.password;
+    switch(where) {
+      case 'login' :
+        axios({
+          url: 'http://192.168.1.4:4444/client/signin/',
+          method : 'post',
+          data : {
+            client_ID : email,
+            client_PW : password
+          }
+        }).then(function(response) {
+          console.log(response)
+        }).catch(function(error) {
+          console.log(error);
+        });
+        this.props.navigator.push({id : 'bidInfo'})
+        break;
+    case 'register' :
+      this.props.navigator.push({
+        id : where,
+      })
+      break;
+    }
   }
 
   render() {
@@ -114,7 +63,7 @@ class HotelSignin extends Component {
           💃 Enjoy Hotel-Reverse 💃
         </Text>
         <TextInput
-        onChangeText={ (text)=> this.setState({clientemail: text}) }
+        onChangeText={ (text)=> this.setState({client_Email: text}) }
         style={styles.input} placeholder="Email">
         </TextInput>
         <TextInput
@@ -123,7 +72,7 @@ class HotelSignin extends Component {
           placeholder="Password"
           secureTextEntry={true}>
         </TextInput>
-        <TouchableHighlight onPress={this.onLoginPressed.bind(this)} style={styles.button}>
+        <TouchableHighlight onPress={this._handlePress.bind(this, 'login')} style={styles.button}>
           <Text style={styles.buttonText}>
             Login
           </Text>
