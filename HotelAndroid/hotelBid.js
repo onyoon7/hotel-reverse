@@ -32,7 +32,24 @@ class HotelBid extends Component {
      newState[key] = value;
      this.setState(newState);
    }
+
    render() {
+     const seoulArea = ['강남구', '서초구', '명동', '여의도'];
+     const jejuArea = ['제주시', '서귀포시'];
+
+     const rows = [];
+     const change = this.props.searchData.mainArea_Name;
+
+     if(change === '서울'){
+       for(const i = 0; i < seoulArea.length; i++){
+         rows.push(<Item label={seoulArea[i]} value={seoulArea[i]} />);
+       }
+     }
+     if(change === '제주'){
+       for(const i = 0; i < jejuArea.length; i++){
+         rows.push(<Item label={jejuArea[i]} value={jejuArea[i]} />);
+       }
+     }
      return (
        <View style={{flex: 1}}>
          <Text style={styles.appName}>
@@ -44,8 +61,7 @@ class HotelBid extends Component {
              selectedValue={this.state.subArea_Name}
              onValueChange={this.onValueChange.bind(this, 'subArea_Name')}
              mode="dropdown">
-             <Item label="강남" value="강남" />
-             <Item label="명동" value="명동" />
+             {this.rows}
            </Picker>
          </View>
 
