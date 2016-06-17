@@ -34,8 +34,8 @@ class HotelAndroid extends Component {
       hotel_SubArea : '강남',
       bidding_Price : 35000,
     };
-    this.stateChagned = this.stateChagned.bind(this);
-    this.navigatorRenderScene = this.navigatorRenderScene.bind(this);
+    // this.stateChagned = this.stateChagned.bind(this);
+    // this.navigatorRenderScene = this.navigatorRenderScene.bind(this);
   }
 
   searchStateChagned(location, checkinText, checkoutText, roomNumber) {

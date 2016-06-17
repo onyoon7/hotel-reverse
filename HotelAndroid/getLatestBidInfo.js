@@ -12,6 +12,7 @@ import {
 
 const Item = Picker.Item;
 import Button from 'react-native-button';
+import axios from 'axios';
 
 
 
@@ -26,60 +27,36 @@ class GetLatestBidInfo extends Component {
     super(props);
   }
 
-  async onLoginPressed() {
-
-  }
-
-
-
-
-
-
   _handlePress(where, bidInfo, client_Email) {
   
+    if (where === 'search') {
+      this.props.navigator.push({id: 'search'});
+    }
     switch (where) {
       case 'thanks':
-
-        var formBody = [];
-
-        for (var key in bidInfo) {
-          var encodedKey = encodeURIComponent(key);
-          var encodedValue = encodeURIComponent(bidInfo[key]);
-        
-          formBody.push(encodedKey + "=" + encodedValue);
-        }
-        console.log(client_Email);
-        console.log('before join: >>>>> ', formBody);
-        formBody = formBody.join("&");
-        console.log('after join: >>>> ', formBody);
-
-        let response = fetch('http://localhost:4444/client/bid/000a@gmail.com', {
-          method: 'PUT',
-          // headers: {
-          //   'Accept': 'application/json',
-          //   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-          // },
-          // body: formBody
-        })
-        .then((response) => {
-          //let res = response.text();
-          if (response.status >= 200 && response.status < 300) {
-            console.log('successfully inserted');
-          } else {
-            console.log('something went wrong', response);
+        axios({
+          url: 'http://192.168.1.9:4444/client/bid/' + client_Email,
+          method: 'put',
+          data: {
+            checkIn_Date: bidInfo.checkIn_Date,
+            checkOut_Date: bidInfo.checkOut_Date,
+            mainArea_Name: bidInfo.mainArea_Name,
+            subArea_Name: bidInfo.subArea_Name,
+            bid_Price: bidInfo.bid_Price
           }
+        }).then(function(response) {
+          console.log(response);
+        }).catch(function(error) {
+          console.log(error);
         });
 
-        this.props.navigator.push({id: where});
+        this.props.navigator.push({id: 'thanks'});
         break;
       case 'search':
-        this.props.navigator.push({id: where});
+        this.props.navigator.push({id: 'search'});
         // back to bid page
         break;
     }
-     
-
-    console.log('nav: ', this.props.navigator);
   }
 
   render() {
