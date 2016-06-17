@@ -41,10 +41,12 @@ class HotelAndroid extends Component {
       }
 
     };
+
     this.searchStateChanged = this.searchStateChanged.bind(this);
     this.bidStateChanged = this.bidStateChanged.bind(this);
     this.signinStateChanged = this.signinStateChanged.bind(this);
     this.navigatorRenderScene = this.navigatorRenderScene.bind(this);
+
   }
 
   searchStateChanged(location, checkinText, checkoutText, roomNumber) {

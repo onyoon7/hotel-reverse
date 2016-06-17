@@ -125,6 +125,7 @@ export default {
 
   makeContract: function(req, res) {
 
+    console.log("In makeContract");
     var client_Email = req.params.client_Email;
     var client_Index;
 

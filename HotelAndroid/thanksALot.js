@@ -24,24 +24,16 @@ import Button from 'react-native-button';
 class ThanksALot extends Component {
   constructor(props) {
     super(props);
+    console.log('thnaxk');
   }
 
   _handlePress(where) {
     this.props.navigator.push({id: where});
-    console.log('nav: ', this.props.navigator);
+    // console.log('nav: ', this.props.navigator);
   }
 
   render() {
-    const bidInfo = {
-      mainArea_Name: '제주도',
-      subArea_Name: '서귀포시',
-      checkIn_Date: '2016-06-24',
-      checkOut_Date: '2016-06-27',
-      bid_Price: 200000
-    };
-
     return (
-
       <View style={{flex: 1}}>
         <Text style={styles.appName}>
           이용해 주셔서 감사합니다!!!
