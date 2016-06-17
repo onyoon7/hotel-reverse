@@ -15,16 +15,16 @@ class HotelBid extends Component {
   constructor(props){
     super(props)
     this.state={
-      hotel_SubArea: '',
+      subArea_Name: '',
       hotel_Rate: 1,
-      bidding_Price: ''
+      bid_Price: ''
     }
   }
 
 
    _handlePress() {
-     this.props.navigator.push({id: 'signin'});
-     this.props.onChange(this.state.hotel_Rate, this.state.hotel_SubArea, this.state.bidding_Price);
+     this.props.navigator.push({id: 'bidInfo'});
+     this.props.onChange(this.state.hotel_Rate, this.state.subArea_Name, this.state.bid_Price);
    }
 
    onValueChange(key: string, value: string) {
@@ -41,19 +41,19 @@ class HotelBid extends Component {
          <View style={styles.rowContainer}>
            <Text style={styles.label}>세부지역</Text>
            <Picker style={{width: 100}}
-             selectedValue={this.state.hotel_SubArea}
-             onValueChange={this.onValueChange.bind(this, 'hotel_SubArea')}
+             selectedValue={this.state.subArea_Name}
+             onValueChange={this.onValueChange.bind(this, 'subArea_Name')}
              mode="dropdown">
-             <Item label="강남" value="gangnam" />
-             <Item label="명동" value="myeongdong" />
+             <Item label="강남" value="강남" />
+             <Item label="명동" value="명" />
            </Picker>
          </View>
 
          <View style={styles.rowContainer}>
            <Text style={styles.label}>호텔등급</Text>
            <Picker style={{width: 100}}
-             selectedValue={this.state.hotel_SubArea}
-             onValueChange={this.onValueChange.bind(this, 'hotel_SubArea')}
+             selectedValue={this.state.subArea_Name}
+             onValueChange={this.onValueChange.bind(this, 'hotel_Rate')}
              mode="dropdown">
              <Item label="1" value="1" />
              <Item label="2" value="2" />
@@ -64,8 +64,8 @@ class HotelBid extends Component {
          </View>
          <TextInput
            style={styles.input}
-           onChangeText={(bidding_Price) => this.setState({bidding_Price})}
-           value={this.state.bidding_Price}
+           onChangeText={(bid_Price) => this.setState({bid_Price})}
+           value={this.state.bid_Price}
            placeholder ={'금액을 입력해주세요.'}
          />
          <View style={styles.rowContainer}>

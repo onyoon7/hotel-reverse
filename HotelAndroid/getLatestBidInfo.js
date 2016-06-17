@@ -27,11 +27,19 @@ class GetLatestBidInfo extends Component {
     super(props);
   }
 
+  _convertDate(date) {
+    var newDate;
+    var d = date.split("/"); 
+    var y = d.splice(-1)[0];
+
+    d.splice(0, 0, y);
+    newDate = d.join("-");
+
+    return newDate;
+  }
+
   _handlePress(where, bidInfo, client_Email) {
   
-    if (where === 'search') {
-      this.props.navigator.push({id: 'search'});
-    }
     switch (where) {
       case 'thanks':
         axios({
@@ -61,14 +69,21 @@ class GetLatestBidInfo extends Component {
 
   render() {
     const bidInfo = {
-      checkIn_Date: '2016-07-24',
-      checkOut_Date: '2016-07-27',      
-      mainArea_Name: '제주도',
-      subArea_Name: '서귀포시',
-      bid_Price: 200000,
+      // checkIn_Date: this.props.searchData.checkIn_Date,
+      // checkOut_Date: this.props.searchData.checkOut_Date,     
+      checkIn_Date: this._convertDate(this.props.searchData.checkIn_Date),
+      checkOut_Date: this._convertDate(this.props.searchData.checkOut_Date),            
+      mainArea_Name: this.props.searchData.mainArea_Name,
+      subArea_Name: this.props.bidData.subArea_Name,
+      bid_Price: +this.props.bidData.bid_Price,
     };
 
     const client_Email = '000a@gmail.com';
+
+    console.log(this.props.searchData);
+    console.log(this.props.searchData.checkIn_Date);
+    console.log(this.props.bidData);
+    console.log(this.props.signinData);
 
     return (
 

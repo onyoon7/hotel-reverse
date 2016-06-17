@@ -19,37 +19,48 @@ class HotelSearch extends Component {
     super(props);
 
     this.state = {
-      location: '',
-      checkinDate: new Date(),
-      checkinText: '체크인 날짜 선택',
-      checkoutDate: new Date(),
-      checkoutText: '체크아웃 날짜 선택',
-      roomNumber: 1,
+      mainArea_Name: '',
+      checkInDate: new Date(),
+      checkIn_Date: '체크인 날짜 선택',
+      checkOutDate: new Date(),
+      checkOut_Date: '체크아웃 날짜 선택',
+      room_Number: 1,
       accessToken : "",
     }
   }
 
+  _convertDate(date) {
+    var newDate;
+    var d = date.split("/"); 
+    var y = d.splice(-1)[0];
+
+    d.splice(0, 0, y);
+    newDate = d.join("-");
+
+    return newDate;
+  }
+
   _incRoomNumber() {
-    if (this.state.roomNumber < 9) {
+    if (this.state.room_Number < 9) {
       this.setState({
         ...this.state,
-        roomNumber: this.state.roomNumber+1,
+        room_Number: this.state.room_Number+1,
       });
     }
   }
 
   _decRoomNumber() {
-    if (this.state.roomNumber > 1) {
+    if (this.state.room_Number > 1) {
       this.setState({
         ...this.state,
-        roomNumber: this.state.roomNumber-1,
+        room_Number: this.state.room_Number-1,
       });
     }
   }
 
   _handlePress() {
     this.props.navigator.push({id: 'bid'});
-    this.props.onChange(this.state.location, this.state.checkinText, this.state.checkoutText, this.state.roomNumber);
+    this.props.onChange(this.state.mainArea_Name, this.state.checkIn_Date, this.state.checkOut_Date, this.state.room_Number);
   }
 
   onValueChange(key: string, value: string) {
@@ -66,7 +77,8 @@ class HotelSearch extends Component {
         //newState[stateKey + 'Text'] = 'dismissed';
       } else {
         var date = new Date(year, month, day);
-        newState[stateKey + 'Text'] = date.toLocaleDateString();
+
+        newState[stateKey + '_Date'] = this._convertDate(date.toLocaleDateString('en-US'));
         newState[stateKey + 'Date'] = date;
       }
       this.setState(newState);
@@ -86,11 +98,11 @@ class HotelSearch extends Component {
           <View style={styles.rowContainer}>
             <Text style={styles.label}>지역</Text>
             <Picker style={{width: 100}}
-              selectedValue={this.state.location}
-              onValueChange={this.onValueChange.bind(this, 'location')}
+              selectedValue={this.state.mainArea_Name}
+              onValueChange={this.onValueChange.bind(this, 'mainArea_Name')}
               mode="dropdown">
-              <Item label="서울" value="seoul" />
-              <Item label="제주" value="jeju" />
+              <Item label="서울" value="서울" />
+              <Item label="제주" value="제" />
             </Picker>
           </View>
 
@@ -99,13 +111,13 @@ class HotelSearch extends Component {
             <Text style={styles.label}>체크인</Text>
 
             <TouchableWithoutFeedback
-                onPress={this.showPicker.bind(this, 'checkin', {
-                  date: this.state.checkinDate,
-                  minDate: this.state.checkinDate,
-                  maxDate: new Date().setDate(this.state.checkinDate.getDate() + 14),
+                onPress={this.showPicker.bind(this, 'checkIn', {
+                  date: this.state.checkInDate,
+                  minDate: this.state.checkInDate,
+                  maxDate: new Date().setDate(this.state.checkInDate.getDate() + 14),
                 })}>
               <View>
-                <Text style={styles.text}>{this.state.checkinText}</Text>
+                <Text style={styles.text}>{this.state.checkIn_Date}</Text>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -113,13 +125,13 @@ class HotelSearch extends Component {
           <View style={styles.rowContainer}>
             <Text style={styles.label}>체크아웃</Text>
             <TouchableWithoutFeedback
-                onPress={this.showPicker.bind(this, 'checkout', {
-                  date: this.state.checkoutDate,
-                  minDate: this.state.checkinDate,
-                  maxDate: new Date().setDate(this.state.checkinDate.getDate() + 7),
+                onPress={this.showPicker.bind(this, 'checkOut', {
+                  date: this.state.checkOutDate,
+                  minDate: this.state.checkInDate,
+                  maxDate: new Date().setDate(this.state.checkInDate.getDate() + 7),
                 })}>
               <View>
-                <Text style={styles.text}>{this.state.checkoutText}</Text>
+                <Text style={styles.text}>{this.state.checkOut_Date}</Text>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -131,7 +143,7 @@ class HotelSearch extends Component {
               onPress={() => this._decRoomNumber()}>
               -&nbsp;
             </Button>
-            <Text>{this.state.roomNumber}</Text>
+            <Text>{this.state.room_Number}</Text>
             <Button
               onPress={() => this._incRoomNumber()}>
               &nbsp;+

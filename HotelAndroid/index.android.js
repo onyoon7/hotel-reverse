@@ -26,18 +26,18 @@ class HotelAndroid extends Component {
 
     this.state = {
       searchData: {
-        location : '',
-        checkinText : '체크인 날짜 선택',
-        checkoutText : '체크아웃 날짜 선택',
-        roomNumber: 1
+        mainArea_Name : '',
+        checkIn_Date : '체크인 날짜 선택',
+        checkOut_Date : '체크아웃 날짜 선택',
+        room_Number: 1
       },
       bidData: {
         hotel_Rate : 3,
-        hotel_SubArea : '강남',
-        bidding_Price : 35000
+        subArea_Name : '강남',
+        bid_Price : 35000
       },
       signinData: {
-        client_email : ''
+        client_Email : ''
       }
 
     };
@@ -49,32 +49,32 @@ class HotelAndroid extends Component {
 
   }
 
-  searchStateChanged(location, checkinText, checkoutText, roomNumber) {
+  searchStateChanged(mainArea_Name, checkIn_Date, checkOut_Date, room_Number) {
     searchData = {
-      location : location,
-      checkinText : checkinText,
-      checkoutText : checkoutText,
-      roomNumber: roomNumber
+      mainArea_Name : mainArea_Name,
+      checkIn_Date : checkIn_Date,
+      checkOut_Date : checkOut_Date,
+      room_Number: room_Number
     }
     this.setState({
       searchData : searchData
     });
   }
 
-  bidStateChanged(hotel_Rate, hotel_SubArea, bidding_Price) {
+  bidStateChanged(hotel_Rate, subArea_Name, bid_Price) {
     bidData = {
       hotel_Rate : hotel_Rate,
-      hotel_SubArea : hotel_SubArea,
-      bidding_Price : bidding_Price
+      subArea_Name : subArea_Name,
+      bid_Price : bid_Price
     }
     this.setState({
       bidData: bidData
     });
   }
 
-  signinStateChanged(client_email) {
+  signinStateChanged(client_Email) {
     signinData ={
-      client_email : client_email
+      client_Email : client_Email
     }
 
     this.setState({

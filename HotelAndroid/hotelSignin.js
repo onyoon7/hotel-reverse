@@ -8,7 +8,6 @@ import {
   AsyncStorage,
 } from 'react-native';
 import Register from './register';
-import Login from './login';
 
 const ACCESS_TOKEN = 'access_token';
 
