@@ -63,7 +63,7 @@ class HotelSignin extends Component {
 
   async onLoginPressed() {
     try {
-      let response = await fetch('https://afternoon-beyond-22141.herokuapp.com/api/login', {
+      let response = await fetch('', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',

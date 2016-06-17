@@ -49,7 +49,7 @@ class HotelSearch extends Component {
 
   _handlePress() {
     this.props.navigator.push({id: 'bid'});
-    this.props.onChange(this.state.location,this.state.client_email, this.state.checkinText, this.state.checkoutText, this.state.roomNumber);
+    this.props.onChange(this.state.location, this.state.checkinText, this.state.checkoutText, this.state.roomNumber);
   }
 
   onValueChange(key: string, value: string) {
