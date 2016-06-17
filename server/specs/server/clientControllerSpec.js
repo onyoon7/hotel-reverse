@@ -11,15 +11,17 @@ describe('Server RestAPI unit test', () => {
     server
       .post('/client/signup')
       .send({
-          client_ID: 'tr',
-          client_PW: 'tr',
+          client_ID: 'taeri',
+          client_PW: 'taeri',
           client_Name: '김태리',
-          client_Email: 'tr@gmail.com',
+          client_Email: 'mh@gmail.com',
           billingInfo: '000a-0001-0002-0003',
           member: 1
         })
       .expect(200)
       .end((err, res) => {
+        if (err) throw err;
+
         res.status.should.equal(200);
         done();
       });
@@ -29,11 +31,13 @@ describe('Server RestAPI unit test', () => {
     server
       .post('/client/signin')
       .send({
-          client_ID: 'tr',
-          client_PW: 'tr',
+          client_ID: 'taeri',
+          client_PW: 'taeri',
         })
       .expect(200)
       .end((err, res) => {
+        if (err) throw err;
+
         res.status.should.equal(200);
         done();
       });
@@ -41,7 +45,7 @@ describe('Server RestAPI unit test', () => {
 
   it('should POST /client/bid/:client_Email', (done) => {
     server
-      .post('/client/bid/tr@gmail.com')
+      .post('/client/bid/mh@gmail.com')
       .send({
         checkIn_Date: '2016-01-01',
         checkOut_Date: '2016-01-02',
@@ -51,6 +55,8 @@ describe('Server RestAPI unit test', () => {
       })
       .expect(200)
       .end((err, res) => {
+        if (err) throw err;
+
         res.status.should.equal(200);
         done();
       });
