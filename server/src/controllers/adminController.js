@@ -23,7 +23,7 @@ export default {
 
   contractedBid: function(req, res) {
     var startDate = req.params.startDate;
-    var endDate = req.body.endDate;
+    var endDate = req.params.endDate;
 
     var startTime = startDate + ' 00:00:00';
     var endTime = endDate + ' 23:59:59';

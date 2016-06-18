@@ -4,50 +4,22 @@
  *-------------------------------------------------------------------*/
 
 /*
-  1. user(customer)
+  1. client
     - signup
-      * method: post
-      * url: /user/signup
     - signin
-      * method: post
-      * url: /user/signin
-    - request contract
-      * method: put
-      * url: /user/contract/:userid (or :email or phone)
+    - bid
     - retrieve contract(all)
-      * method: get
-      * url: /user/:userid (or :email or :phone)
     - retrieve contract(specific)
-      * method: post
-      * url: /user/contract/:userid/:contractid
     - cancel contract
-      * method: delete
-      * url: /user/contract/:userid/:contractid
     - feedback
-      * method: post
-      * url: /user/feedback
     - update user information
-      * method: post
-      * url: /user/info/:userid
-  2. user(hotel manager)
+  2. hotel
     - signup
-      * method: post
-      * url: /manager/signup
     - signin
-      * method: post
-      * url: /manager/signin
-    - retrieve bidding information (not yet contracted)
-      * method: get
-      * url: /manager/bidinfo
-    - retrieve bids (from YYYYMMDD to YYYYMMDD, contracted)
-      * method: post
-      * url: /manager/bidinfo/:yyyymmdd/:yyyymmdd
+    - retrieve pending bids
+    - retrieve settled bids (from YYYY-MM-DD to YYYY-MM-DD)
     - bid (try to bid)
-      * method: post
-      * url: /manager/bid
     - update hotel(including hotel manager) information
-      * method: post
-      * url: /manager/hotel
   3. user(admin)
     - start page
       * method: get
@@ -61,7 +33,7 @@
     - delete hotel
       * method: delete
       * url: /admin/:hotelid
-    - retrieve pending bid
+    - pending bid
       * method: get
       * url: /admin/pendingbid
     - retrieve contracted bid
@@ -96,12 +68,22 @@ export default function (app, express) {
 
   app.post('/deal/bid', dealController.bid);
 
+  //////////////////////////////////////////////////////////////////////////
   // client
-  //  - instead of client_ID, use client_Email
-  //  - because not all clients are members (in this case, no client_ID)
+  // 
+  // function        method    url
+  // ----------------------------------------------------------------------
+  // signup          post,     /client/signup
+  // signin          post,     /client/signin
+  // bid             put       /client/bid/:client_Email (or id)
+  // bid(all)        post      /client/bid/:client_Email (or :email or :phone)
+  // bid(specific)   post      /user/bid/:client_Email/:booking_Num
+  // cancel bid      delete    /client/bid/:client_Email/:booking_Num
+  // feedback        post      /client/feedback/:client_Email/:booking_Num
+  // update client   post      /client/info/:client_Email
   //
-  //  - client can send booking_Num
-  //  - that's because when sending contract info, booking_Num
+  ////////////////////////////////////////////////////////////////////////
+  
   app.post('/client/signup', clientController.signUp);
   app.post('/client/signin', clientController.signIn);
 
@@ -115,21 +97,51 @@ export default function (app, express) {
 
   app.post('/client/info/:client_Email', clientController.updateInfo);
 
+  ////////////////////////////////////////////////////////////////////////
   // hotel
+  // 
+  // function         method    url
+  // ---------------------------------------------------------------------- 
+  // signup           post      /hotel/signup
+  // signin           post      /hotel/signin
+  // pending bids     post      /hotel/bid/:hotel_ID
+  // settled bids     post      /hotel/bid/:hotel_ID/:start_Date/:end_Date
+  //                            Date format -> yyyy-mm-dd
+  // bid              put       /hotel/:booking_Num
+  // update hotel     post      /hotel/update/:hotel_ID
+  // 
+  ////////////////////////////////////////////////////////////////////////
+  
   app.post('/hotel/signup', hotelController.signUp);
   app.post('/hotel/signin', hotelController.signIn);
 
   //// startDate: yyyymmdd, endDate: yyyymmdd
-  //app.post('/hotel/bid/:hotel_ID', hotelController.bidInfo);
-  //app.post('/hotel/bid/:hotel_ID/:startDate/:endDate', hotelController.bidInfoInterval);
+  app.get('/hotel/bid/:hotel_ID', hotelController.bidInfo);
+  app.get('/hotel/contracted/:hotel_ID', hotelController.contractedBids);
 
   //app.put('/hotel/:booking_Num', hotelController.bid);
   app.post('/hotel/update/:hotel_ID', hotelController.updateInfo);
 
-  // don't need I think, app.delete('/admin/:userid', adminController.deleteUser);
-  app.delete('/admin/:hotel_ID', adminController.deleteHotel);
-
-  // startDate: yyyy-mm-dd, endDate: yyyy-mm-dd
+  ////////////////////////////////////////////////////////////////////////
+  // admin
+  // 
+  // function         method    url
+  // ----------------------------------------------------------------------   
+  // pending bid      get       /admin/pendigbid
+  // settled bid      get       /admin/bidinfo/:start_Date/:end_Date
+  //                            Date format -> yyyy-mm-dd
+  // hotels           get       /admin/hotels
+  // hotel            get       /admin/hotels/hotel_ID
+  // hotels(area)     get       /admin/hotels/:subArea_Name
+  // 
+  // clients(info)    get       /admin/clients
+  // client(info)     get       /admin/clients/:client_Email
+  // 
+  // delete(hotel)    delete    /admin/:hotel_ID
+  // delete(client)   delete    /admin/:client_ID    
+  // 
+  ////////////////////////////////////////////////////////////////////////
+ 
   app.get('/admin/pendingbid', adminController.pendingBid);
   app.get('/admin/bidinfo/:startDate/:endDate', adminController.contractedBid);
 
@@ -140,5 +152,8 @@ export default function (app, express) {
   app.get('/admin/clients', adminController.getClients);
   app.get('/admin/clients/:client_Email', adminController.getClient);
 
-  //app.post('/admin/info', adminController.updateAdmin);
+  //app.delete('/admin/:client_Id', adminController.deleteUser);
+  app.delete('/admin/:hotel_ID', adminController.deleteHotel);
+
+
 };
