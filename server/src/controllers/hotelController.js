@@ -21,6 +21,7 @@ export default {
       if (error) {
         console.log('error code: ' + error.code +
                     ', faild to insert new hotel');
+        res.send('something went wrong..., try again');
       } else {
         console.log('query: ' + query);
         console.log('successfully inserted');
@@ -45,6 +46,7 @@ export default {
       if (error) {
         console.log('error code: ' + error.code +
                     ' ,failed to retrieve user informaton');
+        res.send('something went wrong... sorry');
       } else {
         console.log('query: ' + query);
         console.log(results);
@@ -62,30 +64,37 @@ export default {
     var hotel_ID = req.params.hotel_ID;
     var subArea_Name;
 
+    var firstQ = 'SELECT subArea_Name FROM Hotel WHERE hotel_ID=?';
+    var firstData = [hotel_ID];
 
-    var firstQ = 'SELECT subArea_Name FROM Hotel WHERE hotel_ID=' + hotel_ID;
-
-    db.connection.query(query, function(error, results, fields) {
+    db.connection.query(firstQ, firstData, function(error, results, fields) {
       if (error) {
         console.log('error code: ' + error.code +
                     ', failed to retreive bid information');
+        res.send('no pending bids...')
+        return;
       } else {
-        console.log('query: ' + query);
+        console.log('query: ' + firstQ, firstData);
         console.log(results);
 
-        subArea_Name = results[0];
+        subArea_Name = results[0].subArea_Name;
 
-        var secondQ = 'SELECT * FROM deal WHERE bid_Transaction=0 AND subArea_Name=' + subArea_Name;
+        var secondQ = 'SELECT * FROM deal WHERE bid_Transaction=0 AND subArea_Name=?';
+        var secondData = [subArea_Name];
 
-        db.connection.query(query, function(error, results, fields) {
+        db.connection.query(secondQ, secondData, function(error, results, fields) {
 
           if (error) {
             console.log('error code: ' + error.code +
                         ', failed to retreive bid information');
+            res.send('no pending bids...')
+            return;
           } else {
-            console.log('query: ' + query);
+            console.log('query: ' + secondQ, secondData);
             console.log(results);
-
+            if (results.length === 0) {
+              res.send('no pening bid...')
+            }
             res.send(results);
           }
         });
@@ -93,22 +102,18 @@ export default {
     });
   },
 
-  bidInfoInterval: function(req, res) {
+  contractedBids: function(req, res) {
     var hotel_ID = req.params.hotel_ID;
-    var startDate = req.params.startDate;
-    var endDate = req.params.endDate;
 
-    var query1 = 'SELECT * FROM Deal where hotel_ID=' + hotel_ID + ' AND ';
-    var query2 = 'bid_Transaction=1 AND ';
-    var query3 = '(bid_StartTime > ' + startDate + ' AND ';
-    var query4 = 'bid_EndTime < ' + endDate + ')';
+    var query = 'SELECT * FROM Deal where hotel_ID=?';
+    var data = [hotel_ID];
 
-    var query = query1 + query2 + query3 + query4;
-
-    db.connection.query(query, function(error, results, fields) {
+    db.connection.query(query, data, function(error, results, fields) {
       if (error) {
         console.log("error code: " + error.code +
                     " ,fail to get contracted bid info");
+        res.send('no contracted bids');
+        return;
       } else {
         console.log('query: ' + query);
         console.log(results);
@@ -147,6 +152,8 @@ export default {
       if (error) {
         console.log('error code: ' + error.code +
                     ', failed to update hotel information');
+        res.send('failed to update hotel information');
+        return;
       } else {
         console.log('query: ' + query, data);
         console.log(results);
