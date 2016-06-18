@@ -42,12 +42,12 @@ class HotelBid extends Component {
 
      if(change === '서울'){
        for(const i = 0; i < seoulArea.length; i++){
-         rows.push(<Item label={seoulArea[i]} value={seoulArea[i]} />);
+         rows.push(<Item label={seoulArea[i]} key={i} value={seoulArea[i]} />);
        }
      }
      if(change === '제주'){
        for(const i = 0; i < jejuArea.length; i++){
-         rows.push(<Item label={jejuArea[i]} value={jejuArea[i]} />);
+         rows.push(<Item label={jejuArea[i]} key={i} value={jejuArea[i]} />);
        }
      }
      return (
@@ -61,7 +61,7 @@ class HotelBid extends Component {
              selectedValue={this.state.subArea_Name}
              onValueChange={this.onValueChange.bind(this, 'subArea_Name')}
              mode="dropdown">
-             {this.rows}
+             {rows}
            </Picker>
          </View>
 
