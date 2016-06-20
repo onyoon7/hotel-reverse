@@ -7,9 +7,13 @@ import {
   TouchableWithoutFeedback,
   Picker,
   Navigator,
+  Dimensions,
 } from 'react-native';
 const Item = Picker.Item;
 import Button from 'react-native-button';
+import MapView from 'react-native-maps';
+
+let { width, height } = Dimensions.get('window');
 
 class HotelBid extends Component {
   constructor(props){
@@ -51,10 +55,16 @@ class HotelBid extends Component {
        }
      }
      return (
-       <View style={{flex: 1}}>
-         <Text style={styles.appName}>
-           HOTEL REVERSE
-         </Text>
+       <View style={styles.container}>
+         <MapView style={styles.map}>
+           initialRegion={{
+             latitude: 37.78825,
+             longitude: -122.4324,
+             latitudeDelta: 0.0922,
+             longitudeDelta: 0.0421,
+           }}
+         />
+         <View style={styles.inputsContainer}>
          <View style={styles.rowContainer}>
            <Text style={styles.label}>세부지역</Text>
            <Picker style={{width: 100}}
@@ -82,7 +92,7 @@ class HotelBid extends Component {
            style={styles.input}
            onChangeText={(bid_Price) => this.setState({bid_Price})}
            value={this.state.bid_Price}
-           placeholder ={'금액을 입력해주세요.'}
+           placeholder ={'asdfasd금액을 입력해주세요.'}
          />
          <View style={styles.rowContainer}>
            <Button style={styles.searchBtnText}
@@ -91,30 +101,40 @@ class HotelBid extends Component {
              계속하기
            </Button>
          </View>
+         </View>
        </View>
      );
    }
 }
 const styles = StyleSheet.create({
- rowContainer: {
-   flexDirection: 'row',
-   justifyContent: 'center',
-   alignItems: 'center',
+  container: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  rowContainer: {
+/*   flexDirection: 'row',*/
+   //justifyContent: 'center',
+   /*alignItems: 'center',*/
    margin: 10,
- },
- appName: {
+  },
+  appName: {
    fontSize: 20,
    textAlign: 'center',
    color: '#000',
    margin: 10,
- },
- label: {
+  },
+  label: {
    width: 60,
    textAlign: 'left',
    margin: 10,
    color: 'black',
- },
- searchBtn: {
+  },
+  searchBtn: {
    width: 150,
    padding:10,
    height: 30,
@@ -125,17 +145,31 @@ const styles = StyleSheet.create({
    backgroundColor: 'green',
    justifyContent: 'center',
    alignItems: 'center',
- },
- searchBtnText: {
+  },
+  searchBtnText: {
    fontSize: 15,
    color: 'white',
- },
- input: {
+  },
+  input: {
    height: 40,
    borderColor: '#173e43',
    borderWidth: 2,
    textAlign: 'center'
- }
+  },
+  inputsContainer {
+    position: 'absolute',
+    top: height / 2,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  map: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: height / 2,
+  },
 });
 
 

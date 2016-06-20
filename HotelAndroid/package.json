@@ -10,7 +10,8 @@
     "eslint-plugin-react": "^5.1.1",
     "react": "^15.1.0",
     "react-native": "0.27.2",
-    "react-native-button": "^1.6.0"
+    "react-native-button": "^1.6.0",
+    "react-native-maps": "^0.4.2"
   },
   "devDependencies": {
     "babel-eslint": "^6.0.4",

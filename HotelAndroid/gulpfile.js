@@ -34,9 +34,9 @@ gulp.task('eslint', () =>
   .pipe(eslint.failAfterError())
 );
 
-gulp.task('watch', () => {
-  gulp.watch(paths.android, ['eslint']);
-});
+/*gulp.task('watch', () => {*/
+  //gulp.watch(paths.android, ['eslint']);
+/*});*/
 
 gulp.task('start', () => {
   exec('react-native run-android', (err, stdout, stderr) => {
@@ -46,4 +46,4 @@ gulp.task('start', () => {
   });
 });
 
-gulp.task('default', ['eslint', 'watch', 'start']);
+gulp.task('default', ['start']);

@@ -50,32 +50,32 @@ class HotelAndroid extends Component {
   }
 
   searchStateChanged(mainArea_Name, checkIn_Date, checkOut_Date, room_Number) {
-    searchData = {
+    let searchData = {
       mainArea_Name : mainArea_Name,
       checkIn_Date : checkIn_Date,
       checkOut_Date : checkOut_Date,
       room_Number: room_Number
-    }
+    };
     this.setState({
       searchData : searchData
     });
   }
 
   bidStateChanged(hotel_Rate, subArea_Name, bid_Price) {
-    bidData = {
+    let bidData = {
       hotel_Rate : hotel_Rate,
       subArea_Name : subArea_Name,
       bid_Price : bid_Price
-    }
+    };
     this.setState({
       bidData: bidData
     });
   }
 
   signinStateChanged(client_Email) {
-    signinData ={
+    let signinData ={
       client_Email : client_Email
-    }
+    };
 
     this.setState({
       signinData : signinData
