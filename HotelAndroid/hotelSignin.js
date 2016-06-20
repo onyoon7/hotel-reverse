@@ -21,12 +21,6 @@ class HotelSignin extends Component {
     }
   }
 
-// ----- the token related to client login ----- //
-
-
-
-
-// -------------------------------------------- //
 
   _handlePress(where) {
     let email = this.state.client_Email;
