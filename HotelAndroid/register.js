@@ -7,6 +7,7 @@ import {
   View,
   AsyncStorage,
 } from 'react-native';
+import axios from 'axios';
 
 
 class Register extends Component {
@@ -22,6 +23,42 @@ class Register extends Component {
     }
   }
 
+  _handlePress(where) {
+    let name = this.state.name;
+    let email = this.state.client_email;
+    let password = this.state.password;
+    let checkSuccess = false;
+    switch(where) {
+      case 'register' :
+        axios({
+          url: 'http://192.168.1.4:4444/client/signup/',
+          method : 'post',
+          data : {
+            client_ID : email,
+            client_PW : password,
+            client_Name : name,
+            client_Email : email,
+            billingInfo : '1234-1234-1234-1234'
+          }
+        }).then(function(response) {
+          console.log("Thank you for your regitster")
+          console.log(response)
+
+        }).then(this.props.navigator.push({id : 'bidInfo'}))
+        .catch(function(error) {
+          console.log("Register fail")
+          console.log(error);
+        })
+        break;
+    case 'default' :
+      this.props.navigator.push({
+        id : where,
+      })
+      break;
+    }
+  }
+
+  /*
   redirect(routeName, token) {
     this.props.navigator.push({
       id : routeName,
@@ -77,6 +114,8 @@ class Register extends Component {
     }
   }
 
+  */
+
   render() {
 
     return (
@@ -103,7 +142,7 @@ class Register extends Component {
           secureTextEntry={true}>
         </TextInput>
 
-        <TouchableHighlight onPress={this.onRegisterPressed.bind(this)} style={styles.button}>
+      <TouchableHighlight onPress={this._handlePress.bind(this, 'register')} style={styles.button}>
           <Text style={styles.buttonText}>
             Register
           </Text>
