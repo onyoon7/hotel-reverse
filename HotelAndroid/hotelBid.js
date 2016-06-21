@@ -8,6 +8,7 @@ import {
   Picker,
   Navigator,
   Dimensions,
+  Slider,
 } from 'react-native';
 const Item = Picker.Item;
 import Button from 'react-native-button';
@@ -91,10 +92,27 @@ class HotelBid extends Component {
 
     let jeju = [];
 
+    function getPolygonCmpt(region) {
+      return region.map(item => {
+        let r = Math.floor(Math.random()*255), g = Math.floor(Math.random()*255), b = Math.floor(Math.random()*255);
+        const fillColor = `rgba(${r},${g},${b},0.5)`;
+          return (
+            <MapView.Polygon
+              key={item.key}
+              coordinates={item.value}
+              fillColor={fillColor}
+              strokeColor="rgba(0,0,0,0.5)"
+              stokeWidth={2}
+            />
+          )
+        }
+      );
+    }
+
     this.state={
       subArea_Name: '',
       hotel_Rate: 5,
-      bid_Price: '',
+      bid_Price: '80000',
       region : {
         seoul: {
           latitude: 37.552547,
@@ -106,12 +124,11 @@ class HotelBid extends Component {
         },
       },
       polygon: {
-        seoul: seoul,
-        jeju: jeju,
+        seoul: getPolygonCmpt(seoul),
+        jeju: getPolygonCmpt(jeju),
       },
     }
-  }
-
+   }
 
    _handlePress() {
      this.props.navigator.push({id: 'signin'});
@@ -148,21 +165,6 @@ class HotelBid extends Component {
        polygonName = 'jeju';
      }
 
-     let polygons = this.state.polygon[polygonName].map(item => {
-       let r = Math.floor(Math.random()*255), g = Math.floor(Math.random()*255), b = Math.floor(Math.random()*255);
-       const fillColor = `rgba(${r},${g},${b},0.5)`;
-         return (
-           <MapView.Polygon
-             key={item.key}
-             coordinates={item.value}
-             fillColor={fillColor}
-             strokeColor="rgba(0,0,0,0.5)"
-             stokeWidth={2}
-           />
-         )
-       }
-     );
-
      return (
        <View style={styles.container}>
         <Text style={styles.title}>
@@ -172,8 +174,9 @@ class HotelBid extends Component {
          <MapView
            ref="map"
            style={styles.map}
-           initialRegion={region}>
-           {polygons}
+           initialRegion={region}
+         >
+           {this.state.polygon[polygonName]}
          </MapView>
 
          <View style={styles.inputsContainer}>
@@ -198,12 +201,21 @@ class HotelBid extends Component {
                <Item label="★★★" value="3" />
              </Picker>
            </View>
-           <TextInput
-             style={styles.input}
-             onChangeText={(bid_Price) => this.setState({bid_Price})}
-             value={this.state.bid_Price}
-             placeholder ={'금액을 입력해주세요.'}
+
+           <View style={styles.rowContainer}>
+             <Text style={styles.price}>
+               ₩ {this.state.bid_Price}
+             </Text>
+           </View>
+
+           <Slider
+            minimumValue={40000}
+            maximumValue={150000}
+            value={80000}
+            step={1000}
+            onValueChange={(value) => this.setState({bid_Price: value})}
            />
+
            <View style={styles.rowContainer}>
              <Button style={styles.searchBtnText}
                containerStyle={styles.searchBtn}
@@ -252,7 +264,7 @@ const styles = StyleSheet.create({
   },
   searchBtn: {
    width: 150,
-   padding:10,
+   padding: 10,
    height: 30,
    overflow: 'hidden',
    borderColor: 'black',
@@ -261,6 +273,7 @@ const styles = StyleSheet.create({
    backgroundColor: 'green',
    justifyContent: 'center',
    alignItems: 'center',
+   margin: 30,
   },
   searchBtnText: {
    fontSize: 15,
@@ -285,6 +298,10 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: height / 2,
+  },
+  price: {
+    fontSize: 18,
+    color: 'black',
   },
 });
 
