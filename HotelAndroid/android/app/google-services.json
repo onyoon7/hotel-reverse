@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "370846469277",
+    "project_id": "hotelreverse"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:370846469277:android:3ef4b450e9e56bdb",
+        "android_client_info": {
+          "package_name": "com.hotelandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "370846469277-r5g0j97en7ql69r3qj6c48mscklgr8lu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hotelandroid",
+            "certificate_hash": "2203D76410B9D716A629FFE8A553F96D028CFAC3"
+          }
+        },
+        {
+          "client_id": "370846469277-p2lvjnb4u0jcjt1br44h9pmpct82849c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCklQnl19if75ZsCeEFSO8-exKyzZRN0Jk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

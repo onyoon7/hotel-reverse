@@ -9,21 +9,64 @@ import {
 } from 'react-native';
 import Register from './register';
 import axios from 'axios'
+import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
+
 
 class HotelSignin extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      client_Email : "",
+      client_ID : "",
       password : "",
       error : "",
+      user : null,
     }
   }
 
+  componentDidMount() {
+    this._setupGoogleSignin();
+  }
+
+  async _setupGoogleSignin() {
+    try {
+      await GoogleSignin.hasPlayServices({ autoResolve: true });
+      await GoogleSignin.configure({
+        scopes: ['https://www.googleapis.com/auth/calendar'],
+        webClientId: '370846469277-p2lvjnb4u0jcjt1br44h9pmpct82849c.apps.googleusercontent.com',
+        offlineAccess: true
+      });
+
+      const user = await GoogleSignin.currentUserAsync();
+      console.log(user);
+      this.setState({user});
+    }
+    catch(err) {
+      console.log("Play services error", err.code, err.message);
+    }
+  }
+
+  _signIn() {
+    GoogleSignin.signIn()
+    .then((user) => {
+      console.log(user);
+      this.setState({user: user});
+    })
+    .catch((err) => {
+      console.log('WRONG SIGNIN', err);
+    })
+    .done();
+  }
+
+  _signOut() {
+    GoogleSignin.revokeAccess().then(() => GoogleSignin.signOut()).then(() => {
+      this.setState({user: null});
+    })
+    .done();
+  }
 
   _handlePress(where) {
-    let email = this.state.client_Email;
+    let ID = this.state.client_ID;
     let password = this.state.password;
     switch(where) {
       case 'login' :
@@ -31,7 +74,7 @@ class HotelSignin extends Component {
           url: 'http://192.168.1.4:4444/client/signin/',
           method : 'post',
           data : {
-            client_ID : email,
+            client_ID : ID,
             client_PW : password
           }
         }).then(function(response) {
@@ -57,8 +100,8 @@ class HotelSignin extends Component {
           💃 Enjoy Hotel-Reverse 💃
         </Text>
         <TextInput
-        onChangeText={ (text)=> this.setState({client_Email: text}) }
-        style={styles.input} placeholder="Email">
+        onChangeText={ (text)=> this.setState({client_ID: text}) }
+        style={styles.input} placeholder="ID">
         </TextInput>
         <TextInput
           onChangeText={ (text)=> this.setState({password: text}) }
@@ -88,6 +131,11 @@ class HotelSignin extends Component {
           onPress = {this._handlePress.bind(this, 'google')}>
           <Text style={styles.buttonText}>google</Text>
         </TouchableHighlight>
+        <GoogleSigninButton
+          style={styles.button}
+          size = {GoogleSigninButton.Size.Icon}
+          color = {GoogleSigninButton.Color.Dark}
+          onPress = {this._signIn.bind(this)}/>
         <Text style={styles.error}>
           {this.state.error}
         </Text>
