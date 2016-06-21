@@ -1,146 +1,146 @@
-let db = require('../db');
+import db from '../db';
 
 export default {
   home: function(req, res) {
     res.sendFile(__dirname + '../public/admin.html');
   },
 
-  // admin도 signin할 것인가?
-
   pendingBid: function(req, res) {
-    var query = 'SELECT * FROM Deal where bid_Transaction=0';
-    db.connection.query(query, function(error, results, fields) {
-      if(error) {
-        console.log("error code: " + error.code +
-                    " ,fail to get pending bid transaction");
-      } else {
-        console.log('query: ' + query);
-        console.log(results);
+
+    db.Deal.findAll({ where: { bid_Transaction: false } })
+      .then(function(deals) {
+        var results = [];
+        for(var i = 0; i < deals.length; i++) {
+          results.push(deals[i].dataValues);
+          console.log(deals[i].dataValues);
+        }
         res.send(results);
-      }
-    });
+      })
+      .catch(function(error) {
+        console.log("fail to get pending bid transaction", error);
+        res.send(error);
+      })
   },
 
   contractedBid: function(req, res) {
-    var startDate = req.params.startDate;
-    var endDate = req.params.endDate;
 
-    var startTime = startDate + ' 00:00:00';
-    var endTime = endDate + ' 23:59:59';
-
-    var query1 = 'SELECT * FROM Deal where bid_Transaction=1 AND ';
-    var query2 = 'bid_StartTime>? AND bid_EndTime<?';
-    var query = query1 + query2;
-    var data = [startTime, endTime];
-
-    db.connection.query(query, data, function(error, results, fields) {
-      if (error) {
-        console.log("error code: " + error.code +
-                    " ,fail to get contracted bid info");
-      } else {
-        console.log('query: ' + query);
-        console.log(results);
+    db.Deal.findAll({
+      where: {
+          bid_Transaction: true
+        }
+      })
+      .then(function(deals) {
+        var results = [];
+        for (var i = 0; i < deals.length; i++) {
+          console.log(deals[i].dataValues);
+          results.push(deals[i].dataValues);
+        }
         res.send(results);
-      }
-    });
+      })
+      .catch(function(error) {
+        console.log("cannot retrieve bid information: ", error);
+        res.send(error);
+      })
+
   },
 
   getHotels: function(req, res) {
-    var query = 'SELECT * from Hotel';
-
-    db.connection.query(query, function(error, results, fields) {
-      if (error) {
-        console.log("error code: " + error.code +
-                    " ,fail to get Hotel information");
-      } else {
-        console.log('query: ' + query);
-        console.log(results);
+    db.Hotel.findAll()
+      .then(function(hotels) {
+        var results = [];
+        for (var i = 0; i < hotels.length; i++) {
+          results.push(hotels[i].dataValues);
+          console.log(hotels[i].dataValues);
+        }
         res.send(results);
-      }
-    });
+      })
+      .catch(function(error) {
+        console.log("fail to retrieve hotel information:", error);
+        res.send(error);
+      })
   },
 
   getHotel: function(req, res) {
-    var hotel_ID = req.params.hotel_ID;
-    var query = 'SELECT * from Hotel where hotel_ID=?';
-    var data = [hotel_ID];
-
-    db.connection.query(query, data, function(error, results, fields) {
-      if (error) {
-        console.log("error code: " + error.code +
-                    ", fail to get Hotel Information(" + hotel_ID + ")");
-      } else {
-        console.log('query: ' + query);
-        console.log(results);
-        res.send(results);
-      }
-    });
+    db.Hotel.findAll({ where: { hotel_ID: req.params.hotel_ID }})
+      .then(function(hotel) {
+        console.log('getHotel: ' + req.params.hotel_ID);
+        console.log(hotel[0].dataValues);
+        res.send(hotel[0].dataValues);
+      })
+      .catch(function(error) {
+        console.log("fail to retrieve hotel information: ", 
+                    req.params.hotel_ID, error);
+        res.send(error);
+      })
   },
 
   getHotelsByRegion: function(req, res) {
-    var subArea_Name = req.params.subArea_Name;
-    var query = 'SELECT * from Hotel where subArea_Name=?';
-    var data = [subArea_Name];
-
-    db.connection.query(query, data, function(error, results, fields) {
-      if (error) {
-        console.log("error code: " + error.code +
-                    ", fail to get Hotel information(" + subArea_Name + ")");
-      } else {
-        console.log('query: ' + query);
-        console.log(results);
-        res.send(results);
+    db.Hotel.findAll({
+      where: { subArea_Name: req.params.subArea_Name }
+    })
+    .then(function(hotels) {
+      var results = [];
+      for (var i = 0; i < hotels.length; i++) {
+        console.log(hotels[i].dataValues);
+        results.push(hotels[i].dataValues);
       }
-    });
-  },
-
-  deleteHotel: function(req, res) {
-    var hotel_ID = req.params.hotel_ID;
-    var query = 'DELETE FROM Hotel WHERE hotel_ID=?';
-    var data = [hotel_ID];
-
-    db.connection.query(query, data, function(error, results, fields) {
-      if (error) {
-        console.log('error code: ' + error.code +
-                    ', failed to delete hotel(' + hotel_ID + ')');
-      } else {
-        console.log('query: ' + query);
-        var msg = 'successfully deleted(hotel_ID): ' + hotel_ID;
-        console.log(msg);
-        res.send(msg);
-      }
-    });
+      res.send(results);
+    })
+    .catch(function(error) {
+      console.log("fail to retrieve hotel information(region): ", error);
+      res.send(error);
+    })
   },
 
   getClients: function(req, res) {
-    var query = 'SELECT * FROM Client';
-
-    db.connection.query(query, function(error, results, fields) {
-      if (error) {
-        console.log('error code: ' + error.code +
-                    ', failed to get clients info');
-      } else {
-        console.log('query: ' + query);
-        console.log(results);
-        res.send(results);
+    db.Client.findAll()
+    .then(function(clients) {
+      var results = [];
+      for (var i = 0; i < clients.length; i++) {
+        console.log(clients[i].dataValues);
+        results.push(clients[i].dataValues);
       }
-    });
+      res.send(results);
+    })
+    .catch(function(error) {
+      console.log("cannot retrieve clients information:", error);
+      res.send(error);
+    })
   },
 
   getClient: function(req, res) {
-    var client_Email = req.params.client_Email;
-    var query = 'SELECT * FROM Client where client_Email=?';
-    var data = [client_Email];
+    db.Client.findOne({ client_Email: req.params.client_Email })
+    .then(function(result) {
+      console.log(result.dataValues);
+      res.send(result.dataValues);
+    })
+    .catch(function(error) {
+      console.log("cannot retrieve client information:", error);
+      res.send(error);
+    })
+  },
 
-    db.connection.query(query, data, function(error, results, fields) {
-      if (error) {
-        console.log('error code: ' + error.code +
-                    ', failed to get client info');
-      } else {
-        console.log('query: ' + query);
-        console.log(results);
-        res.send(results);
-      }
-    });
+  deleteHotel: function(req, res) {
+    db.Hotel.destroy({ where: { hotel_ID: req.params.hotel_ID } })
+    .then(function(result) {
+      console.log('result is :' + result);
+      res.send('successfully deleted');
+    })
+    .catch(function(error) {
+      console.log("fail to delete ", req.params.hotel_ID, " ", error);
+      res.send(error);
+    })
+  },
+
+  deleteClient: function(req, res) {
+    db.Client.destroy( { where: {client_Email: req.params.client_Email }})
+    .then(function(result) {
+      console.log('result is : ' + result);
+      res.send('successfully deleted');
+    })
+    .catch(function(error) {
+      console.log("fail to delete ", req.params.client_Email, " ", error);
+      res.send(error);
+    })
   }
 };
