@@ -10,7 +10,7 @@ export default {
     var member = 1;
 
     var query1 = 'INSERT INTO Client SET ';
-    var query2 = 'client_ID=?, cli4nt_PW=?, client_Name=?, client_Email=?, billingInfo=?, member=?';
+    var query2 = 'client_ID=?, client_PW=?, client_Name=?, client_Email=?, billingInfo=?, member=?';
     var data = [client_ID, client_PW, client_Name, client_Email, billingInfo, member];
     var query = query1 + query2;
 
