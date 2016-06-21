@@ -1,6 +1,7 @@
 package com.hotelandroid;
 
 import com.facebook.react.ReactActivity;
+import com.AirMaps.AirPackage;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import co.apptailor.googlesignin.RNGoogleSigninPackage;
@@ -36,6 +37,7 @@ public class MainActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
             new MainReactPackage(),
+            new AirPackage(),
             new RNGoogleSigninPackage());
     };
 }
