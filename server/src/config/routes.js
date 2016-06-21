@@ -17,52 +17,29 @@
     - signup
     - signin
     - retrieve pending bids
-    - retrieve settled bids (from YYYY-MM-DD to YYYY-MM-DD)
+    - retrieve settled bids
     - bid (try to bid)
     - update hotel(including hotel manager) information
   3. user(admin)
-    - start page
-      * method: get
-      * url: /admin
-    - signin
-      * method: post
-      * url: /admin/signin
-    - delete user
-      * method: delete
-      * url: /admin/:userid
-    - delete hotel
-      * method: delete
-      * url: /admin/:hotelid
     - pending bid
-      * method: get
-      * url: /admin/pendingbid
-    - retrieve contracted bid
-      * method: post
-      * url: /admin/bidinfo/:yyyymmdd/:yyyymmdd
+    - settled bid
     - retrieve hotels
-      * method: get
-      * url: /admin/hotels
     - retrieve hotel
-      * method: post
-      * url: /admin/hotels/:hotel_id
-    - retrieve hotels(region)
-      * method: post
-      * url: /admin/hotels/region
-    - retrieve users
-      * method: get
-      * url: /admin/users
-    - retrieve user
-      * method: post
-      * url: /admin/users/:userid
-    - update admin
-      * method: post
-      * url: /admin/info
+    - retrieve hotels (sub area)
+    - retrieve clients
+    - retrieve client
+    - delete user
+    - delete hotel
  */
 
 import clientController from '../controllers/clientController';
 import hotelController from '../controllers/hotelController';
 import adminController from '../controllers/adminController';
 import dealController from '../controllers/dealController';
+
+import Client from '../db';
+import Deal from '../db';
+import Hotel from '../db';
 
 export default function (app, express) {
 
@@ -115,11 +92,10 @@ export default function (app, express) {
   app.post('/hotel/signup', hotelController.signUp);
   app.post('/hotel/signin', hotelController.signIn);
 
-  //// startDate: yyyymmdd, endDate: yyyymmdd
   app.get('/hotel/bid/:hotel_ID', hotelController.bidInfo);
   app.get('/hotel/contracted/:hotel_ID', hotelController.contractedBids);
 
-  //app.put('/hotel/:booking_Num', hotelController.bid);
+  app.put('/hotel/bid/:hotel_ID/:booking_Num', hotelController.bid);
   app.post('/hotel/update/:hotel_ID', hotelController.updateInfo);
 
   ////////////////////////////////////////////////////////////////////////
@@ -128,8 +104,7 @@ export default function (app, express) {
   // function         method    url
   // ----------------------------------------------------------------------   
   // pending bid      get       /admin/pendigbid
-  // settled bid      get       /admin/bidinfo/:start_Date/:end_Date
-  //                            Date format -> yyyy-mm-dd
+  // settled bid      get       /admin/bidinfo
   // hotels           get       /admin/hotels
   // hotel            get       /admin/hotels/hotel_ID
   // hotels(area)     get       /admin/hotels/:subArea_Name
@@ -143,7 +118,7 @@ export default function (app, express) {
   ////////////////////////////////////////////////////////////////////////
  
   app.get('/admin/pendingbid', adminController.pendingBid);
-  app.get('/admin/bidinfo/:startDate/:endDate', adminController.contractedBid);
+  app.get('/admin/bidinfo', adminController.contractedBid);
 
   app.get('/admin/hotels', adminController.getHotels);
   app.get('/admin/hotels/:hotel_ID', adminController.getHotel);
@@ -152,8 +127,7 @@ export default function (app, express) {
   app.get('/admin/clients', adminController.getClients);
   app.get('/admin/clients/:client_Email', adminController.getClient);
 
-  //app.delete('/admin/:client_Id', adminController.deleteUser);
-  app.delete('/admin/:hotel_ID', adminController.deleteHotel);
-
+  app.delete('/admin/client/:client_Email', adminController.deleteClient);
+  app.delete('/admin/hotel/:hotel_ID', adminController.deleteHotel);
 
 };

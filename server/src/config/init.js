@@ -14,7 +14,7 @@ var mysql = require('mysql');
 var connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  password: '1008',
+  password: 'lion0787',
   database: 'hotelreverse'
 });
 
@@ -23,7 +23,7 @@ connection.connect(function(err) {
     console.log('can`t connect to mysql database');
     return;
   }
-  console.log('successfully connected to database...');
+    console.log('successfully connected to database...');
 });
 
 //delete all rows in client, deal, hotel
@@ -101,8 +101,7 @@ var hotel = [
     mainArea_Name: '서울시',
     subArea_Name: '강남구',
     hotel_Rate: 3,
-    mgr_Name: '오동길',
-    booking_Num: 100
+    mgr_Name: '오동길'
   },
   {
     hotel_ID: 'a2',
@@ -112,8 +111,7 @@ var hotel = [
     mainArea_Name: '서울시',
     subArea_Name: '서초구',
     hotel_Rate: 5,
-    mgr_Name: '박준희',
-    booking_Num: 200
+    mgr_Name: '박준희'
   },
   {
     hotel_ID: 'a3',
@@ -123,8 +121,7 @@ var hotel = [
     mainArea_Name: '제주도',
     subArea_Name: '서귀포시',
     hotel_Rate: 2,
-    mgr_Name: '양서리',
-    booking_Num: 300
+    mgr_Name: '양서리'
   }
 ];
 
@@ -134,61 +131,51 @@ for(var i = 0; i < client.length; i++){
 
   connection.query(query1, query2, function(err, results, fields){
     if(err){
-      console.log('Unsuccessful!');
+      console.log('Client is unsuccessful!');
     }else{
-      console.log('Successfl!');
+      console.log('Client is successful!');
     }
   })
 }
+
+
 var rows;
-for(var i = 0; i < deal.length; i++){
-  var query1 = 'INSERT INTO Deal SET checkIn_Date=?, checkOut_Date=?, mainArea_Name=?, subArea_Name=?, bid_Price=?, bid_Transaction=?, bid_StartTime=now(), bid_EndTime=now()+INTERVAL 1 DAY';
-  var query2 = [deal[i].checkIn_Date, deal[i].checkOut_Date, deal[i].mainArea_Name, deal[i].subArea_Name, deal[i].bid_Price, deal[i].bid_Transaction];
-  console.log(query1);
-  console.log(query2);
 
-  connection.query(query1, query2, function(err, results, fields){
-    if(err){
-      console.log('Unsuccessful!');
-    }else{
-      console.log('Successfl!');
-
-    }
-  })
-}
-
-
-  connection.query('select booking_Num from Deal', function(err, results, fields){
-    if(err){
-      console.log('Unsuccessful!');
-    }else{
-      console.log('Successfl!');
-      console.log(results);
-      rows = results;
-      console.log('rows: ', rows);
-      console.log('rows[0] booking_Num', rows[0].booking_Num)
-    }
-  })
-
-
-
-
+connection.query('SELECT client_Index FROM Client', function(err, results, fields){
+  if(err){
+    console.log('Selecting client_Index is unsuccessful');
+  }else{
+    rows = results;
+  }
+})
 
 setTimeout(function(){
-  console.log('rows=> ', rows);
-  for(var i = 0; i < hotel.length; i++){
-    var query1 = 'INSERT INTO Hotel SET hotel_ID=?, hotel_PW=?, hotel_Name=?, hotel_Address=?, mainArea_Name=?, subArea_Name=?, hotel_Rate=?, mgr_Name=?, booking_Num=?';
-    var query2 = [hotel[i].hotel_ID, hotel[i].hotel_PW, hotel[i].hotel_Name, hotel[i].hotel_Address, hotel[i].mainArea_Name, hotel[i].subArea_Name, hotel[i].hotel_Rate, hotel[i].mgr_Name, rows[i].booking_Num];
+  for(var i = 0; i < deal.length; i++){
+    var query1 = 'INSERT INTO Deal SET client_Index=?, checkIn_Date=?, checkOut_Date=?, mainArea_Name=?, subArea_Name=?, bid_Price=?, bid_Transaction=?, bid_StartTime=now(), bid_EndTime=now()+INTERVAL 1 DAY';
+    var query2 = [rows[i].client_Index, deal[i].checkIn_Date, deal[i].checkOut_Date, deal[i].mainArea_Name, deal[i].subArea_Name, deal[i].bid_Price, deal[i].bid_Transaction];
 
     connection.query(query1, query2, function(err, results, fields){
       if(err){
+        console.log('Deal is unsuccessful!');
         console.log(err);
-        console.log('Unsuccessful!');
       }else{
-        console.log('Successfl!');
+        console.log('Deal is successful!');
       }
     })
   }
-
   connection.end();
-}, 1000);
+}, 1000)
+
+for(var i = 0; i < hotel.length; i++){
+  var query1 = 'INSERT INTO Hotel SET hotel_ID=?, hotel_PW=?, hotel_Name=?, hotel_Address=?, mainArea_Name=?, subArea_Name=?, hotel_Rate=?, mgr_Name=?';
+  var query2 = [hotel[i].hotel_ID, hotel[i].hotel_PW, hotel[i].hotel_Name, hotel[i].hotel_Address, hotel[i].mainArea_Name, hotel[i].subArea_Name, hotel[i].hotel_Rate, hotel[i].mgr_Name];
+
+  connection.query(query1, query2, function(err, results, fields){
+    if(err){
+      console.log(err);
+      console.log('Hotel is unsuccessful!');
+    }else{
+      console.log('Hotel is successful!');
+    }
+  })
+}
