@@ -114,7 +114,7 @@ export default {
       var now = new Date();
       var tomorrow = moment(now).add(1, 'day');
 
-      makeTime(date) => {
+      function makeTime(date) {
         var yyyymmdd = date.toISOString().split('T')[0];
         var second = date.toISOString().split('T')[1];
         var hhmmss = second.split('.')[0];
