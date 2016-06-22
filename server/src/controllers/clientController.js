@@ -62,8 +62,8 @@ export default {
     })
     .then((deals) => {
       console.log('>>>> deals');
-      var results = [];
-      for (var i = 0; i < deals.length; i++) {
+      let results = [];
+      for (let i = 0; i < deals.length; i++) {
         console.log(deals[i].dataValues);
         results.push(deals[i].dataValues);
       }
@@ -111,13 +111,13 @@ export default {
       return client.dataValues.client_Index;
     })
     .then((client_Index) => {
-      var now = new Date();
-      var tomorrow = moment(now).add(1, 'day');
+      let now = new Date();
+      let tomorrow = moment(now).add(1, 'day');
 
-      function makeTime(date) {
-        var yyyymmdd = date.toISOString().split('T')[0];
-        var second = date.toISOString().split('T')[1];
-        var hhmmss = second.split('.')[0];
+      let makeTime(date) => {
+        let yyyymmdd = date.toISOString().split('T')[0];
+        let second = date.toISOString().split('T')[1];
+        let hhmmss = second.split('.')[0];
 
         return yyyymmdd + ' ' + hhmmss;
       }
