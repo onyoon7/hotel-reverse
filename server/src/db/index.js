@@ -12,7 +12,7 @@ import mysql from 'mysql';
   2. Then connect to 'hotelreverse' database
  --------------------------------------------------------------------*/
 
-var sequelize = new Sequelize('hotelreverse', 'hotel', 'hotel', {
+const sequelize = new Sequelize('hotelreverse', 'hotel', 'hotel', {
   host: 'localhost',
   dialect: 'mysql',
   pool: {
@@ -24,10 +24,10 @@ var sequelize = new Sequelize('hotelreverse', 'hotel', 'hotel', {
 
 sequelize
   .authenticate()
-  .then(function(err) {
+  .then((err) => {
     console.log('connection has been established successfully');
   })
-  .catch(function(err) {
+  .catch((err) => {
     console.log('unable to connect to database: ', err);
   })
 
@@ -41,7 +41,7 @@ sequelize
   3. Hotel table
  --------------------------------------------------------------------*/
 
-var Client = sequelize.define('Client', {
+let Client = sequelize.define('Client', {
   client_Index: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -80,7 +80,7 @@ var Client = sequelize.define('Client', {
     defaultValue: false,
     field: 'member'
   }
-  
+
 }, {
   tableName: 'Client',
   associate: function(models) {
@@ -95,7 +95,7 @@ var Client = sequelize.define('Client', {
 });
 
 
-var Deal = sequelize.define('Deal', {
+let Deal = sequelize.define('Deal', {
   booking_Num: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -158,11 +158,11 @@ var Deal = sequelize.define('Deal', {
     //Deal.belongsTo(models.Hotel, {foreignKey: 'booking_Num'});
   },
   timestamps: false,
-  freezeTableName: true  
+  freezeTableName: true
 });
 
 
-var Hotel = sequelize.define('Hotel', {
+let Hotel = sequelize.define('Hotel', {
   hotel_Index: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -219,24 +219,24 @@ var Hotel = sequelize.define('Hotel', {
   //   })
   // },
   timestamps: false,
-  freezeTableName: true  
+  freezeTableName: true
 });
 
 
 // sync to the table
-Client.sync().then(function() {
+Client.sync().then(() => {
     console.log('now, can use Client table');
 });
 
-Deal.sync().then(function() {
+Deal.sync().then(() => {
   console.log('now, can use Deal table');
 });
 
-Hotel.sync().then(function() {
+Hotel.sync().then(() => {
   console.log('now, can use Hotel table');
 });
 
-export default { Client, Deal, Hotel}; 
+export default { Client, Deal, Hotel};
 
 
 

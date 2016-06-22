@@ -1,17 +1,17 @@
-var fs = require('fs');
-var morgan = require('morgan');
-var bodyParser = require('body-parser');
-var url = require('url');
-var path = require('path');
+let fs = require('fs');
+let morgan = require('morgan');
+let bodyParser = require('body-parser');
+let url = require('url');
+let path = require('path');
 
 // setup a log file that will log all requests in Apache combined format
 // to the file access.log
 
 // In production
-var accessLogStream =
+const accessLogStream =
     fs.createWriteStream(path.join(__dirname, 'access.log'), {flags: 'a'});
 
-export default function (app, express) {
+export default (app, express) => {
   app.use(morgan('dev'));
 
   // Handle json format and x-www-form-urlencoded

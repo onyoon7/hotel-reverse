@@ -24,7 +24,7 @@ routes(app, express);
 app.set('port', process.env.PORT || 4444);
 
 // now server running...
-app.listen(app.get('port'), function() {
+app.listen(app.get('port'), () => {
   console.log("Express started on http://localhost:" +
     app.get('port') + '; press Ctrl-C to terminate.');
 });
