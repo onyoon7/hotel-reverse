@@ -20,6 +20,12 @@ export default function (app, express) {
     extended: true
   }));
 
+  app.use(function(req, res, next) {
+    res.header('Access-Control-Allow-Origin', "*");
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+  })
   // we have to determine the exact location of static files
-  app.use(express.static(__dirname + '/../../client'));
+  // app.use(express.static(__dirname + '/../../client'));
 };

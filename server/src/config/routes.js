@@ -62,21 +62,22 @@ export default function (app, express) {
   //
   ////////////////////////////////////////////////////////////////////////
   
-  app.post('/client/signup', clientController.signUp);
-  app.post('/client/signin', clientController.signIn);
+  app.post('/client/signup', clientController.signUp);  // checked
+  app.post('/client/signin', clientController.signIn);  // checked
+
 
   app.use('/client/auth', helpers.jwtCheck);
   app.get('/client/auth/check', (req, res) => {res.send(200)});
 
   app.put('/client/bid/:client_Email', clientController.makeContract);
 
-  app.post('/client/bid/:client_Email', clientController.getAllContracts);
-  app.post('/client/bid/:client_Email/:booking_Num', clientController.getContract);
+  app.post('/client/bid/:client_Email', clientController.getAllContracts); // checked
+  app.post('/client/bid/:client_Email/:booking_Num', clientController.getContract); // checked
 
   //app.delete('/client/bid/:client_Email/:booking_Num', clientController.cancelContract);
   //app.post('/client/feedback/:client_Email/:booking_Num', clientController.makeFeedback);
 
-  app.post('/client/info/:client_Email', clientController.updateInfo);
+  app.post('/client/info/:client_Email', clientController.updateInfo); // checked
 
   ////////////////////////////////////////////////////////////////////////
   // hotel
@@ -93,14 +94,14 @@ export default function (app, express) {
   // 
   ////////////////////////////////////////////////////////////////////////
   
-  app.post('/hotel/signup', hotelController.signUp);
-  app.post('/hotel/signin', hotelController.signIn);
+  app.post('/hotel/signup', hotelController.signUp);  // checked
+  app.post('/hotel/signin', hotelController.signIn);  // checked
 
-  app.get('/hotel/bid/:hotel_ID', hotelController.bidInfo);
-  app.get('/hotel/contracted/:hotel_ID', hotelController.contractedBids);
+  app.get('/hotel/bid/:hotel_ID', hotelController.bidInfo); // checked
+  app.get('/hotel/contracted/:hotel_ID', hotelController.contractedBids); // checked
 
-  app.put('/hotel/bid/:hotel_ID/:booking_Num', hotelController.bid);
-  app.post('/hotel/update/:hotel_ID', hotelController.updateInfo);
+  app.put('/hotel/bid/:hotel_ID/:booking_Num', hotelController.bid); // checked
+  app.post('/hotel/update/:hotel_ID', hotelController.updateInfo); // checked
 
   ////////////////////////////////////////////////////////////////////////
   // admin
@@ -110,7 +111,7 @@ export default function (app, express) {
   // pending bid      get       /admin/pendigbid
   // settled bid      get       /admin/bidinfo
   // hotels           get       /admin/hotels
-  // hotel            get       /admin/hotels/hotel_ID
+  // hotel            get       /admin/hotels/:hotel_ID
   // hotels(area)     get       /admin/hotels/:subArea_Name
   // 
   // clients(info)    get       /admin/clients
@@ -121,17 +122,17 @@ export default function (app, express) {
   // 
   ////////////////////////////////////////////////////////////////////////
  
-  app.get('/admin/pendingbid', adminController.pendingBid);
-  app.get('/admin/bidinfo', adminController.contractedBid);
+  app.get('/admin/pendingbid', adminController.pendingBid); // checked
+  app.get('/admin/bidinfo', adminController.contractedBid); // checked
 
-  app.get('/admin/hotels', adminController.getHotels);
-  app.get('/admin/hotels/:hotel_ID', adminController.getHotel);
-  app.get('/admin/hotelarea/:subArea_Name', adminController.getHotelsByRegion);
+  app.get('/admin/hotels', adminController.getHotels);      // checked
+  app.get('/admin/hotels/:hotel_ID', adminController.getHotel); // checked
+  app.get('/admin/hotelarea/:subArea_Name', adminController.getHotelsByRegion); // checked
 
-  app.get('/admin/clients', adminController.getClients);
-  app.get('/admin/clients/:client_Email', adminController.getClient);
+  app.get('/admin/clients', adminController.getClients);  // checked
+  app.get('/admin/clients/:client_Email', adminController.getClient); // checked
 
-  app.delete('/admin/client/:client_Email', adminController.deleteClient);
-  app.delete('/admin/hotel/:hotel_ID', adminController.deleteHotel);
+  app.delete('/admin/client/:client_Email', adminController.deleteClient);  // checked
+  app.delete('/admin/hotel/:hotel_ID', adminController.deleteHotel);  // checked
 
 };

@@ -4,7 +4,7 @@ USE hotelreverse;
 
 CREATE TABLE `Client` (
   `client_Index` int AUTO_INCREMENT,
-  `client_ID` varchar(128),
+  `client_ID` varchar(128) default NULL ,
   `client_PW` varchar(128) NOT NULL ,
   `client_Name` varchar(128) NOT NULL ,
   `client_Email` varchar(128) NOT NULL ,
@@ -14,24 +14,10 @@ CREATE TABLE `Client` (
   UNIQUE KEY (`client_Email`)
 );
 
-CREATE TABLE `Hotel` (
-  `hotel_Index` int AUTO_INCREMENT,
-  `hotel_ID` varchar(128) NOT NULL ,
-  `hotel_PW` varchar(128) NOT NULL ,
-  `hotel_Name` varchar(128) NOT NULL ,
-  `hotel_Address` varchar(128) NOT NULL ,
-  `mainArea_Name` varchar(128) NOT NULL ,
-  `subArea_Name` varchar(128) NOT NULL ,
-  `hotel_Rate` int NOT NULL ,
-  `mgr_Name` varchar(128) NOT NULL ,
-  PRIMARY KEY (`hotel_Index`),
-  UNIQUE KEY (`hotel_ID`)
-);
-
 CREATE TABLE `Deal` (
   `booking_Num` int AUTO_INCREMENT,
   `client_Index` int,
-  `hotel_ID` varchar(128) NULL,
+  `hotel_ID` varchar(128),
   `checkIn_Date` DATE NOT NULL,
   `checkOut_Date` DATE NOT NULL,
   `mainArea_Name` varchar(128) NOT NULL,
@@ -44,4 +30,19 @@ CREATE TABLE `Deal` (
   CONSTRAINT `fk_client` FOREIGN KEY (`client_Index`) REFERENCES `Client` (`client_Index`)
   ON DELETE CASCADE
   ON UPDATE CASCADE
+);
+
+
+CREATE TABLE `Hotel` (
+  `hotel_Index` int AUTO_INCREMENT,
+  `hotel_ID` varchar(128) NOT NULL ,
+  `hotel_PW` varchar(128) NOT NULL ,
+  `hotel_Name` varchar(128) NOT NULL ,
+  `hotel_Address` varchar(128) NOT NULL ,
+  `mainArea_Name` varchar(128) NOT NULL ,
+  `subArea_Name` varchar(128) NOT NULL ,
+  `hotel_Rate` int NOT NULL ,
+  `mgr_Name` varchar(128) NOT NULL ,
+  PRIMARY KEY (`hotel_Index`),
+  UNIQUE KEY(`hotel_ID`)
 );
