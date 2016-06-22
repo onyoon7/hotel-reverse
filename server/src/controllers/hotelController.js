@@ -68,46 +68,6 @@ export default {
         console.log("cannot retrieve bid information: ", error);
         res.send(error);
       })
-
-    // var hotel_ID = req.params.hotel_ID;
-    // var subArea_Name;
-
-    // var firstQ = 'SELECT subArea_Name FROM Hotel WHERE hotel_ID=?';
-    // var firstData = [hotel_ID];
-
-    // db.connection.query(firstQ, firstData, function(error, results, fields) {
-    //   if (error) {
-    //     console.log('error code: ' + error.code +
-    //                 ', failed to retreive bid information');
-    //     res.send('no pending bids...')
-    //     return;
-    //   } else {
-    //     console.log('query: ' + firstQ, firstData);
-    //     console.log(results);
-
-    //     subArea_Name = results[0].subArea_Name;
-
-    //     var secondQ = 'SELECT * FROM deal WHERE bid_Transaction=0 AND subArea_Name=?';
-    //     var secondData = [subArea_Name];
-
-    //     db.connection.query(secondQ, secondData, function(error, results, fields) {
-
-    //       if (error) {
-    //         console.log('error code: ' + error.code +
-    //                     ', failed to retreive bid information');
-    //         res.send('no pending bids...')
-    //         return;
-    //       } else {
-    //         console.log('query: ' + secondQ, secondData);
-    //         console.log(results);
-    //         if (results.length === 0) {
-    //           res.send('no pening bid...')
-    //         }
-    //         res.send(results);
-    //       }
-    //     });
-    //   }
-    // });
   },
 
   contractedBids: function(req, res) {
@@ -155,15 +115,22 @@ export default {
     // first check whether this bid is already captured
     db.Deal.findOne({ booking_Num: req.params.booking_Num })
     .then(function(deal) {
-      if (deal.dataValues.bid_Transaction === true) {
-        res.send("this deal already captured");
-        return;
-      } else {
-        db.Deal.update({
+      if (deal.dataValues.bid_Transaction === 0) {
+        return db.Deal.update({
           hotel_ID: req.params.hotel_ID,
           bid_Transaction: true
-        })
+        }, {
+          where: {
+            booking_Num: req.params.booking_Num
+          }
+        })        
+      } else {
+        return "this deal alreay captured";
       }
+    })
+    .then(function(result) {
+      console.log('bid result: ', result);
+      res.send(result);
     })
     .catch(function(error) {
       console.log("cannot update deal DB: ", error);

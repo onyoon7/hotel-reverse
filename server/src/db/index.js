@@ -86,7 +86,8 @@ var Client = sequelize.define('Client', {
   associate: function(models) {
     Client.hasMany(models.Deal, {
       foreignKey: 'client_Index',
-      onDelete: 'cascade'
+      onDelete: 'cascade',
+      onUpdate: 'cascade'
     })
   },
   timestamps: false,
@@ -104,6 +105,10 @@ var Deal = sequelize.define('Deal', {
   client_Index: {
     type: Sequelize.INTEGER,
     field: 'client_Index'
+  },
+  hotel_ID: {
+    type: Sequelize.STRING(128),
+    field: 'hotel_ID'
   },
   checkIn_Date: {
     type: Sequelize.DATEONLY,
@@ -132,13 +137,11 @@ var Deal = sequelize.define('Deal', {
   },
   bid_StartTime: {
     type: Sequelize.DATE,
-    //defaultValue: Sequelize.NOW,
     allowNull: false,
     field: 'bid_StartTime'
   },
   bid_EndTime: {
     type: Sequelize.DATE,
-    //defaultValue: Sequelize.NOW,
     allowNull: false,
     field: 'bid_EndTime'
   },
@@ -152,7 +155,7 @@ var Deal = sequelize.define('Deal', {
   tableName: 'Deal',
   associate: function(models) {
     Deal.belongsTo(models.Client, {foreignKey: 'client_Index'});
-    Deal.belongsTo(models.Hotel, {foreignKey: 'booking_Num'});
+    //Deal.belongsTo(models.Hotel, {foreignKey: 'booking_Num'});
   },
   timestamps: false,
   freezeTableName: true  
@@ -205,19 +208,16 @@ var Hotel = sequelize.define('Hotel', {
     type: Sequelize.STRING(128),
     allowNull: false,
     field: 'mgr_Name'
-  },
-  booking_Num: {
-    type: Sequelize.INTEGER,
   }
 }, {
   tableName: 'Hotel',
-  associate: function(models) {
-    Hotel.hasMany(models.Deal, {
-      foreignKey: 'booking_Num',
-      onDelete: 'cascade',
-      onUpdate: 'cascade'
-    })
-  },
+  // associate: function(models) {
+  //   Hotel.hasMany(models.Deal, {
+  //     foreignKey: 'booking_Num',
+  //     onDelete: 'cascade',
+  //     onUpdate: 'cascade'
+  //   })
+  // },
   timestamps: false,
   freezeTableName: true  
 });

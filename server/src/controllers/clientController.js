@@ -131,7 +131,7 @@ export default {
         bid_Price: req.body.bid_Price,
         bid_StartTime: makeTime(now),
         bid_EndTime: makeTime(tomorrow),
-        bid_Transaction: 1
+        bid_Transaction: false
       })
     })
     .then(function(bid) {
