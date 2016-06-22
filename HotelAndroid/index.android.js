@@ -110,7 +110,7 @@ class HotelAndroid extends Component {
   }
 
   renderMenuItem(item) {
-    if (_navigator.getCurrentRoutes()[_navigator.getCurrentRoutes().length-1].id !== 'signin') {
+    if (_navigator.getCurrentRoutes()[_navigator.getCurrentRoutes().length-1].id !== item) {
       _navigator.push({id: item});
     }
     this.closeDrawer();
@@ -138,7 +138,8 @@ class HotelAndroid extends Component {
         renderNavigationView={() => navigationView}>
         <Navigator
           initialRoute={{id: 'search'}}
-          renderScene={this.navigatorRenderScene}/>
+          renderScene={this.navigatorRenderScene}
+          configureScene={(route, routeStack) => Navigator.SceneConfigs.FadeAndroid}/>
       </DrawerLayoutAndroid>
     );
   }
