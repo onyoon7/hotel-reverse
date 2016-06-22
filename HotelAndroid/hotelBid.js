@@ -61,16 +61,16 @@ class HotelBid extends Component {
     this.polygon = this.setPolygon(areaInfo.polygon[objKey]);
   }
 
-  _handlePress() {
-    let id_token = await AsyncStorage.getItem('id_token');
+  async _handlePress() {
+    var id_token = await AsyncStorage.getItem('id_token');
     if (id_token) {
       try {
         let response = await axios({
-          url: 'http://172.30.113.150:4444/client/auth/check',
+          url: 'http://192.168.1.42:4444/client/auth/check',
           method : 'get',
           headers: {
             'Authorization': 'Bearer ' + id_token
-          };
+          },
         });
         console.log('auth res: ', response);
       } catch(error) {
