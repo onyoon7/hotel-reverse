@@ -12,7 +12,7 @@ import mysql from 'mysql';
   2. Then connect to 'hotelreverse' database
  --------------------------------------------------------------------*/
 
-var sequelize = new Sequelize('hotelreverse', 'root', 'lion0787', {
+var sequelize = new Sequelize('hotelreverse', 'hotel', 'hotel', {
   host: 'localhost',
   dialect: 'mysql',
   pool: {
