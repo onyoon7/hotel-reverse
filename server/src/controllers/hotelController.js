@@ -161,7 +161,7 @@ export default {
       } else {
         db.Deal.update({
           hotel_ID: req.params.hotel_ID,
-          bid_Transaction: true;
+          bid_Transaction: true
         })
       }
     })
