@@ -167,18 +167,20 @@ class HotelBid extends Component {
 
      return (
        <View style={styles.container}>
-        <Text style={styles.title}>
-          {this.props.searchData.mainArea_Name}의 어디에서 묵고 싶나요?
-        </Text>
+         <View style={styles.rowContainer}>
+           <Text style={styles.title}>
+             {this.props.searchData.mainArea_Name}의 어디에서 묵고 싶나요?
+           </Text>
+         </View>
 
          <MapView
-           style={styles.map}
+           style={{width: width, flex: 1}}
            initialRegion={region}
          >
            {this.state.polygon[polygonName]}
          </MapView>
 
-         <View style={styles.inputsContainer}>
+         <View style={{flex: 1}}>
            <View style={styles.rowContainer}>
              <Text style={styles.label}>세부지역</Text>
              <Picker style={{width: 150}}
@@ -216,8 +218,9 @@ class HotelBid extends Component {
            />
 
            <View style={styles.rowContainer}>
-             <Button style={styles.searchBtnText}
-               containerStyle={styles.searchBtn}
+             <Button
+               containerStyle={styles.button}
+               style={styles.buttonText}
                onPress={() => this._handlePress()}>
                계속하기
              </Button>
@@ -245,15 +248,9 @@ const styles = StyleSheet.create({
    margin: 10,
   },
   title: {
-   position: 'absolute',
    fontSize: 20,
    textAlign: 'center',
    color: '#000',
-   margin: 10,
-   top: 0,
-   left: 0,
-   right: 0,
-   bottom: 50,
   },
   label: {
    width: 60,
@@ -261,7 +258,7 @@ const styles = StyleSheet.create({
    margin: 10,
    color: 'black',
   },
-  searchBtn: {
+  button: {
    width: 150,
    padding: 10,
    height: 30,
@@ -274,29 +271,9 @@ const styles = StyleSheet.create({
    alignItems: 'center',
    margin: 30,
   },
-  searchBtnText: {
+  buttonText: {
    fontSize: 15,
    color: 'white',
-  },
-  input: {
-   height: 40,
-   borderColor: '#173e43',
-   borderWidth: 2,
-   textAlign: 'center'
-  },
-  inputsContainer: {
-    position: 'absolute',
-    top: height / 2,
-    left: 0,
-    right: 0,
-    bottom: 0,
-  },
-  map: {
-    position: 'absolute',
-    top: 50,
-    left: 0,
-    right: 0,
-    bottom: height / 2,
   },
   price: {
     fontSize: 18,
