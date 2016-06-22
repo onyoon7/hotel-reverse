@@ -5,10 +5,10 @@ const babel = require('gulp-babel');
 const webpack = require('webpack-stream');
 const eslint = require('gulp-eslint');
 const nodemon = require('gulp-nodemon');
-const Cache = require('gulp-file-cache');
-const cache = new Cache();
-const mocha = require('gulp-mocha');
-const paths = {
+let Cache = require('gulp-file-cache');
+let cache = new Cache();
+let mocha = require('gulp-mocha');
+let paths = {
   server: ['./src/**/*.js'],
   test: ['./specs/server/*.js'],
 };

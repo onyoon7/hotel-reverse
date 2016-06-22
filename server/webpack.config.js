@@ -1,6 +1,6 @@
-const webpack = require('webpack');
-const path = require('path');
-const es2015 = require('babel-preset-es2015');
+let webpack = require('webpack');
+let path = require('path');
+let es2015 = require('babel-preset-es2015');
 
 module.exports = {
   devtool: 'eval-source-map',

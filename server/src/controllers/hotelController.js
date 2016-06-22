@@ -1,7 +1,7 @@
 import db from '../db';
 
 export default {
-  signUp: function(req, res) {
+  signUp: (req, res) => {
 
     db.Hotel.create({
       hotel_ID: req.body.hotel_ID,
@@ -11,44 +11,44 @@ export default {
       mainArea_Name: req.body.mainArea_Name,
       subArea_Name: req.body.subArea_Name,
       hotel_Rate: req.body.hotel_Rate,
-      mgr_Name: req.body.mgr_Name   
+      mgr_Name: req.body.mgr_Name
     })
-    .then(function(hotel) {
+    .then((hotel) => {
       console.log(hotel.dataValues);
       res.send('successfully registered');
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log("fail to register to the DB:", error);
       res.send(error);
     })
   },
 
-  signIn: function(req, res) {
+  signIn: (req, res) => {
 
-    db.Hotel.findAll({ where: { 
+    db.Hotel.findAll({ where: {
       hotel_ID: req.body.hotel_ID,
       hotel_PW: req.body.hotel_PW
     }})
-    .then(function(hotel) {
+    .then((hotel) => {
       console.log('successfully loged in');
       console.log(hotel[0].dataValues);
       res.send(hotel[0].dataValues);
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log("cannot log in:", error);
       res.send(error);
-    })    
+    })
 
   },
 
-  bidInfo: function(req, res) {
+  bidInfo: (req, res) => {
 
     db.Hotel.findOne({ where: { hotel_ID: req.params.hotel_ID } })
-      .then(function(hotel) {
+      .then((hotel) => {
         console.log(hotel.dataValues.subArea_Name);
         return hotel.dataValues.subArea_Name;
       })
-      .then(function(subArea_Name) {
+      .then((subArea_Name) => {
         return db.Deal.findAll({
           where: {
             subArea_Name: subArea_Name,
@@ -56,7 +56,7 @@ export default {
           }
         })
       })
-      .then(function(deals) {
+      .then((deals) => {
         var results = [];
         for (var i = 0; i < deals.length; i++) {
           console.log(deals[i].dataValues);
@@ -64,30 +64,30 @@ export default {
         }
         res.send(results);
       })
-      .catch(function(error) {
+      .catch((error) => {
         console.log("cannot retrieve bid information: ", error);
         res.send(error);
       })
   },
 
-  contractedBids: function(req, res) {
+  contractedBids: (req, res) => {
 
     db.Deal.findAll({
-      where: { 
+      where: {
         hotel_ID: req.params.hotel_ID,
-        bid_Transaction: true 
+        bid_Transaction: true
       }
     })
-    .then(function(deals) {
+    .then((deals) => {
       console.log('>>>> deals');
       var results = [];
       for (var i = 0; i < deals.length; i++) {
         console.log(deals[i].dataValues);
         results.push(deals[i].dataValues);
       }
-      res.send(results);      
+      res.send(results);
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log("cannot get contract information: ", error);
       res.send(error);
     })
@@ -111,10 +111,10 @@ export default {
     // });
   },
 
-  bid: function(req, res) {
+  bid: (req, res) => {
     // first check whether this bid is already captured
     db.Deal.findOne({ booking_Num: req.params.booking_Num })
-    .then(function(deal) {
+    .then((deal) => {
       if (deal.dataValues.bid_Transaction === 0) {
         return db.Deal.update({
           hotel_ID: req.params.hotel_ID,
@@ -123,23 +123,23 @@ export default {
           where: {
             booking_Num: req.params.booking_Num
           }
-        })        
+        })
       } else {
         return "this deal alreay captured";
       }
     })
-    .then(function(result) {
+    .then((result) => {
       console.log('bid result: ', result);
       res.send(result);
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log("cannot update deal DB: ", error);
       res.send(error);
     })
   },
 
 
-  updateInfo: function(req, res) {
+  updateInfo: (req, res) => {
 
     db.Hotel.update({
       hotel_PW: req.body.hotel_PW,
@@ -154,11 +154,11 @@ export default {
         hotel_ID: req.params.hotel_ID
       }
     })
-    .then(function(results) {
+    .then((results) => {
       console.log("#of updated rows: ", results[0]);
       res.send("successfully updated");
     })
-    .catch(function(error) {
+    .catch((error) => {
       console.log("cannot update user information:", error);
       res.send(error);
     })

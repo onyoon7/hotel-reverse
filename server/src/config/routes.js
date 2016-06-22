@@ -42,13 +42,13 @@ import Client from '../db';
 import Deal from '../db';
 import Hotel from '../db';
 
-export default function (app, express) {
+export default (app, express) => {
 
   app.post('/deal/bid', dealController.bid);
 
   //////////////////////////////////////////////////////////////////////////
   // client
-  // 
+  //
   // function        method    url
   // ----------------------------------------------------------------------
   // signup          post,     /client/signup
@@ -61,10 +61,9 @@ export default function (app, express) {
   // update client   post      /client/info/:client_Email
   //
   ////////////////////////////////////////////////////////////////////////
-  
+
   app.post('/client/signup', clientController.signUp);  // checked
   app.post('/client/signin', clientController.signIn);  // checked
-
 
   app.use('/client/auth', helpers.jwtCheck);
   app.get('/client/auth/check', (req, res) => {res.send(200)});
@@ -81,9 +80,9 @@ export default function (app, express) {
 
   ////////////////////////////////////////////////////////////////////////
   // hotel
-  // 
+  //
   // function         method    url
-  // ---------------------------------------------------------------------- 
+  // ----------------------------------------------------------------------
   // signup           post      /hotel/signup
   // signin           post      /hotel/signin
   // pending bids     post      /hotel/bid/:hotel_ID
@@ -91,9 +90,9 @@ export default function (app, express) {
   //                            Date format -> yyyy-mm-dd
   // bid              put       /hotel/:booking_Num
   // update hotel     post      /hotel/update/:hotel_ID
-  // 
+  //
   ////////////////////////////////////////////////////////////////////////
-  
+
   app.post('/hotel/signup', hotelController.signUp);  // checked
   app.post('/hotel/signin', hotelController.signIn);  // checked
 
@@ -105,23 +104,23 @@ export default function (app, express) {
 
   ////////////////////////////////////////////////////////////////////////
   // admin
-  // 
+  //
   // function         method    url
-  // ----------------------------------------------------------------------   
+  // ----------------------------------------------------------------------
   // pending bid      get       /admin/pendigbid
   // settled bid      get       /admin/bidinfo
   // hotels           get       /admin/hotels
   // hotel            get       /admin/hotels/:hotel_ID
   // hotels(area)     get       /admin/hotels/:subArea_Name
-  // 
+  //
   // clients(info)    get       /admin/clients
   // client(info)     get       /admin/clients/:client_Email
-  // 
+  //
   // delete(hotel)    delete    /admin/:hotel_ID
-  // delete(client)   delete    /admin/:client_ID    
-  // 
+  // delete(client)   delete    /admin/:client_ID
+  //
   ////////////////////////////////////////////////////////////////////////
- 
+
   app.get('/admin/pendingbid', adminController.pendingBid); // checked
   app.get('/admin/bidinfo', adminController.contractedBid); // checked
 
