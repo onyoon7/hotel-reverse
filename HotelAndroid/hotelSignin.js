@@ -7,10 +7,8 @@ import {
   TextInput,
   AsyncStorage,
 } from 'react-native';
-import Register from './register';
 import axios from 'axios'
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
-
 
 class HotelSignin extends Component {
   constructor(props) {
@@ -38,7 +36,7 @@ class HotelSignin extends Component {
       });
 
       const user = await GoogleSignin.currentUserAsync();
-      console.log(user);
+      console.log('user: ', user);
       this.setState({user});
     }
     catch(err) {
@@ -65,25 +63,26 @@ class HotelSignin extends Component {
     .done();
   }
 
-  _handlePress(where) {
+  async _handlePress(where) {
     let ID = this.state.client_ID;
     let password = this.state.password;
     switch(where) {
-      case 'login' :
-        axios({
+    case 'login' :
+      try {
+        let id_token = await axios({
           url: 'http://192.168.1.4:4444/client/signin/',
           method : 'post',
           data : {
             client_ID : ID,
             client_PW : password
           }
-        }).then(function(response) {
-          console.log(response)
-        }).catch(function(error) {
-          console.log(error);
         });
-        this.props.navigator.push({id : 'bidInfo'})
-        break;
+        await AsyncStorage.setItem('id_token', id_token);
+      } catch(error) {
+        console.log(error);
+      }
+      this.props.navigator.push({id : 'bidInfo'})
+      break;
     case 'register' :
       this.props.navigator.push({
         id : where,
@@ -121,16 +120,6 @@ class HotelSignin extends Component {
           <Text style={styles.buttonText}>Register</Text>
         </TouchableHighlight>
 
-        <TouchableHighlight
-          style={[styles.button, styles.facebook]}
-          onPress = {this._handlePress.bind(this, 'facebook')}>
-          <Text style={styles.buttonText}>Facebook</Text>
-        </TouchableHighlight>
-        <TouchableHighlight
-          style={[styles.button, styles.googleweb]}
-          onPress = {this._handlePress.bind(this, 'google')}>
-          <Text style={styles.buttonText}>google</Text>
-        </TouchableHighlight>
         <GoogleSigninButton
           style={styles.button}
           size = {GoogleSigninButton.Size.Icon}

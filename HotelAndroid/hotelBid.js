@@ -6,10 +6,12 @@ import {
   Picker,
   Dimensions,
   Slider,
+  AsyncStorage,
 } from 'react-native';
 const Item = Picker.Item;
 import Button from 'react-native-button';
 import MapView from 'react-native-maps';
+import axios from 'axios';
 import areaInfo from './assets/areaInfo';
 
 const { width } = Dimensions.get('window');
@@ -60,6 +62,21 @@ class HotelBid extends Component {
   }
 
   _handlePress() {
+    let id_token = await AsyncStorage.getItem('id_token');
+    if (id_token) {
+      try {
+        let response = await axios({
+          url: 'http://172.30.113.150:4444/client/auth/check',
+          method : 'get',
+          headers: {
+            'Authorization': 'Bearer ' + id_token
+          };
+        });
+        console.log('auth res: ', response);
+      } catch(error) {
+        console.log(error);
+      }
+    }
     this.props.navigator.push({id: 'signin'});
     this.props.onChange(this.state.hotel_Rate, this.state.subArea_Name, this.state.bid_Price);
   }

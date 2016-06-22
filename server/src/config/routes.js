@@ -36,6 +36,7 @@ import clientController from '../controllers/clientController';
 import hotelController from '../controllers/hotelController';
 import adminController from '../controllers/adminController';
 import dealController from '../controllers/dealController';
+import helpers from '../config/helpers';
 
 import Client from '../db';
 import Deal from '../db';
@@ -63,6 +64,9 @@ export default function (app, express) {
   
   app.post('/client/signup', clientController.signUp);
   app.post('/client/signin', clientController.signIn);
+
+  app.use('/client/auth', helpers.jwtCheck);
+  app.get('/client/auth/check', (req, res) => {res.send(200)});
 
   app.put('/client/bid/:client_Email', clientController.makeContract);
 
