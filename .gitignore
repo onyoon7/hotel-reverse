@@ -44,3 +44,8 @@ server/build
 
 # gulp cache
 .gulp-cache
+
+# angular2 js, map
+server/manager/app/*.js
+server/manager/app/*.map
+server/manager/app/.DS_Store
