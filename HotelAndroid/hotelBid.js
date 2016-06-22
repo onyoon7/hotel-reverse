@@ -10,7 +10,7 @@ import {
 const Item = Picker.Item;
 import Button from 'react-native-button';
 import MapView from 'react-native-maps';
-import coordinates from './assets/coordinates';
+import areaInfo from './assets/areaInfo';
 
 const { width } = Dimensions.get('window');
 
@@ -18,42 +18,45 @@ class HotelBid extends Component {
   constructor(props){
     super(props)
 
-    let seoul = coordinates.seoul;
-    let jeju = coordinates.jeju;
-    let seoulPolygons = coordinates.seoulPolygons;
-    let jejuPolygons = coordinates.jejuPolygons;
-    function getPolygonCmpt(region) {
-      return region.map(item => {
-        let r = Math.floor(Math.random()*255), g = Math.floor(Math.random()*255), b = Math.floor(Math.random()*255);
-        const fillColor = `rgba(${r},${g},${b},0.5)`;
-        return (
-          <MapView.Polygon
-          key={item.key}
-          coordinates={item.value}
-          fillColor={fillColor}
-          strokeColor="rgba(0,0,0,0.5)"
-          stokeWidth={2}
-          />
-        )
-      }
-      );
-    }
-
-    this.region = {
-      seoul: seoul,
-      jeju: jeju,
-    }
-
-    this.polygon = {
-      seoul: getPolygonCmpt(seoulPolygons),
-      jeju: getPolygonCmpt(jejuPolygons),
-    }
-
     this.state = {
       subArea_Name: '',
       hotel_Rate: 5,
       bid_Price: '80000',
     }
+  }
+
+  setPolygon(regionArr) {
+    return regionArr.map(item => {
+      let r = Math.floor(Math.random()*255), g = Math.floor(Math.random()*255), b = Math.floor(Math.random()*255);
+      const fillColor = `rgba(${r},${g},${b},0.5)`;
+      return (
+        <MapView.Polygon
+        key={item.key}
+        coordinates={item.value}
+        fillColor={fillColor}
+        strokeColor="rgba(0,0,0,0.5)"
+        stokeWidth={2}
+        />
+      )
+    }
+    );
+  }
+
+  componentWillMount() {
+    let objKey;
+    let mainArea = this.props.searchData.mainArea_Name;
+    if (mainArea === '서울'){
+      objKey = 'seoul';
+    } else if (mainArea === '제주'){
+      objKey = 'jeju';
+    }
+
+    this.subArea = [];
+    for(let i = 0; i < areaInfo.area[objKey].length; i++){
+      this.subArea.push(<Item label={areaInfo.area[objKey][i]} key={i} value={areaInfo.area[objKey][i]} />);
+    }
+    this.region = areaInfo.region[objKey];
+    this.polygon = this.setPolygon(areaInfo.polygon[objKey]);
   }
 
   _handlePress() {
@@ -68,29 +71,6 @@ class HotelBid extends Component {
   }
 
   render() {
-    let region;
-    let polygonName;
-
-    const seoulArea = ['강남구', '서초구', '명동', '여의도'];
-    const jejuArea = ['제주시', '서귀포시'];
-
-    const rows = [];
-    const mainArea = this.props.searchData.mainArea_Name;
-
-    if(mainArea === '서울'){
-      for(let i = 0; i < seoulArea.length; i++){
-        rows.push(<Item label={seoulArea[i]} key={i} value={seoulArea[i]} />);
-      }
-      region = this.state.region.seoul;
-      polygonName = 'seoul';
-    } else if(mainArea === '제주'){
-      for(let i = 0; i < jejuArea.length; i++){
-        rows.push(<Item label={jejuArea[i]} key={i} value={jejuArea[i]} />);
-      }
-      region = this.state.region.jeju;
-      polygonName = 'jeju';
-    }
-
     return (
       <View style={styles.container}>
         <View style={styles.rowContainer}>
@@ -101,9 +81,9 @@ class HotelBid extends Component {
 
         <MapView
           style={{width: width, flex: 1}}
-          initialRegion={region}
+          initialRegion={this.region}
         >
-          {this.state.polygon[polygonName]}
+          {this.polygon}
         </MapView>
 
         <View style={{flex: 1}}>
@@ -113,7 +93,7 @@ class HotelBid extends Component {
               selectedValue={this.state.subArea_Name}
               onValueChange={this.onValueChange.bind(this, 'subArea_Name')}
               mode="dropdown">
-              {rows}
+              {this.subArea}
             </Picker>
           </View>
 
