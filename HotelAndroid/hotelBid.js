@@ -172,7 +172,6 @@ class HotelBid extends Component {
         </Text>
 
          <MapView
-           ref="map"
            style={styles.map}
            initialRegion={region}
          >

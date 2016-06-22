@@ -9,7 +9,11 @@ import {
   AppRegistry,
   Navigator,
   BackAndroid,
+  DrawerLayoutAndroid,
+  View,
+  StyleSheet,
 } from 'react-native';
+import Button from 'react-native-button';
 
 import HotelSearch from './hotelSearch';
 import HotelBid from './hotelBid';
@@ -46,7 +50,8 @@ class HotelAndroid extends Component {
     this.bidStateChanged = this.bidStateChanged.bind(this);
     this.signinStateChanged = this.signinStateChanged.bind(this);
     this.navigatorRenderScene = this.navigatorRenderScene.bind(this);
-
+    this.closeDrawer = this.closeDrawer.bind(this);
+    this.renderMenuItem = this.renderMenuItem.bind(this);
   }
 
   searchStateChanged(mainArea_Name, checkIn_Date, checkOut_Date, room_Number) {
@@ -100,11 +105,41 @@ class HotelAndroid extends Component {
     }
   }
 
+  closeDrawer() {
+    this._drawer.closeDrawer();
+  }
+
+  renderMenuItem(item) {
+    if (_navigator.getCurrentRoutes()[_navigator.getCurrentRoutes().length-1].id !== 'signin') {
+      _navigator.push({id: item});
+    }
+    this.closeDrawer();
+  }
+
   render() {
+    var navigationView = (
+      <View style={styles.navView}>
+        <Button
+          containerStyle={styles.drawerBtn}
+          style={styles.drawerBtnText}
+          onPress={() => {this.renderMenuItem('register')}}>Register</Button>
+        <Button
+          containerStyle={styles.drawerBtn}
+          style={styles.drawerBtnText}
+          onPress={() => {this.renderMenuItem('signin')}}>Sign in</Button>
+      </View>
+    );
+
     return (
-      <Navigator
-        initialRoute={{id: 'search'}}
-        renderScene={this.navigatorRenderScene}/>
+      <DrawerLayoutAndroid
+        ref={(ref) => this._drawer = ref}
+        drawerWidth={300}
+        drawerPosition={DrawerLayoutAndroid.positions.Left}
+        renderNavigationView={() => navigationView}>
+        <Navigator
+          initialRoute={{id: 'search'}}
+          renderScene={this.navigatorRenderScene}/>
+      </DrawerLayoutAndroid>
     );
   }
 }
@@ -120,3 +155,25 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
 });
 
 AppRegistry.registerComponent('HotelAndroid', () => HotelAndroid);
+
+const styles = StyleSheet.create({
+  navView: {
+    flex: 1,
+    paddingTop: 30,
+    backgroundColor: '#fff',
+  },
+  drawerBtn: {
+    padding: 25,
+    height: 30,
+    overflow: 'hidden',
+    borderColor: 'grey',
+    borderWidth: 2,
+    borderStyle: 'solid',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  drawerBtnText: {
+    fontSize: 25,
+    color: 'black',
+  },
+});
