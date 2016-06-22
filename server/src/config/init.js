@@ -152,7 +152,7 @@ connection.query('SELECT client_Index FROM Client', function(err, results, field
 setTimeout(function(){
   for(var i = 0; i < deal.length; i++){
     var query1 = 'INSERT INTO Deal SET client_Index=?, checkIn_Date=?, checkOut_Date=?, mainArea_Name=?, subArea_Name=?, bid_Price=?, bid_Transaction=?, bid_StartTime=now(), bid_EndTime=now()+INTERVAL 1 DAY';
-    var query2 = [deal[i].client_Index, deal[i].checkIn_Date, deal[i].checkOut_Date, deal[i].mainArea_Name, deal[i].subArea_Name, deal[i].bid_Price, deal[i].bid_Transaction];
+    var query2 = [rows[i].client_Index, deal[i].checkIn_Date, deal[i].checkOut_Date, deal[i].mainArea_Name, deal[i].subArea_Name, deal[i].bid_Price, deal[i].bid_Transaction];
 
     connection.query(query1, query2, function(err, results, fields){
       if(err){
