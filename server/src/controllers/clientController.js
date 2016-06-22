@@ -1,5 +1,6 @@
 import db from '../db';
 import moment from 'moment';
+import helpers from '../config/helpers';
 
 export default {
   signUp: function(req, res) {
@@ -13,31 +14,34 @@ export default {
       member: 1
     })
     .then(function(client) {
-      console.log(client.dataValues);
-      res.send('successfully registered');
+      console.log('client signup: ', client.dataValues);
+      res.status(201).send({
+        id_token: helpers.createToken(client.dataValues),
+      });
     })
     .catch(function(error) {
       console.log("fail to register to the DB:", error);
-      res.send(error);
+      res.status(400).send("fail to register");
     })
-
   },
 
   signIn: function(req, res) {
 
-    db.Client.findAll({ where: { 
+    db.Client.findAll({ where: {
       client_ID: req.body.client_ID,
       client_PW: req.body.client_PW
     }})
     .then(function(client) {
       console.log('successfully loged in');
       console.log(client[0].dataValues);
-      res.send(client[0].dataValues);
+      res.status(200).send({
+        id_token: helpers.createToken(client[0].dataValues),
+      });
     })
     .catch(function(error) {
       console.log("cannot log in:", error);
       res.send(error);
-    })    
+    })
 
   },
 
@@ -49,7 +53,7 @@ export default {
       return client.dataValues.client_Index;
     })
     .then(function(client_Index) {
-      return db.Deal.findAll({ 
+      return db.Deal.findAll({
         where: {
           client_Index: client_Index,
           bid_Transaction: true
@@ -80,13 +84,13 @@ export default {
       return client.dataValues.client_Index;
     })
     .then(function(client_Index) {
-      return db.Deal.findAll({ 
+      return db.Deal.findAll({
         where: {
           client_Index: client_Index,
           bid_Transaction: true,
           booking_Num: req.params.booking_Num
         }
-      })    
+      })
     })
     .then(function(deal) {
       console.log(deal[0].dataValues);
