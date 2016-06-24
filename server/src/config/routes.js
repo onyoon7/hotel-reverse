@@ -61,7 +61,9 @@ export default (app, express) => {
   app.post('/client/signin', clientController.signIn);  // checked
 
   app.use('/client/auth', helpers.jwtCheck);
-  app.get('/client/auth/check', (req, res) => {res.send(200)});
+  app.get('/client/auth/check', (req, res) => {
+    res.send(req.user.client_Email);
+  });
 
   app.put('/client/bid/:client_Email', clientController.makeContract);
 

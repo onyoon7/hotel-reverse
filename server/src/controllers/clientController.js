@@ -28,7 +28,7 @@ export default {
   signIn: (req, res) => {
 
     db.Client.findAll({ where: {
-      client_ID: req.body.client_ID,
+      client_Email: req.body.client_Email,
       client_PW: req.body.client_PW
     }})
     .then((client) => {

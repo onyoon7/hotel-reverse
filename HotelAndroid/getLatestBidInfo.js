@@ -107,11 +107,13 @@ class GetLatestBidInfo extends Component {
     }
   }
 
+
   onValueChange(key: string, value: string) {
     const newState = {};
     newState[key] = value;
     this.setState(newState);
   }
+
 
   render() {
     return (
@@ -119,6 +121,14 @@ class GetLatestBidInfo extends Component {
         <Text style={styles.appName}>
           Your Wish List
         </Text>
+
+        <View style={styles.smallRowContainer}>
+          <Text>
+
+
+            {'-  '} 고객 이메일: {client_Email}
+          </Text>
+        </View>
 
         <View style={styles.smallRowContainer}>
           <Text>

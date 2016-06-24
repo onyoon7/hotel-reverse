@@ -11,7 +11,6 @@ import {
 const Item = Picker.Item;
 import Button from 'react-native-button';
 import HotelSignin from './hotelSignin';
-const ACCESS_TOKEN = 'access_token';
 
 
 class HotelSearch extends Component {
@@ -25,7 +24,6 @@ class HotelSearch extends Component {
       checkOutDate: new Date(),
       checkOut_Date: '체크아웃 날짜 선택',
       room_Number: 1,
-      accessToken : "",
     }
   }
 
