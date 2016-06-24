@@ -47,34 +47,31 @@ class GetLatestBidInfo extends Component {
 
     switch (where) {
     case 'thanks':
-      //let token;
-      //try {
-        //token = (await axios.post('https://api.iamport.kr/users/getToken', {
-          //'imp_key': IMP_KEY,
-          //'imp_secret': IMP_SECRET,
-        //})).data.response.access_token
-      //} catch (error) {
-        //console.error('token err: ', error);
-      //}
+      let token;
+      try {
+        token = (await axios.post('https://api.iamport.kr/users/getToken', {
+          'imp_key': IMP_KEY,
+          'imp_secret': IMP_SECRET,
+        })).data.response.access_token
+      } catch (error) {
+        console.error('token err: ', error);
+      }
 
-      //let resp;
-      //try {
-        //resp = (await axios.post('https://api.iamport.kr/subscribe/payments/onetime?_token=' + token, {
-          //merchant_uid : 'nictest14m',
-          //amount : 500,
-          //card_number: '1111-1111-1111-1111',
-          //expiry: '2020-09',
-          //birth: '940111',
-          //pwd_2digit: '12',
-        //})).data.response;
-      //} catch (error) {
-        //console.error('payment err: ', error);
-      //}
+      let resp;
+      try {
+        resp = (await axios.post('https://api.iamport.kr/subscribe/payments/onetime?_token=' + token, {
+          merchant_uid : 'nictest14m',
+          amount : 500,
+          card_number: '1111-1111-1111-1111',
+          expiry: '2020-09',
+          birth: '940111',
+          pwd_2digit: '12',
+        })).data.response;
+      } catch (error) {
+        console.error('payment err: ', error);
+      }
 
-      //console.log('log: ', token, resp);
-      let resp = {imp_uid: '123'};
-
-      console.log(this.bidInfo, this.client_Email, resp);
+      //console.log(this.bidInfo, this.client_Email, resp);
       axios({
         url: 'http://192.168.1.42:4444/client/bid/' + this.client_Email,
         method: 'put',
@@ -92,7 +89,7 @@ class GetLatestBidInfo extends Component {
         console.log('client bid: ', error);
       });
 
-      //this.props.navigator.push({id: 'thanks'});
+      this.props.navigator.push({id: 'thanks'});
       break;
     case 'search':
       this.props.navigator.push({id: 'search'});
