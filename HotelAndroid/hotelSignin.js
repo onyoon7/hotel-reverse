@@ -7,7 +7,7 @@ import {
   TextInput,
   AsyncStorage,
 } from 'react-native';
-import axios from 'axios'
+  import axios from 'axios'
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 
 class HotelSignin extends Component {
@@ -15,56 +15,62 @@ class HotelSignin extends Component {
     super(props);
 
     this.state = {
-      client_ID : "",
+      client_Email : "",
       password : "",
       error : "",
       user : null,
     }
+
+    this._handlePress = this._handlePress.bind(this);
+    // this._signIn = this._signIn.bind(this);
+
   }
 
   componentDidMount() {
     this._setupGoogleSignin();
+    console.log('state client_Email : ',this.state.client_Email);
   }
 
   async _setupGoogleSignin() {
     try {
       await GoogleSignin.hasPlayServices({ autoResolve: true });
       await GoogleSignin.configure({
-        scopes: ['https://www.googleapis.com/auth/calendar'],
+        scopes: ['https://www.googleapis.com/auth/drive.readonly'],
         webClientId: '370846469277-p2lvjnb4u0jcjt1br44h9pmpct82849c.apps.googleusercontent.com',
         offlineAccess: true
       });
 
       const user = await GoogleSignin.currentUserAsync();
-      console.log('user: ', user);
-      this.setState({user});
+      console.log('Googleid is logged in, client_Email: ', user);
+      this.setState({client_Email : user.email});
+      await AsyncStorage.setItem('id_token', user.idToken);
     }
     catch(err) {
       console.log("Play services error", err.code, err.message);
     }
   }
 
-  _signIn() {
-    GoogleSignin.signIn()
-    .then((user) => {
-      console.log(user);
-      this.setState({user: user});
-    })
-    .catch((err) => {
+  async _signIn() {
+    let user = await GoogleSignin.signIn()
+    console.log(user);
+    this.setState({client_Email: user.email});
+    this.props.onChange(this.state.client_Email)
+    this.props.navigator.push({id : 'bidInfo'});
+    await AsyncStorage.setItem('id_token', user.id);
+    }
+    catch(err) {
       console.log('WRONG SIGNIN', err);
-    })
-    .done();
-  }
+    }
 
   _signOut() {
     GoogleSignin.revokeAccess().then(() => GoogleSignin.signOut()).then(() => {
-      this.setState({user: null});
+      this.setState({client_Email: null});
     })
     .done();
   }
 
   async _handlePress(where) {
-    let ID = this.state.client_ID;
+    let email = this.state.client_Email;
     let password = this.state.password;
     switch(where) {
     case 'login' :
@@ -73,15 +79,21 @@ class HotelSignin extends Component {
           url: 'http://192.168.1.4:4444/client/signin/',
           method : 'post',
           data : {
-            client_ID : ID,
+            client_Email : email,
             client_PW : password
           }
         });
-        await AsyncStorage.setItem('id_token', id_token);
+        await AsyncStorage.setItem('id_token', id_token.data.id_token);
+        this.setState({client_Email : email});
+        console.log('client_email : ', this.state.client_Email);
       } catch(error) {
         console.log(error);
       }
-      this.props.navigator.push({id : 'bidInfo'})
+      var id_token = await AsyncStorage.getItem('id_token');
+      if(id_token) {
+        this.props.navigator.push({id : 'bidInfo'})
+        this.props.onChange(this.state.client_Email)
+      }
       break;
     case 'register' :
       this.props.navigator.push({
@@ -99,8 +111,8 @@ class HotelSignin extends Component {
           💃 Enjoy Hotel-Reverse 💃
         </Text>
         <TextInput
-        onChangeText={ (text)=> this.setState({client_ID: text}) }
-        style={styles.input} placeholder="ID">
+        onChangeText={ (text)=> this.setState({client_Email: text}) }
+        style={styles.input} placeholder="Email">
         </TextInput>
         <TextInput
           onChangeText={ (text)=> this.setState({password: text}) }
@@ -108,15 +120,15 @@ class HotelSignin extends Component {
           placeholder="Password"
           secureTextEntry={true}>
         </TextInput>
-        <TouchableHighlight onPress={this._handlePress.bind(this, 'login')} style={styles.button}>
+        <TouchableHighlight onPress={()=>this._handlePress('login')} style={styles.button}>
           <Text style={styles.buttonText}>
-            Login
+            Log In
           </Text>
         </TouchableHighlight>
 
         <TouchableHighlight
           style={styles.button}
-          onPress = {this._handlePress.bind(this, 'register')}>
+          onPress = {()=>this._handlePress('register')}>
           <Text style={styles.buttonText}>Register</Text>
         </TouchableHighlight>
 
@@ -124,7 +136,8 @@ class HotelSignin extends Component {
           style={styles.button}
           size = {GoogleSigninButton.Size.Icon}
           color = {GoogleSigninButton.Color.Dark}
-          onPress = {this._signIn.bind(this)}/>
+          onPress = {()=>this._signIn()}/>
+
         <Text style={styles.error}>
           {this.state.error}
         </Text>
@@ -134,11 +147,6 @@ class HotelSignin extends Component {
 }
 
 let styles = StyleSheet.create({
-  text: {
-    color: 'black',
-    backgroundColor: 'white',
-    fontSize: 30
-  },
   container: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -146,19 +154,6 @@ let styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
     padding: 10,
     paddingTop: 80
-  },
-  content: {
-    flex: 1,
-    marginTop: 80,
-    marginRight: 10,
-    marginLeft: 10
-  },
-  register : {
-    height: 50,
-    backgroundColor: '#48BBEC',
-    alignSelf: 'stretch',
-    marginTop: 10,
-    justifyContent: 'center'
   },
   input: {
     height: 50,
@@ -187,60 +182,6 @@ let styles = StyleSheet.create({
     color: 'red',
     paddingTop: 10
   },
-  success: {
-    color: 'green',
-    paddingTop: 10
-  },
-  loader: {
-    marginTop: 20
-  },
-  pic: {
-    width: 100,
-    height: 100
-  },
-  mono: {
-    fontFamily: 'Menlo',
-    paddingTop: 10
-  },
-  scroll: {
-    marginTop: 0,
-    paddingTop: 0,
-    backgroundColor: '#f2f2f2',
-    borderColor: '#888',
-    borderWidth: 1,
-    marginBottom: 10,
-    padding: 10,
-    flexDirection: 'row'
-  },
-  header: {
-    fontWeight: 'bold',
-    marginBottom: 10,
-    marginTop: 10,
-    fontSize: 16
-  },
-  loading: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  'googleweb': {
-    backgroundColor: '#ccc',
-  },
-  facebook: {
-    backgroundColor: '#3b5998'
-  },
-  twitter: {
-    backgroundColor: '#48BBEC'
-  },
-  instagram: {
-    backgroundColor: '#3F729B'
-  },
-  tumblr: {
-    backgroundColor: '#36465D'
-  },
-  'linkedin-web': {
-    backgroundColor: '#0077B5'
-  }
 });
 
 

@@ -78,12 +78,12 @@ class GetLatestBidInfo extends Component {
       bid_Price: +this.props.bidData.bid_Price,
     };
 
-    const client_Email = this.props.signinData.client_Email;
+    const client_Email = this.props.bidData.client_Email;
 
     console.log(this.props.searchData);
     console.log(this.props.searchData.checkIn_Date);
     console.log(this.props.bidData);
-    console.log(this.props.signinData);
+
 
     return (
 
@@ -91,6 +91,12 @@ class GetLatestBidInfo extends Component {
         <Text style={styles.appName}>
           Your Wish List
         </Text>
+
+        <View style={styles.smallRowContainer}>
+          <Text>
+            {'-  '} 고객 이메일: {client_Email}
+          </Text>
+        </View>
 
         <View style={styles.smallRowContainer}>
           <Text>
