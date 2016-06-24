@@ -115,9 +115,11 @@ export default (app, express) => {
   // delete(client)   delete    /admin/:client_ID
   //
   ////////////////////////////////////////////////////////////////////////
-
-  app.get('/admin/pendingbid', adminController.pendingBid); // checked
-  app.get('/admin/bidinfo', adminController.contractedBid); // checked
+ 
+  app.get('/admin/pendingbid', adminController.pendingBids); // checked
+  app.get('/admin/pendingbid/:booking_Num', adminController.pendingBid)
+  app.get('/admin/bidinfo', adminController.contractedBids); // checked
+  app.get('/admin/bidinfo/:booking_Num', adminController.contractedBid)
 
   app.get('/admin/hotels', adminController.getHotels);      // checked
   app.get('/admin/hotels/:hotel_ID', adminController.getHotel); // checked
