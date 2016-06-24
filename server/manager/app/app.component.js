@@ -1,4 +1,4 @@
-System.register(['angular2/core', './get.service', './post.service', 'angular2/http'], function(exports_1, context_1) {
+System.register(['angular2/core', './get.service', './post.service', 'angular2/http', 'angular2/router', './hotel_signin.component'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', './get.service', './post.service', 'angular2/h
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, get_service_1, post_service_1, http_1;
+    var core_1, get_service_1, post_service_1, http_1, router_1, hotel_signin_component_1;
     var AppComponent;
     return {
         setters:[
@@ -25,6 +25,12 @@ System.register(['angular2/core', './get.service', './post.service', 'angular2/h
             },
             function (http_1_1) {
                 http_1 = http_1_1;
+            },
+            function (router_1_1) {
+                router_1 = router_1_1;
+            },
+            function (hotel_signin_component_1_1) {
+                hotel_signin_component_1 = hotel_signin_component_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
@@ -45,9 +51,13 @@ System.register(['angular2/core', './get.service', './post.service', 'angular2/h
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'my-app',
-                        template: "\n    ",
-                        providers: [get_service_1.GetService, post_service_1.PostService, http_1.HTTP_PROVIDERS]
-                    }), 
+                        template: "\n    <router-outlet></router-outlet>\n    ",
+                        providers: [get_service_1.GetService, post_service_1.PostService, http_1.HTTP_PROVIDERS],
+                        directives: [router_1.ROUTER_DIRECTIVES]
+                    }),
+                    router_1.RouteConfig([
+                        { path: '/hotel/signin', component: hotel_signin_component_1.hotelSignin, name: 'HotelSignin' }
+                    ]), 
                     __metadata('design:paramtypes', [get_service_1.GetService, post_service_1.PostService])
                 ], AppComponent);
                 return AppComponent;
