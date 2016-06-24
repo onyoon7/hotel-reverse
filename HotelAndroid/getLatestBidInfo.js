@@ -3,18 +3,13 @@ import {
   StyleSheet,
   Text,
   View,
-  ListView,
-  DatePickerAndroid,
-  TouchableWithoutFeedback,
-  Picker,
-  Navigator,
 } from 'react-native';
 
-const Item = Picker.Item;
 import Button from 'react-native-button';
 import axios from 'axios';
 
-
+const IMP_KEY = '3372420065794528';
+const IMP_SECRET = 'YwZIGQT4cEjESlJwSwrk4HadQE2QN4qLBpuhgnms2F7V1QrTmSdrAnEq2HhPLHBm76Enu0PwFXrGNTAa';
 
 /*----------------------------------------------------------------
   Structure
@@ -38,55 +33,76 @@ class GetLatestBidInfo extends Component {
     return newDate;
   }
 
-  _handlePress(where, bidInfo, client_Email) {
+  bidInfo = {
+    checkIn_Date: this._convertDate(this.props.searchData.checkIn_Date),
+    checkOut_Date: this._convertDate(this.props.searchData.checkOut_Date),
+    mainArea_Name: this.props.searchData.mainArea_Name,
+    subArea_Name: this.props.bidData.subArea_Name,
+    bid_Price: +this.props.bidData.bid_Price,
+  }
+
+  client_Email = this.props.signinData.client_Email
+
+  async _handlePress(where) {
 
     switch (where) {
-      case 'thanks':
-        axios({
-          url: 'http://192.168.1.4:4444/client/bid/' + client_Email,
-          method: 'put',
-          data: {
-            checkIn_Date: bidInfo.checkIn_Date,
-            checkOut_Date: bidInfo.checkOut_Date,
-            mainArea_Name: bidInfo.mainArea_Name,
-            subArea_Name: bidInfo.subArea_Name,
-            bid_Price: bidInfo.bid_Price
-          }
-        }).then(function(response) {
-          console.log(response);
-        }).catch(function(error) {
-          console.log(error);
-        });
+    case 'thanks':
+      //let token;
+      //try {
+        //token = (await axios.post('https://api.iamport.kr/users/getToken', {
+          //'imp_key': IMP_KEY,
+          //'imp_secret': IMP_SECRET,
+        //})).data.response.access_token
+      //} catch (error) {
+        //console.error('token err: ', error);
+      //}
 
-        this.props.navigator.push({id: 'thanks'});
-        break;
-      case 'search':
-        this.props.navigator.push({id: 'search'});
-        // back to bid page
-        break;
+      //let resp;
+      //try {
+        //resp = (await axios.post('https://api.iamport.kr/subscribe/payments/onetime?_token=' + token, {
+          //merchant_uid : 'nictest14m',
+          //amount : 500,
+          //card_number: '1111-1111-1111-1111',
+          //expiry: '2020-09',
+          //birth: '940111',
+          //pwd_2digit: '12',
+        //})).data.response;
+      //} catch (error) {
+        //console.error('payment err: ', error);
+      //}
+
+      //console.log('log: ', token, resp);
+      let resp = {imp_uid: '123'};
+
+      console.log(this.bidInfo, this.client_Email, resp);
+      axios({
+        url: 'http://192.168.1.42:4444/client/bid/' + this.client_Email,
+        method: 'put',
+        data: {
+          checkIn_Date: this.bidInfo.checkIn_Date,
+          checkOut_Date: this.bidInfo.checkOut_Date,
+          mainArea_Name: this.bidInfo.mainArea_Name,
+          subArea_Name: this.bidInfo.subArea_Name,
+          bid_Price: this.bidInfo.bid_Price,
+          booking_Num: resp.imp_uid,
+        }
+      }).then(function(response) {
+        console.log(response);
+      }).catch(function(error) {
+        console.log('client bid: ', error);
+      });
+
+      //this.props.navigator.push({id: 'thanks'});
+      break;
+    case 'search':
+      this.props.navigator.push({id: 'search'});
+      // back to bid page
+      break;
     }
   }
 
   render() {
-    const bidInfo = {
-      // checkIn_Date: this.props.searchData.checkIn_Date,
-      // checkOut_Date: this.props.searchData.checkOut_Date,
-      checkIn_Date: this._convertDate(this.props.searchData.checkIn_Date),
-      checkOut_Date: this._convertDate(this.props.searchData.checkOut_Date),
-      mainArea_Name: this.props.searchData.mainArea_Name,
-      subArea_Name: this.props.bidData.subArea_Name,
-      bid_Price: +this.props.bidData.bid_Price,
-    };
-
-    const client_Email = this.props.signinData.client_Email;
-
-    console.log(this.props.searchData);
-    console.log(this.props.searchData.checkIn_Date);
-    console.log(this.props.bidData);
-    console.log(this.props.signinData);
-
     return (
-
       <View style={{flex: 1}}>
         <Text style={styles.appName}>
           Your Wish List
@@ -94,32 +110,32 @@ class GetLatestBidInfo extends Component {
 
         <View style={styles.smallRowContainer}>
           <Text>
-            {'-  '} 희망 지역: {bidInfo.mainArea_Name + '  ' + bidInfo.subArea_Name}
+            {'-  '} 희망 지역: {this.bidInfo.mainArea_Name + '  ' + this.bidInfo.subArea_Name}
           </Text>
         </View>
 
         <View style={styles.smallRowContainer}>
           <Text>
-            {'-  '} 체크인 날짜: {' ' + bidInfo.checkIn_Date}
+            {'-  '} 체크인 날짜: {' ' + this.bidInfo.checkIn_Date}
           </Text>
         </View>
 
         <View style={styles.smallRowContainer}>
           <Text>
-            {'-  '} 체크아웃 날짜: {' ' + bidInfo.checkOut_Date}
+            {'-  '} 체크아웃 날짜: {' ' + this.bidInfo.checkOut_Date}
           </Text>
         </View>
 
         <View style={styles.smallRowContainer}>
           <Text>
-            {'-  '} 희망 가격: {' ' + bidInfo.bid_Price}
+            {'-  '} 희망 가격: {' ' + this.bidInfo.bid_Price}
           </Text>
         </View>
 
         <View style={styles.rowContainer}>
           <Button style={styles.searchBtnText}
             containerStyle={styles.searchBtn}
-            onPress={() => this._handlePress('thanks', bidInfo, client_Email)}>
+            onPress={() => this._handlePress('thanks')}>
             I'm SURE!
           </Button>
         </View>
@@ -127,7 +143,7 @@ class GetLatestBidInfo extends Component {
         <View style={styles.rowContainer}>
           <Button style={styles.searchBtnText}
             containerStyle={styles.searchBtn}
-            onPress={() => this._handlePress('search', bidInfo, client_Email)}>
+            onPress={() => this._handlePress('search')}>
             I'm not SURE!
           </Button>
         </View>

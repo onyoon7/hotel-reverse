@@ -123,6 +123,7 @@ export default {
       }
 
       return db.Deal.create({
+        booking_Num: req.body.booking_Num,
         client_Index: client_Index,
         checkIn_Date: req.body.checkIn_Date,
         checkOut_Date: req.body.checkOut_Date,
