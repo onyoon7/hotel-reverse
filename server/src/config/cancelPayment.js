@@ -374,8 +374,6 @@ function cancelPayment(results) {
 }
 
 
-
-
 // function sendCancelNotification(results) {
 
 //   function sendMail(client_Email) {
@@ -411,22 +409,19 @@ function cancelPayment(results) {
 //   }
 
   
-//   for (var i = 0; i < results.length; i++) {
-//     console.log("results[i].client_Index", results[i].client_Index)
-//     Client.findOne({
-//       where: {client_Index: results[i].client_Index}
-//     })
-//     .then(function(client) {
-//       //console.log("results>>>");
-//       //console.log(self.results[i]);
-//       console.log(client.dataValues);
-//       sendMail(client.dataValues.client_Email);
-//     })
-//     .catch(function(error) {
-//       console.log('Error: ' + error)
-//     })
-//   }
-
+//   console.log("result.client_Index", results.client_Index)
+//   Client.findOne({
+//     where: {client_Index: results.client_Index}
+//   })
+//   .then(function(client) {
+//     //console.log("results>>>");
+//     //console.log(self.results[i]);
+//     console.log(client.dataValues);
+//     sendMail(client.dataValues.client_Email);
+//   })
+//   .catch(function(error) {
+//     console.log('Error: ' + error)
+//   })
 
 // }
 
