@@ -18,9 +18,9 @@ export class HotelSignup {
         .subscribe(
           hotel => {console.log(hotel)},
           err => console.log(err),
-          () => console.log("done")
+          () => { console.log("done"); this._router.navigate(['HotelSignin']); }
+
         )
+      }
     //navigate to singin page
-    this._router.navigate(['HotelSignin']);
-  }
 }
