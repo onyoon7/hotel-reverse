@@ -47,7 +47,11 @@ export default {
 
   getAllContracts: (req, res) => {
 
-    db.Client.findOne({ client_Email: req.params.client_Email })
+    db.Client.findOne({ 
+      where: { 
+        client_Email: req.params.client_Email 
+      }
+    })
     .then((client) => {
       console.log(client.dataValues.client_Index);
       return client.dataValues.client_Index;
@@ -78,7 +82,11 @@ export default {
 
   getContract: (req, res) => {
 
-    db.Client.findOne({ client_Email: req.params.client_Email })
+    db.Client.findOne({ 
+      where: { 
+        client_Email: req.params.client_Email 
+      }
+    })
     .then((client) => {
       console.log(client.dataValues.client_Index);
       return client.dataValues.client_Index;
@@ -105,7 +113,11 @@ export default {
 
   makeContract: (req, res) => {
 
-    db.Client.findOne({ client_Email: req.params.client_Email })
+    db.Client.findOne({ 
+      where: {
+        client_Email: req.params.client_Email 
+      }
+    })
     .then((client) => {
       console.log(client.dataValues.client_Index);
       return client.dataValues.client_Index;
@@ -148,12 +160,13 @@ export default {
   },
 
   cancelContract: (req, res) => {
-    // cancel policies needed
+    
   },
 
   // currently dummy function,
   // later we need to update DB schema to incorporate 'like' into our app
   makeFeedback: (req, res) => {
+
   },
 
   updateInfo: (req, res) => {
