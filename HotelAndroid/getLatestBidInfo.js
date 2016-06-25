@@ -3,6 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
+  TextInput,
 } from 'react-native';
 
 import Button from 'react-native-button';
@@ -10,6 +11,7 @@ import axios from 'axios';
 
 const IMP_KEY = '3372420065794528';
 const IMP_SECRET = 'YwZIGQT4cEjESlJwSwrk4HadQE2QN4qLBpuhgnms2F7V1QrTmSdrAnEq2HhPLHBm76Enu0PwFXrGNTAa';
+const MERCHANT_UID = 'nictest14m';
 
 /*----------------------------------------------------------------
   Structure
@@ -20,6 +22,13 @@ const IMP_SECRET = 'YwZIGQT4cEjESlJwSwrk4HadQE2QN4qLBpuhgnms2F7V1QrTmSdrAnEq2HhP
 class GetLatestBidInfo extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      card_number: 'XXXX-XXXX-XXXX-XXXX',
+      expiry: 'YYYY-MM',
+      birth: 'YYMMDD',
+      pwd_2digit: 'XX',
+    }
   }
 
   _convertDate(date) {
@@ -60,12 +69,12 @@ class GetLatestBidInfo extends Component {
       let resp;
       try {
         resp = (await axios.post('https://api.iamport.kr/subscribe/payments/onetime?_token=' + token, {
-          merchant_uid : 'nictest14m',
-          amount : 500,
-          card_number: '1111-1111-1111-1111',
-          expiry: '2020-09',
-          birth: '940111',
-          pwd_2digit: '12',
+          merchant_uid: MERCHANT_UID,
+          amount: this.bidInfo.bid_Price,
+          card_number: this.state.card_number,
+          expiry: this.state.expiry,
+          birth: this.state.birth,
+          pwd_2digit: this.state.pwd_2digit,
         })).data.response;
       } catch (error) {
         console.error('payment err: ', error);
@@ -81,21 +90,27 @@ class GetLatestBidInfo extends Component {
           mainArea_Name: this.bidInfo.mainArea_Name,
           subArea_Name: this.bidInfo.subArea_Name,
           bid_Price: this.bidInfo.bid_Price,
-          booking_Num: resp.imp_uid,
+          imp_uid: resp.imp_uid,
         }
       }).then(function(response) {
         console.log(response);
+        this.props.navigator.push({id: 'thanks'});
       }).catch(function(error) {
         console.log('client bid: ', error);
       });
 
-      this.props.navigator.push({id: 'thanks'});
       break;
     case 'search':
       this.props.navigator.push({id: 'search'});
       // back to bid page
       break;
     }
+  }
+
+  onValueChange(key: string, value: string) {
+    const newState = {};
+    newState[key] = value;
+    this.setState(newState);
   }
 
   render() {
@@ -128,6 +143,30 @@ class GetLatestBidInfo extends Component {
             {'-  '} 희망 가격: {' ' + this.bidInfo.bid_Price}
           </Text>
         </View>
+
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(text) => this.onValueChange('card_number', text)}
+          placeholder={this.state.card_number}
+        />
+
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(text) => this.onValueChange('expiry', text)}
+          placeholder={this.state.expiry}
+        />
+
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(text) => this.onValueChange('birth', text)}
+          placeholder={this.state.birth}
+        />
+
+        <TextInput
+          style={styles.textInput}
+          onChangeText={(text) => this.onValueChange('pwd_2digit', text)}
+          placeholder={this.state.pwd_2digit}
+        />
 
         <View style={styles.rowContainer}>
           <Button style={styles.searchBtnText}
@@ -208,6 +247,11 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     color: 'white'
+  },
+  textInput: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1
   }
 });
 
