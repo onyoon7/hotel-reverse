@@ -1,8 +1,13 @@
 import db from '../db';
 import moment from 'moment';
 import helpers from '../config/helpers';
+import email from '../config/email';
 
 export default {
+  authCheck: (req, res) => {
+    res.status(200).send(req.user.client_Email);
+  },
+
   signUp: (req, res) => {
 
     db.Client.create({
@@ -104,9 +109,10 @@ export default {
   },
 
   makeContract: (req, res) => {
-
+    email.makedeal('kamjik123@naver.com') //실제 req.params.client_Email 로 발송해야함
     db.Client.findOne({ client_Email: req.params.client_Email })
     .then((client) => {
+
       console.log(client.dataValues.client_Index);
       return client.dataValues.client_Index;
     })

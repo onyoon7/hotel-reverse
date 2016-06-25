@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import {
+    Alert,
   StyleSheet,
   Text,
   View,
   TextInput,
+  AsyncStorage,
 } from 'react-native';
 
 import Button from 'react-native-button';
@@ -12,6 +14,8 @@ import axios from 'axios';
 const IMP_KEY = '3372420065794528';
 const IMP_SECRET = 'YwZIGQT4cEjESlJwSwrk4HadQE2QN4qLBpuhgnms2F7V1QrTmSdrAnEq2HhPLHBm76Enu0PwFXrGNTAa';
 const MERCHANT_UID = 'nictest14m';
+
+const alertMessage = '조심해라. 한번 체결되면 바로 돈 나간다!!!!'
 
 /*----------------------------------------------------------------
   Structure
@@ -28,6 +32,7 @@ class GetLatestBidInfo extends Component {
       expiry: 'YYYY-MM',
       birth: 'YYMMDD',
       pwd_2digit: 'XX',
+      client_Email : '',
     }
   }
 
@@ -49,8 +54,6 @@ class GetLatestBidInfo extends Component {
     subArea_Name: this.props.bidData.subArea_Name,
     bid_Price: +this.props.bidData.bid_Price,
   }
-
-  client_Email = this.props.signinData.client_Email
 
   async _handlePress(where) {
 
@@ -82,7 +85,7 @@ class GetLatestBidInfo extends Component {
 
       //console.log(this.bidInfo, this.client_Email, resp);
       axios({
-        url: 'http://192.168.1.42:4444/client/bid/' + this.client_Email,
+        url: 'http://192.168.1.42:4444/client/bid/' + this.state.client_Email,
         method: 'put',
         data: {
           checkIn_Date: this.bidInfo.checkIn_Date,
@@ -115,6 +118,11 @@ class GetLatestBidInfo extends Component {
   }
 
 
+  async componentWillMount() {
+    var email = await AsyncStorage.getItem('client_Email');
+    this.setState({client_Email : email })
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>
@@ -124,9 +132,7 @@ class GetLatestBidInfo extends Component {
 
         <View style={styles.smallRowContainer}>
           <Text>
-
-
-            {'-  '} 고객 이메일: {client_Email}
+            {'-  '} 고객 이메일: {this.state.client_Email}
           </Text>
         </View>
 
@@ -181,8 +187,12 @@ class GetLatestBidInfo extends Component {
         <View style={styles.rowContainer}>
           <Button style={styles.searchBtnText}
             containerStyle={styles.searchBtn}
-            onPress={() => this._handlePress('thanks')}>
-            I'm SURE!
+            onPress={() => Alert.alert('check', alertMessage,
+              [
+                {text : 'Cancel', onPress: () => console.log('진행 취소')},
+                {text : 'OK', onPress: () => this._handlePress('thanks')}
+              ])}>
+            신청하기
           </Button>
         </View>
 
@@ -190,7 +200,7 @@ class GetLatestBidInfo extends Component {
           <Button style={styles.searchBtnText}
             containerStyle={styles.searchBtn}
             onPress={() => this._handlePress('search')}>
-            I'm not SURE!
+            처음으로 돌아가기
           </Button>
         </View>
 

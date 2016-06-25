@@ -24,7 +24,6 @@ class HotelBid extends Component {
       subArea_Name: '',
       hotel_Rate: 5,
       bid_Price: '80000',
-      client_Email : '',
     }
   }
 
@@ -66,26 +65,12 @@ class HotelBid extends Component {
     var id_token =  await AsyncStorage.getItem('id_token');
     console.log('hotel bid id token check', id_token);
     if (id_token) {
-      try {
-        let response = await axios({
-          url: 'http://192.168.1.4:4444/client/auth/check',
-          method : 'get',
-          headers: {
-            'Authorization': 'Bearer ' + id_token
-          },
-        });
-        console.log('auth res: ', response.data);
-        this.setState({client_Email :  response.data});
-      } catch(error) {
-        console.log(error);
-      }
       this.props.navigator.push({id: 'bidInfo'})
     }
     else {
       this.props.navigator.push({id: 'signin'});
     }
-
-    this.props.onChange(this.state.hotel_Rate, this.state.subArea_Name, this.state.bid_Price, this.state.client_Email);
+    this.props.onChange(this.state.hotel_Rate, this.state.subArea_Name, this.state.bid_Price);
   }
 
   onValueChange(key: string, value: string) {
