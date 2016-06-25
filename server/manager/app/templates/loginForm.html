@@ -1,11 +1,13 @@
 <form (ngSubmit)="formSubmit()">
   <div class="form-group">
     <label for="uname">Username:</label>
-    <input type="text" id="uname" class="form-control" [(mgModel)]="data.username">
+    <input type="text" id="uname" class="form-control" [(ngModel)]="data.hotel_ID">
   </div>
   <div class="form-group">
     <label for="pwd">Password:</label>
-    <input type="password" id="pwd" class="form-control" [(mgModel)]="data.password">
+    <input type="password" id="pwd" class="form-control" [(ngModel)]="data.hotel_PW">
   </div>
   <button type="submit" class="btn-default btn">Login</button>
 </form>
+
+<button  class="btn-default btn" (click)="signUp()">signUp</button>

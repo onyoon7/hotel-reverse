@@ -1,4 +1,4 @@
-System.register(['angular2/core', './get.service', './post.service', 'angular2/http', 'angular2/router', './hotel_signin.component'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', 'angular2/http', './hotel_signin.component', './hotel_signup.component', './bid.component', './contracted.component', './update.component', './get.service', './post.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,27 +10,39 @@ System.register(['angular2/core', './get.service', './post.service', 'angular2/h
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, get_service_1, post_service_1, http_1, router_1, hotel_signin_component_1;
+    var core_1, router_1, http_1, hotel_signin_component_1, hotel_signup_component_1, bid_component_1, contracted_component_1, update_component_1, get_service_1, post_service_1;
     var AppComponent;
     return {
         setters:[
             function (core_1_1) {
                 core_1 = core_1_1;
             },
+            function (router_1_1) {
+                router_1 = router_1_1;
+            },
+            function (http_1_1) {
+                http_1 = http_1_1;
+            },
+            function (hotel_signin_component_1_1) {
+                hotel_signin_component_1 = hotel_signin_component_1_1;
+            },
+            function (hotel_signup_component_1_1) {
+                hotel_signup_component_1 = hotel_signup_component_1_1;
+            },
+            function (bid_component_1_1) {
+                bid_component_1 = bid_component_1_1;
+            },
+            function (contracted_component_1_1) {
+                contracted_component_1 = contracted_component_1_1;
+            },
+            function (update_component_1_1) {
+                update_component_1 = update_component_1_1;
+            },
             function (get_service_1_1) {
                 get_service_1 = get_service_1_1;
             },
             function (post_service_1_1) {
                 post_service_1 = post_service_1_1;
-            },
-            function (http_1_1) {
-                http_1 = http_1_1;
-            },
-            function (router_1_1) {
-                router_1 = router_1_1;
-            },
-            function (hotel_signin_component_1_1) {
-                hotel_signin_component_1 = hotel_signin_component_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
@@ -56,7 +68,12 @@ System.register(['angular2/core', './get.service', './post.service', 'angular2/h
                         directives: [router_1.ROUTER_DIRECTIVES]
                     }),
                     router_1.RouteConfig([
-                        { path: '/hotel/signin', component: hotel_signin_component_1.hotelSignin, name: 'HotelSignin' }
+                        { path: '/', component: hotel_signin_component_1.HotelSignin, name: 'MainPage' },
+                        { path: '/hotel/signin', component: hotel_signin_component_1.HotelSignin, name: 'HotelSignin' },
+                        { path: '/hotel/signup', component: hotel_signup_component_1.HotelSignup, name: 'HotelSignup' },
+                        { path: '/hotel/bid/:hotel_ID', component: bid_component_1.HotelBid, name: 'HotelBid' },
+                        { path: '/hotel/contracted/:hotel_ID', component: contracted_component_1.HotelContracted, name: 'HotelContracted' },
+                        { path: '/hotel/update/:hotel_ID', component: update_component_1.HotelUpdate, name: 'HotelUpdate' }
                     ]), 
                     __metadata('design:paramtypes', [get_service_1.GetService, post_service_1.PostService])
                 ], AppComponent);
