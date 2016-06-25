@@ -368,68 +368,62 @@ function cancelPayment(results) {
         return console.error('cancel failed: ' + err);
       }
       console.log('Cancel successful! Server response with: ', body);
-      sendCancelNotification(results);
     })    
   }
 
 }
 
 
+// function sendCancelNotification(results) {
 
+//   function sendMail(client_Email) {
+//     console.log('client_Email:' + client_Email);
+//     //console.log('booking_Num:' + booking_Num);
+//     client_Email = 'gooday2.luv@gmail.com';
 
-function sendCancelNotification(results) {
+//     var smtpTransport = nodemailer.createTransport("SMTP", {
+//       service: 'Gmail',
+//       auth: {
+//         user: client_Email,
+//         pass: 'a1082926'
+//       }
+//     }); 
 
-  function sendMail(client_Email) {
-    console.log('client_Email:' + client_Email);
-    //console.log('booking_Num:' + booking_Num);
-    client_Email = 'gooday2.luv@gmail.com';
+//     var mailOptions = {
+//       from: 'hotelreverse <korean.crossfitter@gmail.com>',
+//       to: client_Email,
+//       subject: 'Cancel Notification',
+//       text: '고객님, 주문번호가 취소되었습니다.'
+//     };
 
-    var smtpTransport = nodemailer.createTransport("SMTP", {
-      service: 'Gmail',
-      auth: {
-        user: client_Email,
-        pass: 'a1082926'
-      }
-    }); 
+//     smtpTransport.sendMail(mailOptions, function(error, response){
 
-    var mailOptions = {
-      from: 'hotelreverse <korean.crossfitter@gmail.com>',
-      to: client_Email,
-      subject: 'Cancel Notification',
-      text: '고객님, 주문번호가 취소되었습니다.'
-    };
+//       if (error){
+//         console.log(error);
+//       } else {
+//         console.log("Message sent : " + response.message);
+//       }
+//       smtpTransport.close();
+//     });  
 
-    smtpTransport.sendMail(mailOptions, function(error, response){
-
-      if (error){
-        console.log(error);
-      } else {
-        console.log("Message sent : " + response.message);
-      }
-      smtpTransport.close();
-    });  
-
-  }
+//   }
 
   
-  for (var i = 0; i < results.length; i++) {
-    console.log("results[i].client_Index", results[i].client_Index)
-    Client.findOne({
-      where: {client_Index: results[i].client_Index}
-    })
-    .then(function(client) {
-      //console.log("results>>>");
-      //console.log(self.results[i]);
-      console.log(client.dataValues);
-      sendMail(client.dataValues.client_Email);
-    })
-    .catch(function(error) {
-      console.log('Error: ' + error)
-    })
-  }
+//   console.log("result.client_Index", results.client_Index)
+//   Client.findOne({
+//     where: {client_Index: results.client_Index}
+//   })
+//   .then(function(client) {
+//     //console.log("results>>>");
+//     //console.log(self.results[i]);
+//     console.log(client.dataValues);
+//     sendMail(client.dataValues.client_Email);
+//   })
+//   .catch(function(error) {
+//     console.log('Error: ' + error)
+//   })
 
-
-}
+// }
 
 var currentTime = makeTime(new Date());
 
