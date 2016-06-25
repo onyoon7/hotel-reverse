@@ -44,7 +44,7 @@ class HotelBid extends Component {
     );
   }
 
-  componentWillMount() {
+ componentWillMount() {
     let objKey;
     let mainArea = this.props.searchData.mainArea_Name;
     if (mainArea === '서울'){
@@ -62,22 +62,14 @@ class HotelBid extends Component {
   }
 
   async _handlePress() {
-    var id_token = await AsyncStorage.getItem('id_token');
+    var id_token =  await AsyncStorage.getItem('id_token');
+    console.log('hotel bid id token check', id_token);
     if (id_token) {
-      try {
-        let response = await axios({
-          url: 'http://192.168.1.42:4444/client/auth/check',
-          method : 'get',
-          headers: {
-            'Authorization': 'Bearer ' + id_token
-          },
-        });
-        console.log('auth res: ', response);
-      } catch(error) {
-        console.log(error);
-      }
+      this.props.navigator.push({id: 'bidInfo'})
     }
-    this.props.navigator.push({id: 'signin'});
+    else {
+      this.props.navigator.push({id: 'signin'});
+    }
     this.props.onChange(this.state.hotel_Rate, this.state.subArea_Name, this.state.bid_Price);
   }
 

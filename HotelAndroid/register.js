@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  Alert,
   StyleSheet,
   TextInput,
   TouchableHighlight,
@@ -23,98 +24,30 @@ class Register extends Component {
     }
   }
 
-  _handlePress(where) {
+  _handlePress() {
     let name = this.state.name;
     let email = this.state.client_email;
     let password = this.state.password;
     let checkSuccess = false;
-    switch(where) {
-      case 'register' :
-        axios({
-          url: 'http://192.168.1.4:4444/client/signup/',
-          method : 'post',
-          data : {
-            client_ID : email,
-            client_PW : password,
-            client_Name : name,
-            client_Email : email,
-            billingInfo : '1234-1234-1234-1234'
-          }
-        }).then(function(response) {
-          console.log("Thank you for your regitster")
-          console.log(response)
-
-        }).then(this.props.navigator.push({id : 'bidInfo'}))
-        .catch(function(error) {
-          console.log("Register fail")
-          console.log(error);
-        })
-        break;
-    case 'default' :
-      this.props.navigator.push({
-        id : where,
-      })
-      break;
-    }
-  }
-
-  /*
-  redirect(routeName, token) {
-    this.props.navigator.push({
-      id : routeName,
-      passProps : {
-        accessToken : token,
+    axios({
+      url: 'http://192.168.1.4:4444/client/signup/',
+      method : 'post',
+      data : {
+        client_ID : email,
+        client_PW : password,
+        client_Name : name,
+        client_Email : email,
+        billingInfo : '1234-1234-1234-1234'
       }
+    }).then(function(response) {
+      console.log("Thank you for your regitster")
+      console.log(response)
+    }).then(this.props.navigator.push({id : 'signin'}))
+    .catch(function(error) {
+      console.log("Register fail")
+      console.log(error);
     })
   }
-
-  async onRegisterPressed(){
-    try {
-      let response = await fetch('https://afternoon-beyond-22141.herokuapp.com/api/users', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user:{
-            name: this.state.name,
-            client_email: this.state.email,
-            password: this.state.password,
-            password_confirmation: this.state.password_confirmation,
-          }
-        })
-      });
-
-      let lest = await response.text();
-
-      if(response.status >= 200 && response.status < 300) {
-        console.log("res success is " + res);
-        let accessToken = res;
-        this.redirect('search', accessToken);
-      } else {
-        let errors = res;
-        throw errors;
-      }
-    } catch(errors) {
-      console.log('catch errors : ' + errors);
-      //errors are in JSON form so we must parse them first.
-      let formErrors = JSON.parse(errors);
-      //We will store all the errors in the array.
-      let errorsArray = [];
-      for(var key in formErrors) {
-        //If array is bigger than one we need to split it.
-        if(formErrors[key].length > 1) {
-            formErrors[key].map(error => errorsArray.push(`${key} ${error}`));
-        } else {
-            errorsArray.push(`${key} ${formErrors[key]}`);
-        }
-      }
-      this.setState({errors : errorsArray});
-    }
-  }
-
-  */
 
   render() {
 
@@ -142,7 +75,10 @@ class Register extends Component {
           secureTextEntry={true}>
         </TextInput>
 
-      <TouchableHighlight onPress={this._handlePress.bind(this, 'register')} style={styles.button}>
+      <TouchableHighlight
+        style={styles.button}
+        onPress={() => Alert.alert('signup','가입을 축하드립니다',
+        [{text : 'congratulation', onPress: () => this._handlePress() }] )}>
           <Text style={styles.buttonText}>
             Register
           </Text>

@@ -1,9 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
 import {
   AppRegistry,
@@ -12,6 +6,7 @@ import {
   DrawerLayoutAndroid,
   View,
   StyleSheet,
+  AsyncStorage,
 } from 'react-native';
 import Button from 'react-native-button';
 
@@ -21,6 +16,7 @@ import GetLatestBidInfo from './getLatestBidInfo';
 import ThanksALot from './thanksALot';
 import HotelSignin from './hotelSignin';
 import Register from './register';
+import axios from 'axios';
 
 let _navigator;
 
@@ -40,15 +36,10 @@ class HotelAndroid extends Component {
         subArea_Name : '강남',
         bid_Price : 35000
       },
-      signinData: {
-        client_Email : ''
-      }
-
     };
 
     this.searchStateChanged = this.searchStateChanged.bind(this);
     this.bidStateChanged = this.bidStateChanged.bind(this);
-    this.signinStateChanged = this.signinStateChanged.bind(this);
     this.navigatorRenderScene = this.navigatorRenderScene.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
     this.renderMenuItem = this.renderMenuItem.bind(this);
@@ -62,7 +53,7 @@ class HotelAndroid extends Component {
       room_Number: room_Number
     };
     this.setState({
-      searchData : searchData
+      searchData : searchData,
     });
   }
 
@@ -70,21 +61,26 @@ class HotelAndroid extends Component {
     let bidData = {
       hotel_Rate : hotel_Rate,
       subArea_Name : subArea_Name,
-      bid_Price : bid_Price
+      bid_Price : bid_Price,
     };
     this.setState({
-      bidData: bidData
+      bidData: bidData,
     });
   }
 
-  signinStateChanged(client_Email) {
-    let signinData ={
-      client_Email : client_Email
-    };
+  async componentWillMount() {
+    var id_token = await AsyncStorage.getItem('id_token');
+    console.log('Start id_token : ', id_token)
+  }
 
-    this.setState({
-      signinData : signinData
-    });
+  async _signOut() {
+    try {
+      await AsyncStorage.removeItem('id_token')
+    } catch(error) {
+      console.log('signout error : ', error);
+    }
+    var id_token =  await AsyncStorage.getItem('id_token');
+    console.log('After signout _ id_token : ',id_token)
   }
 
   navigatorRenderScene(route, navigator) {
@@ -99,7 +95,7 @@ class HotelAndroid extends Component {
       case 'register':
         return (<Register navigator={navigator}/>);
       case 'bidInfo':
-        return (<GetLatestBidInfo navigator={navigator} searchData={this.state.searchData} bidData={this.state.bidData} signinData={this.state.signinData}/>);
+        return (<GetLatestBidInfo navigator={navigator} searchData={this.state.searchData} bidData={this.state.bidData} />);
       case 'thanks':
         return (<ThanksALot navigator={navigator}/>);
     }
@@ -116,6 +112,8 @@ class HotelAndroid extends Component {
     this.closeDrawer();
   }
 
+
+
   render() {
     var navigationView = (
       <View style={styles.navView}>
@@ -127,6 +125,10 @@ class HotelAndroid extends Component {
           containerStyle={styles.drawerBtn}
           style={styles.drawerBtnText}
           onPress={() => {this.renderMenuItem('signin')}}>Sign in</Button>
+        <Button
+          containerStyle={styles.drawerBtn}
+          style={styles.drawerBtnText}
+          onPress={() => {this._signOut()}}>로그아웃</Button>
       </View>
     );
 
