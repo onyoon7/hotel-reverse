@@ -66,6 +66,7 @@ class HotelBid extends Component {
     var id_token =  await AsyncStorage.getItem('id_token');
     console.log('hotel bid id token check', id_token);
     if (id_token) {
+<<<<<<< HEAD
       try {
         let response = await axios({
           url: 'http://192.168.1.4:4444/client/auth/check',
@@ -86,6 +87,14 @@ class HotelBid extends Component {
     }
 
     this.props.onChange(this.state.hotel_Rate, this.state.subArea_Name, this.state.bid_Price, this.state.client_Email);
+=======
+      this.props.navigator.push({id: 'bidInfo'})
+    }
+    else {
+      this.props.navigator.push({id: 'signin'});
+    }
+    this.props.onChange(this.state.hotel_Rate, this.state.subArea_Name, this.state.bid_Price);
+>>>>>>> 5eef0d66375a67adb1ed2ce609db73c04170c31e
   }
 
   onValueChange(key: string, value: string) {

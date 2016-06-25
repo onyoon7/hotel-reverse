@@ -26,9 +26,23 @@ System.register(['angular2/http', 'rxjs/add/operator/map', 'angular2/core'], fun
                 function PostService(_http) {
                     this._http = _http;
                     this._url_hotel_signin = "http://localhost:4444/hotel/signin";
+                    this._url_hotel_signup = "http://localhost:4444/hotel/signup";
                 }
                 PostService.prototype.hotelSignIn = function (hotel) {
-                    return this._http.post(this._url_hotel_signin, JSON.stringify(hotel))
+                    var hotel_ID = hotel.hotel_ID;
+                    var hotel_PW = hotel.hotel_PW;
+                    var hotel_Info = "hotel_ID=" + hotel_ID + "&hotel_PW=" + hotel_PW;
+                    var headers = new http_1.Headers();
+                    headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+                    return this._http.post(this._url_hotel_signin, hotel_Info, { headers: headers })
+                        .map(function (res) { return res.json(); });
+                };
+                PostService.prototype.hotelSignUp = function (hotel) {
+                    console.log(hotel);
+                    var hotel_Info = "hotel_ID=" + hotel.hotel_ID + "&hotel_PW=" + hotel.hotel_PW + "&hotel_Name=" + hotel.hotel_Name + "&hotel_Address=" + hotel.hotel_Address + "&mainArea_Name=" + hotel.mainArea_Name + "&subArea_Name=" + hotel.subArea_Name + "&hotel_Rate=" + hotel.hotel_Rate + "&mgr_Name=" + hotel.mgr_Name;
+                    var headers = new http_1.Headers();
+                    headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+                    return this._http.post(this._url_hotel_signup, hotel_Info, { headers: headers })
                         .map(function (res) { return res.json(); });
                 };
                 PostService = __decorate([

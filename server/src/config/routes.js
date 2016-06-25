@@ -35,16 +35,11 @@
 import clientController from '../controllers/clientController';
 import hotelController from '../controllers/hotelController';
 import adminController from '../controllers/adminController';
-import dealController from '../controllers/dealController';
 import helpers from '../config/helpers';
-
-import Client from '../db';
-import Deal from '../db';
-import Hotel from '../db';
 
 export default (app, express) => {
 
-  app.post('/deal/bid', dealController.bid);
+  // TODO  router refactoring
 
   //////////////////////////////////////////////////////////////////////////
   // client
@@ -66,9 +61,13 @@ export default (app, express) => {
   app.post('/client/signin', clientController.signIn);  // checked
 
   app.use('/client/auth', helpers.jwtCheck);
+<<<<<<< HEAD
   app.get('/client/auth/check', (req, res) => {
     res.send(req.user.client_Email);
   });
+=======
+  // app.get('/client/auth/check', clientController.authCheck);
+>>>>>>> 5eef0d66375a67adb1ed2ce609db73c04170c31e
 
   app.put('/client/bid/:client_Email', clientController.makeContract);
 
@@ -122,9 +121,11 @@ export default (app, express) => {
   // delete(client)   delete    /admin/:client_ID
   //
   ////////////////////////////////////////////////////////////////////////
-
-  app.get('/admin/pendingbid', adminController.pendingBid); // checked
-  app.get('/admin/bidinfo', adminController.contractedBid); // checked
+ 
+  app.get('/admin/pendingbid', adminController.pendingBids); // checked
+  app.get('/admin/pendingbid/:booking_Num', adminController.pendingBid)
+  app.get('/admin/bidinfo', adminController.contractedBids); // checked
+  app.get('/admin/bidinfo/:booking_Num', adminController.contractedBid)
 
   app.get('/admin/hotels', adminController.getHotels);      // checked
   app.get('/admin/hotels/:hotel_ID', adminController.getHotel); // checked

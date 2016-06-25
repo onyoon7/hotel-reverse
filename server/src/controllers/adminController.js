@@ -5,24 +5,46 @@ export default {
     res.sendFile(__dirname + '../public/admin.html');
   },
 
-  pendingBid: (req, res) => {
+  pendingBids: function(req, res) {
 
-    db.Deal.findAll({ where: { bid_Transaction: false }})
-      .then((deals) => {
-        let results = [];
-        for(let i = 0; i < deals.length; i++) {
+    db.Deal.findAll({ 
+      where: { 
+          bid_Transaction: false 
+        } 
+      })
+      .then(function(deals) {
+        var results = [];
+        for(var i = 0; i < deals.length; i++) {
           results.push(deals[i].dataValues);
           console.log(deals[i].dataValues);
         }
         res.send(results);
       })
-      .catch((error) => {
+      .catch(function(error) {
+        console.log("fail to get pending bid transactions", error);
+        res.send(error);
+      })
+  },
+
+  pendingBid: function(req, res) {
+
+    db.Deal.findOne({
+      where: {
+          booking_Num: req.params.booking_Num
+        }
+      })
+      .then(function(deal) {
+        console.log(deal.dataValues);
+        res.send(deal.dataValues);
+      })
+      .catch(function(error) {
         console.log("fail to get pending bid transaction", error);
         res.send(error);
       })
   },
 
-  contractedBid: (req, res) => {
+
+  contractedBids: function(req, res) {
 
     db.Deal.findAll({
       where: {
@@ -44,7 +66,24 @@ export default {
 
   },
 
-  getHotels: (req, res) => {
+  contractedBid: function(req, res) {
+    db.Deal.findOne({
+      where: {
+        booking_Num: req.params.booking_Num
+      }
+    })
+    .then(function(deal) {
+      console.log(deal.dataValues);
+      res.send(deal.dataValues);
+    })
+    .catch(function(error) {
+      console.log("cannot retrieve bid information: ", error);
+      res.send(error);
+    })
+  },
+
+  getHotels: function(req, res) {
+
     db.Hotel.findAll()
       .then((hotels) => {
         let results = [];
@@ -60,12 +99,17 @@ export default {
       })
   },
 
-  getHotel: (req, res) => {
-    db.Hotel.findAll({ where: { hotel_ID: req.params.hotel_ID }})
-      .then((hotel) => {
+
+  getHotel: function(req, res) {
+    db.Hotel.findOne({ 
+      where: { 
+          hotel_ID: req.params.hotel_ID 
+        }
+      })
+      .then(function(hotel) {
         console.log('getHotel: ' + req.params.hotel_ID);
-        console.log(hotel[0].dataValues);
-        res.send(hotel[0].dataValues);
+        console.log(hotel.dataValues);
+        res.send(hotel.dataValues);
       })
       .catch((error) => {
         console.log("fail to retrieve hotel information: ",
@@ -76,71 +120,85 @@ export default {
 
   getHotelsByRegion: (req, res) => {
     db.Hotel.findAll({
-      where: { subArea_Name: req.params.subArea_Name }
-    })
-    .then((hotels) => {
-      let results = [];
-      for (let i = 0; i < hotels.length; i++) {
-        console.log(hotels[i].dataValues);
-        results.push(hotels[i].dataValues);
-      }
-      res.send(results);
-    })
-    .catch((error) => {
-      console.log("fail to retrieve hotel information(region): ", error);
-      res.send(error);
-    })
+      where: { 
+          subArea_Name: req.params.subArea_Name 
+        }
+      })
+      .then(function(hotels) {
+        var results = [];
+        for (var i = 0; i < hotels.length; i++) {
+          console.log(hotels[i].dataValues);
+          results.push(hotels[i].dataValues);
+        }
+        res.send(results);
+      })
+      .catch(function(error) {
+        console.log("fail to retrieve hotel information(region): ", error);
+        res.send(error);
+      })
   },
 
   getClients: (req, res) => {
     db.Client.findAll()
-    .then((clients) => {
-      let results = [];
-      for (let i = 0; i < clients.length; i++) {
-        console.log(clients[i].dataValues);
-        results.push(clients[i].dataValues);
-      }
-      res.send(results);
-    })
-    .catch((error) => {
-      console.log("cannot retrieve clients information:", error);
-      res.send(error);
-    })
+      .then(function(clients) {
+        var results = [];
+        for (var i = 0; i < clients.length; i++) {
+          console.log(clients[i].dataValues);
+          results.push(clients[i].dataValues);
+        }
+        res.send(results);
+      })
+      .catch(function(error) {
+        console.log("cannot retrieve clients information:", error);
+        res.send(error);
+      })
   },
 
-  getClient: (req, res) => {
-    db.Client.findOne({ client_Email: req.params.client_Email })
-    .then((result) => {
-      console.log(result.dataValues);
-      res.send(result.dataValues);
-    })
-    .catch((error) => {
-      console.log("cannot retrieve client information:", error);
-      res.send(error);
-    })
+  getClient: function(req, res) {
+    db.Client.findOne({ 
+      where: { 
+          client_Email: req.params.client_Email 
+        } 
+      })
+      .then(function(result) {
+        console.log(result.dataValues);
+        res.send(result.dataValues);
+      })
+      .catch(function(error) {
+        console.log("cannot retrieve client information:", error);
+        res.send(error);
+      })
   },
 
-  deleteHotel: (req, res) => {
-    db.Hotel.destroy({ where: { hotel_ID: req.params.hotel_ID } })
-    .then((result) => {
-      console.log('result is :' + result);
-      res.send('successfully deleted');
-    })
-    .catch((error) => {
-      console.log("fail to delete ", req.params.hotel_ID, " ", error);
-      res.send(error);
-    })
+  deleteHotel: function(req, res) {
+    db.Hotel.destroy({ 
+      where: { 
+          hotel_ID: req.params.hotel_ID 
+        } 
+      })
+      .then(function(result) {
+        console.log('result is :' + result);
+        res.send('successfully deleted');
+      })
+      .catch(function(error) {
+        console.log("fail to delete ", req.params.hotel_ID, " ", error);
+        res.send(error);
+      })
   },
 
-  deleteClient: (req, res) => {
-    db.Client.destroy( { where: {client_Email: req.params.client_Email }})
-    .then((result) => {
-      console.log('result is : ' + result);
-      res.send('successfully deleted');
-    })
-    .catch((error) => {
-      console.log("fail to delete ", req.params.client_Email, " ", error);
-      res.send(error);
-    })
+  deleteClient: function(req, res) {
+    db.Client.destroy({ 
+      where: {
+          client_Email: req.params.client_Email 
+        }
+      })
+      .then(function(result) {
+        console.log('result is : ' + result);
+        res.send('successfully deleted');
+      })
+      .catch(function(error) {
+        console.log("fail to delete ", req.params.client_Email, " ", error);
+        res.send(error);
+      })
   }
 };

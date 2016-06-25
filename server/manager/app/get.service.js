@@ -28,6 +28,7 @@ System.register(['angular2/http', 'rxjs/add/operator/map', 'angular2/core'], fun
                     this._url_get_hotels = "http://localhost:4444/admin/hotels";
                     this._url_get_hotel = "http://localhost:4444/admin/hotels/a1";
                     this._url_get_pendingbid = "http://localhost:4444/admin/pendingbid";
+                    this._url_get_bidinfo = "http://localhost:4444/hotel/bid/";
                 }
                 GetService.prototype.getHotels = function () {
                     return this._http.get(this._url_get_hotels)
@@ -40,6 +41,13 @@ System.register(['angular2/http', 'rxjs/add/operator/map', 'angular2/core'], fun
                 GetService.prototype.getPendingBid = function () {
                     return this._http.get(this._url_get_pendingbid)
                         .map(function (res) { return res.json(); });
+                };
+                GetService.prototype.getBidInfo = function (id) {
+                    console.log("IDDDD", id);
+                    var val = this._http.get(this._url_get_bidinfo + id)
+                        .map(function (res) { return res.json(); });
+                    console.log('val: ', val);
+                    return val;
                 };
                 GetService = __decorate([
                     core_1.Injectable(), 

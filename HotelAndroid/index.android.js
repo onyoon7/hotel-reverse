@@ -16,6 +16,7 @@ import GetLatestBidInfo from './getLatestBidInfo';
 import ThanksALot from './thanksALot';
 import HotelSignin from './hotelSignin';
 import Register from './register';
+import axios from 'axios';
 
 let _navigator;
 
@@ -35,15 +36,14 @@ class HotelAndroid extends Component {
         subArea_Name : '강남',
         bid_Price : 35000
       },
-      signinData: {
-        client_Email : ''
-      }
-
     };
 
     this.searchStateChanged = this.searchStateChanged.bind(this);
     this.bidStateChanged = this.bidStateChanged.bind(this);
+<<<<<<< HEAD
     // this.signinStateChanged = this.signinStateChanged.bind(this);
+=======
+>>>>>>> 5eef0d66375a67adb1ed2ce609db73c04170c31e
     this.navigatorRenderScene = this.navigatorRenderScene.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
     this.renderMenuItem = this.renderMenuItem.bind(this);
@@ -66,13 +66,17 @@ class HotelAndroid extends Component {
       hotel_Rate : hotel_Rate,
       subArea_Name : subArea_Name,
       bid_Price : bid_Price,
+<<<<<<< HEAD
       client_Email : client_Email
+=======
+>>>>>>> 5eef0d66375a67adb1ed2ce609db73c04170c31e
     };
     this.setState({
       bidData: bidData,
     });
   }
 
+<<<<<<< HEAD
   // signinStateChanged(client_Email) {
   //   let signinData ={
   //     client_Email : client_Email
@@ -88,6 +92,13 @@ class HotelAndroid extends Component {
     console.log('Start id_token : ', id_token)
   }
 
+=======
+  async componentWillMount() {
+    var id_token = await AsyncStorage.getItem('id_token');
+    console.log('Start id_token : ', id_token)
+  }
+
+>>>>>>> 5eef0d66375a67adb1ed2ce609db73c04170c31e
   async _signOut() {
     try {
       await AsyncStorage.removeItem('id_token')
@@ -110,7 +121,7 @@ class HotelAndroid extends Component {
       case 'register':
         return (<Register navigator={navigator}/>);
       case 'bidInfo':
-        return (<GetLatestBidInfo navigator={navigator} searchData={this.state.searchData} bidData={this.state.bidData} signinData={this.state.signinData}/>);
+        return (<GetLatestBidInfo navigator={navigator} searchData={this.state.searchData} bidData={this.state.bidData} />);
       case 'thanks':
         return (<ThanksALot navigator={navigator}/>);
     }
@@ -126,6 +137,8 @@ class HotelAndroid extends Component {
     }
     this.closeDrawer();
   }
+
+
 
   render() {
     var navigationView = (

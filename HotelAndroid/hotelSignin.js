@@ -18,7 +18,7 @@ class HotelSignin extends Component {
       client_Email : "",
       password : "",
       error : "",
-      user : null,
+      user : "",
     }
 
     this._handlePress = this._handlePress.bind(this);
@@ -41,9 +41,14 @@ class HotelSignin extends Component {
       });
 
       const user = await GoogleSignin.currentUserAsync();
+<<<<<<< HEAD
       console.log('Googleid is logged in, client_Email: ', user);
       this.setState({client_Email : user.email});
       await AsyncStorage.setItem('id_token', user.idToken);
+=======
+      //if you need user information, use the user object.
+      console.log('first user: ', user)
+>>>>>>> 5eef0d66375a67adb1ed2ce609db73c04170c31e
     }
     catch(err) {
       console.log("Play services error", err.code, err.message);
@@ -51,16 +56,29 @@ class HotelSignin extends Component {
   }
 
   async _signIn() {
+<<<<<<< HEAD
     let user = await GoogleSignin.signIn()
     console.log(user);
     this.setState({client_Email: user.email});
     this.props.onChange(this.state.client_Email)
     this.props.navigator.push({id : 'bidInfo'});
     await AsyncStorage.setItem('id_token', user.id);
+=======
+    try {
+      let user = await GoogleSignin.signIn()
+      console.log(user)
+      await AsyncStorage.setItem('id_token', user.id);
+      await AsyncStorage.setItem('client_Email', user.email);
+      this.props.navigator.push({id : 'bidInfo'});
+>>>>>>> 5eef0d66375a67adb1ed2ce609db73c04170c31e
     }
     catch(err) {
       console.log('WRONG SIGNIN', err);
     }
+<<<<<<< HEAD
+=======
+  }
+>>>>>>> 5eef0d66375a67adb1ed2ce609db73c04170c31e
 
   _signOut() {
     GoogleSignin.revokeAccess().then(() => GoogleSignin.signOut()).then(() => {
@@ -84,15 +102,22 @@ class HotelSignin extends Component {
           }
         });
         await AsyncStorage.setItem('id_token', id_token.data.id_token);
+<<<<<<< HEAD
         this.setState({client_Email : email});
         console.log('client_email : ', this.state.client_Email);
+=======
+        await AsyncStorage.setItem('client_Email', email);
+>>>>>>> 5eef0d66375a67adb1ed2ce609db73c04170c31e
       } catch(error) {
         console.log(error);
       }
       var id_token = await AsyncStorage.getItem('id_token');
       if(id_token) {
         this.props.navigator.push({id : 'bidInfo'})
+<<<<<<< HEAD
         this.props.onChange(this.state.client_Email)
+=======
+>>>>>>> 5eef0d66375a67adb1ed2ce609db73c04170c31e
       }
       break;
     case 'register' :

@@ -43,7 +43,11 @@ export default {
 
   bidInfo: (req, res) => {
 
-    db.Hotel.findOne({ where: { hotel_ID: req.params.hotel_ID } })
+    db.Hotel.findOne({ 
+        where: { 
+          hotel_ID: req.params.hotel_ID 
+        } 
+      })
       .then((hotel) => {
         console.log(hotel.dataValues.subArea_Name);
         return hotel.dataValues.subArea_Name;
@@ -92,28 +96,15 @@ export default {
       res.send(error);
     })
 
-    // var hotel_ID = req.params.hotel_ID;
-
-    // var query = 'SELECT * FROM Deal where hotel_ID=?';
-    // var data = [hotel_ID];
-
-    // db.connection.query(query, data, function(error, results, fields) {
-    //   if (error) {
-    //     console.log("error code: " + error.code +
-    //                 " ,fail to get contracted bid info");
-    //     res.send('no contracted bids');
-    //     return;
-    //   } else {
-    //     console.log('query: ' + query);
-    //     console.log(results);
-    //     res.send(results);
-    //   }
-    // });
   },
 
   bid: (req, res) => {
     // first check whether this bid is already captured
-    db.Deal.findOne({ booking_Num: req.params.booking_Num })
+    db.Deal.findOne({ 
+      where: { 
+        booking_Num: req.params.booking_Num 
+      } 
+    })
     .then((deal) => {
       if (deal.dataValues.bid_Transaction === 0) {
         return db.Deal.update({

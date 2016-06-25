@@ -1,8 +1,13 @@
 import db from '../db';
 import moment from 'moment';
 import helpers from '../config/helpers';
+import email from '../config/email';
 
 export default {
+  authCheck: (req, res) => {
+    res.status(200).send(req.user.client_Email);
+  },
+
   signUp: (req, res) => {
 
     db.Client.create({
@@ -47,7 +52,11 @@ export default {
 
   getAllContracts: (req, res) => {
 
-    db.Client.findOne({ client_Email: req.params.client_Email })
+    db.Client.findOne({ 
+      where: { 
+        client_Email: req.params.client_Email 
+      }
+    })
     .then((client) => {
       console.log(client.dataValues.client_Index);
       return client.dataValues.client_Index;
@@ -78,7 +87,11 @@ export default {
 
   getContract: (req, res) => {
 
-    db.Client.findOne({ client_Email: req.params.client_Email })
+    db.Client.findOne({ 
+      where: { 
+        client_Email: req.params.client_Email 
+      }
+    })
     .then((client) => {
       console.log(client.dataValues.client_Index);
       return client.dataValues.client_Index;
@@ -105,7 +118,11 @@ export default {
 
   makeContract: (req, res) => {
 
-    db.Client.findOne({ client_Email: req.params.client_Email })
+    db.Client.findOne({ 
+      where: {
+        client_Email: req.params.client_Email 
+      }
+    })
     .then((client) => {
       console.log(client.dataValues.client_Index);
       return client.dataValues.client_Index;
@@ -123,6 +140,7 @@ export default {
       }
 
       return db.Deal.create({
+        imp_uid: req.body.imp_uid,
         client_Index: client_Index,
         checkIn_Date: req.body.checkIn_Date,
         checkOut_Date: req.body.checkOut_Date,
@@ -147,12 +165,13 @@ export default {
   },
 
   cancelContract: (req, res) => {
-    // cancel policies needed
+    
   },
 
   // currently dummy function,
   // later we need to update DB schema to incorporate 'like' into our app
   makeFeedback: (req, res) => {
+
   },
 
   updateInfo: (req, res) => {
