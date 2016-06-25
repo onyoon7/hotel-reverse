@@ -150,11 +150,6 @@ let Deal = sequelize.define('Deal', {
     allowNull: false,
     defaultValue: false,
     field: 'bid_Transaction'
-  },
-  imp_uid: {
-    type: Sequelize.STRING,
-    allowNull: false,
-    field: 'imp_uid'
   }
 }, {
   tableName: 'Deal',

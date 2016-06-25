@@ -35,11 +35,16 @@
 import clientController from '../controllers/clientController';
 import hotelController from '../controllers/hotelController';
 import adminController from '../controllers/adminController';
+import dealController from '../controllers/dealController';
 import helpers from '../config/helpers';
+
+import Client from '../db';
+import Deal from '../db';
+import Hotel from '../db';
 
 export default (app, express) => {
 
-  // TODO  router refactoring
+  app.post('/deal/bid', dealController.bid);
 
   //////////////////////////////////////////////////////////////////////////
   // client
