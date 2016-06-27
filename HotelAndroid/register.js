@@ -9,6 +9,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 import axios from 'axios';
+import config from './config';
 
 
 class Register extends Component {
@@ -30,7 +31,7 @@ class Register extends Component {
     let password = this.state.password;
     let checkSuccess = false;
     axios({
-      url: 'http://192.168.1.4:4444/client/signup/',
+      url: config.serverUrl + '/client/signup/',
       method : 'post',
       data : {
         client_ID : email,

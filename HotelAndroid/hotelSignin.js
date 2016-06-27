@@ -9,6 +9,7 @@ import {
 } from 'react-native';
   import axios from 'axios'
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
+import config from './config';
 
 class HotelSignin extends Component {
   constructor(props) {
@@ -76,7 +77,7 @@ class HotelSignin extends Component {
     case 'login' :
       try {
         let id_token = await axios({
-          url: 'http://192.168.1.4:4444/client/signin/',
+          url: config.serverUrl + '/client/signin/',
           method : 'post',
           data : {
             client_Email : email,
