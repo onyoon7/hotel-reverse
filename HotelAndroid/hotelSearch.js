@@ -6,11 +6,9 @@ import {
   DatePickerAndroid,
   TouchableWithoutFeedback,
   Picker,
-  Navigator,
 } from 'react-native';
 const Item = Picker.Item;
 import Button from 'react-native-button';
-import HotelSignin from './hotelSignin';
 
 
 class HotelSearch extends Component {
@@ -20,22 +18,22 @@ class HotelSearch extends Component {
     this.state = {
       mainArea_Name: '',
       checkInDate: new Date(),
-      checkIn_Date: '체크인 날짜 선택',
+      checkInText: '체크인 날짜 선택',
       checkOutDate: new Date(),
-      checkOut_Date: '체크아웃 날짜 선택',
+      checkOutText: '체크아웃 날짜 선택',
       room_Number: 1,
     }
+
+    this.onValueChange = this.onValueChange.bind(this);
+    this.showPicker = this.showPicker.bind(this);
   }
 
   _convertDate(date) {
-    var newDate;
-    var d = date.split("/");
-    var y = d.splice(-1)[0];
+    let dd = date.getDate()
+    let mm = date.getMonth() + 1;
+    let y = date.getFullYear();
 
-    d.splice(0, 0, y);
-    newDate = d.join("-");
-
-    return newDate;
+    return `${y}-${mm}-${dd}`;
   }
 
   _incRoomNumber() {
@@ -58,7 +56,7 @@ class HotelSearch extends Component {
 
   _handlePress() {
     this.props.navigator.push({id: 'bid'});
-    this.props.onChange(this.state.mainArea_Name, this.state.checkIn_Date, this.state.checkOut_Date, this.state.room_Number);
+    this.props.onChange(this.state.mainArea_Name, this.state.checkInText, this.state.checkOutText, this.state.room_Number);
   }
 
   onValueChange(key: string, value: string) {
@@ -76,7 +74,7 @@ class HotelSearch extends Component {
       } else {
         var date = new Date(year, month, day);
 
-        newState[stateKey + '_Date'] = this._convertDate(date.toLocaleDateString('en-US'));
+        newState[stateKey + 'Text'] = this._convertDate(date);
         newState[stateKey + 'Date'] = date;
       }
       this.setState(newState);
@@ -97,7 +95,7 @@ class HotelSearch extends Component {
             <Text style={styles.label}>지역</Text>
             <Picker style={{width: 100}}
               selectedValue={this.state.mainArea_Name}
-              onValueChange={this.onValueChange.bind(this, 'mainArea_Name')}
+              onValueChange={() => this.onValueChange('mainArea_Name')}
               mode="dropdown">
               <Item label="서울" value="서울" />
               <Item label="제주" value="제주" />
@@ -109,13 +107,13 @@ class HotelSearch extends Component {
             <Text style={styles.label}>체크인</Text>
 
             <TouchableWithoutFeedback
-                onPress={this.showPicker.bind(this, 'checkIn', {
+                onPress={() => this.showPicker('checkIn', {
                   date: this.state.checkInDate,
-                  minDate: this.state.checkInDate,
-                  maxDate: new Date().setDate(this.state.checkInDate.getDate() + 14),
+                  minDate: new Date(),
+                  maxDate: new Date().setDate(new Date().getDate() + 14),
                 })}>
               <View>
-                <Text style={styles.text}>{this.state.checkIn_Date}</Text>
+                <Text style={styles.text}>{this.state.checkInText}</Text>
               </View>
             </TouchableWithoutFeedback>
           </View>
@@ -123,13 +121,18 @@ class HotelSearch extends Component {
           <View style={styles.rowContainer}>
             <Text style={styles.label}>체크아웃</Text>
             <TouchableWithoutFeedback
-                onPress={this.showPicker.bind(this, 'checkOut', {
-                  date: this.state.checkOutDate,
-                  minDate: this.state.checkInDate,
-                  maxDate: new Date().setDate(this.state.checkInDate.getDate() + 7),
-                })}>
+                onPress={() => {
+                  let maxDate = new Date(this.state.checkInDate);
+                  maxDate.setDate(maxDate.getDate() + 14);
+
+                  let options = {
+                    date: this.state.checkOutDate,
+                    minDate: this.state.checkInDate,
+                    maxDate: maxDate,
+                  };
+                  this.showPicker('checkOut', options)}}>
               <View>
-                <Text style={styles.text}>{this.state.checkOut_Date}</Text>
+                <Text style={styles.text}>{this.state.checkOutText}</Text>
               </View>
             </TouchableWithoutFeedback>
           </View>
