@@ -14,6 +14,7 @@ import MapView from 'react-native-maps';
 import areaInfo from './assets/areaInfo';
 
 const { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height / 2;
 
 class HotelBid extends Component {
   constructor(props){
@@ -25,28 +26,66 @@ class HotelBid extends Component {
       bid_Price: '80000',
       bubbleText: '↕️',
       mapStyle: {width: width, flex: 1},
+      region: {},
     }
 
     this.isFullScreen = false;
 
+    this.onValueChange = this.onValueChange.bind(this);
     this.toggleFullScreen = this.toggleFullScreen.bind(this);
+    this.setMapView = this.setMapView.bind(this);
+    this.setRegionToMarker = this.setRegionToMarker.bind(this);
   }
 
-  setPolygon(regionArr) {
-    return regionArr.map(item => {
+  setMapView(region) {
+    let polygons = areaInfo.polygon[region];
+    let markers = areaInfo.marker[region];
+
+    let colors = [];
+    for (let i=0; i<polygons.length; i++) {
       let r = Math.floor(Math.random()*255), g = Math.floor(Math.random()*255), b = Math.floor(Math.random()*255);
-      const fillColor = `rgba(${r},${g},${b},0.5)`;
+      colors.push(`rgba(${r},${g},${b}`);
+    }
+
+    this.polygon = polygons.map((item, i) => {
       return (
         <MapView.Polygon
         key={item.key}
         coordinates={item.value}
-        fillColor={fillColor}
+        fillColor={colors[i] + ',0.5)'}
         strokeColor="rgba(0,0,0,0.5)"
         stokeWidth={2}
         />
       )
     }
     );
+
+    this.marker = markers.map((item, i) => {
+      return (
+        <MapView.Marker
+        key={item.key}
+        coordinate={item.value}
+        title={item.key}
+        pinColor={colors[i] + ',0.7)'}
+        onPress={() => {
+          this.onValueChange('subArea_Name', item.key);
+          if (this.isFullScreen) {
+            this.toggleFullScreen()
+          }
+          this.setRegionToMarker(item.value);
+        }
+        }
+        />
+      )
+    }
+    );
+  }
+
+  setRegionToMarker(coor) {
+    let region = { latitude: coor.latitude, longitude: coor.longitude };
+    region.latitudeDelta = 0.0522;
+    region.longitudeDelta = 0.1522 * ASPECT_RATIO;
+    this.onValueChange('region', region);
   }
 
   componentWillMount() {
@@ -58,12 +97,13 @@ class HotelBid extends Component {
       objKey = 'jeju';
     }
 
+    this.onValueChange('region', areaInfo.region[objKey]);
+
     this.subArea = [];
     for(let i = 0; i < areaInfo.area[objKey].length; i++){
       this.subArea.push(<Item label={areaInfo.area[objKey][i]} key={i} value={areaInfo.area[objKey][i]} />);
     }
-    this.region = areaInfo.region[objKey];
-    this.polygon = this.setPolygon(areaInfo.polygon[objKey]);
+    this.setMapView(objKey);
   }
 
   async _handlePress() {
@@ -106,10 +146,15 @@ class HotelBid extends Component {
 
         <MapView
           style={this.state.mapStyle}
-          initialRegion={this.region}
-          onPress={this.toggleFullScreen}
+          region={this.state.region}
+          onPress={() => {
+            if (!this.isFullScreen) {
+              this.toggleFullScreen()
+            }
+          }}
         >
           {this.polygon}
+          {this.marker}
         </MapView>
 
         <View style={styles.bubbleContainer}>
@@ -126,7 +171,7 @@ class HotelBid extends Component {
             <Text style={styles.label}>세부지역</Text>
             <Picker style={{width: 150}}
               selectedValue={this.state.subArea_Name}
-              onValueChange={this.onValueChange.bind(this, 'subArea_Name')}
+              onValueChange={value => this.onValueChange('subArea_Name', value)}
               mode="dropdown">
               {this.subArea}
             </Picker>
@@ -136,7 +181,7 @@ class HotelBid extends Component {
             <Text style={styles.label}>호텔등급</Text>
             <Picker style={{width: 150}}
               selectedValue={this.state.hotel_Rate}
-              onValueChange={this.onValueChange.bind(this, 'hotel_Rate')}
+              onValueChange={value => this.onValueChange('hotel_Rate', value)}
               mode="dropdown">
                 <Item label="★★★★★" value="5" />
                 <Item label="★★★★" value="4" />
@@ -217,7 +262,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   bubble: {
-    backgroundColor: 'rgba(255,255,255,0.7)',
+    backgroundColor: 'rgba(255,255,255,0.8)',
     borderRadius: 20,
     width: 60,
     height: 50,
