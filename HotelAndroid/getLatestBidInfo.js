@@ -10,6 +10,7 @@ import {
 
 import Button from 'react-native-button';
 import axios from 'axios';
+import config from './config';
 
 const IMP_KEY = '3372420065794528';
 const IMP_SECRET = 'YwZIGQT4cEjESlJwSwrk4HadQE2QN4qLBpuhgnms2F7V1QrTmSdrAnEq2HhPLHBm76Enu0PwFXrGNTAa';
@@ -85,7 +86,7 @@ class GetLatestBidInfo extends Component {
 
       //console.log(this.bidInfo, this.client_Email, resp);
       axios({
-        url: 'http://192.168.1.42:4444/client/bid/' + this.state.client_Email,
+        url: config.serverUrl + '/client/bid/' + this.state.client_Email,
         method: 'put',
         data: {
           checkIn_Date: this.bidInfo.checkIn_Date,

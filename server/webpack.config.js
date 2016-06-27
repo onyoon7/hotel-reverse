@@ -5,8 +5,6 @@ var es2015 = require('babel-preset-es2015');
 module.exports = {
   devtool: 'eval-source-map',
   entry: {
-//    manager: './manager/index.js',
-    admin : './admin/index.js'
   },
   output: {
     path: path.join(__dirname, 'public'),

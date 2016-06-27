@@ -13,6 +13,7 @@ import Button from 'react-native-button';
 import MapView from 'react-native-maps';
 import axios from 'axios';
 import areaInfo from './assets/areaInfo';
+import config from './config';
 
 const { width } = Dimensions.get('window');
 
