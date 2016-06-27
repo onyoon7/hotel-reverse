@@ -13,7 +13,7 @@ import Button from 'react-native-button';
 import MapView from 'react-native-maps';
 import areaInfo from './assets/areaInfo';
 
-const { width } = Dimensions.get('window');
+const { width, height } = Dimensions.get('window');
 
 class HotelBid extends Component {
   constructor(props){
@@ -23,7 +23,13 @@ class HotelBid extends Component {
       subArea_Name: '',
       hotel_Rate: 5,
       bid_Price: '80000',
+      bubbleText: '↕️',
+      mapStyle: {width: width, flex: 1},
     }
+
+    this.isFullScreen = false;
+
+    this.toggleFullScreen = this.toggleFullScreen.bind(this);
   }
 
   setPolygon(regionArr) {
@@ -43,7 +49,7 @@ class HotelBid extends Component {
     );
   }
 
- componentWillMount() {
+  componentWillMount() {
     let objKey;
     let mainArea = this.props.searchData.mainArea_Name;
     if (mainArea === '서울'){
@@ -78,6 +84,17 @@ class HotelBid extends Component {
     this.setState(newState);
   }
 
+  toggleFullScreen() {
+    this.isFullScreen = !this.isFullScreen;
+    if (this.isFullScreen) {
+      this.onValueChange('bubbleText', '←');
+      this.onValueChange('mapStyle', {flex: 100, width: width, height: height});
+    } else {
+      this.onValueChange('bubbleText', '↕️');
+      this.onValueChange('mapStyle', {width: width, flex: 1});
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -88,11 +105,21 @@ class HotelBid extends Component {
         </View>
 
         <MapView
-          style={{width: width, flex: 1}}
+          style={this.state.mapStyle}
           initialRegion={this.region}
+          onPress={this.toggleFullScreen}
         >
           {this.polygon}
         </MapView>
+
+        <View style={styles.bubbleContainer}>
+          <Button
+            containerStyle={styles.bubble}
+            style={{color: 'black', fontSize: 30}}
+            onPress={this.toggleFullScreen}>
+              {this.state.bubbleText}
+          </Button>
+        </View>
 
         <View style={{flex: 1}}>
           <View style={styles.rowContainer}>
@@ -189,9 +216,24 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: 'white',
   },
+  bubble: {
+    backgroundColor: 'rgba(255,255,255,0.7)',
+    borderRadius: 20,
+    width: 60,
+    height: 50,
+  },
+  bubbleContainer: {
+    position: 'absolute',
+    top: 60,
+    left: 10,
+  },
   price: {
     fontSize: 18,
     color: 'black',
+  },
+  smallMap: {
+    width: width,
+    flex: 1,
   },
 });
 

@@ -2,8 +2,6 @@ import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height / 2;
-const LATITUDE_DELTA = 0.1522;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const area = {
   seoul: ['강남구', '서초구', '명동', '여의도'],
@@ -16,19 +14,49 @@ export default {
     seoul: {
       latitude: 37.552547,
       longitude: 126.993552,
-      latitudeDelta: LATITUDE_DELTA,
-      longitudeDelta: LONGITUDE_DELTA,
+      latitudeDelta: 0.1522,
+      longitudeDelta: 0.1522 * ASPECT_RATIO,
     },
     jeju: {
-      latitude: 33.499634,
-      longitude: 126.531223,
-      latitudeDelta: LATITUDE_DELTA,
-      longitudeDelta: LONGITUDE_DELTA,
+      latitude: 33.389222,
+      longitude: 126.562156,
+      latitudeDelta: 0.5522,
+      longitudeDelta: 0.5522 * ASPECT_RATIO,
     },
+  },
+  marker: {
+    seoul: [
+      { key: area.seoul[0],
+        value: {
+          latitude: 37.495890,
+          longitude: 127.056266 }
+      },
+      { key: area.seoul[2],
+        value: {
+          latitude: 37.564001,
+          longitude: 126.985170 }
+      },
+      { key: area.seoul[3],
+        value: {
+          latitude: 37.525378,
+          longitude: 126.924887 }
+      },
+    ],
+    jeju: [
+      { key: area.jeju[0],
+        value: {
+          latitude: 33.499981,
+          longitude: 126.526628 }
+      },
+      { key: area.jeju[1],
+        value: {
+          latitude: 33.252828,
+          longitude: 126.563587 }
+      },
+    ],
   },
   polygon: {
     seoul: [
-      // gangnam-gu
       { key: area.seoul[0], value: [
         {
           latitude: 37.533335,
@@ -52,7 +80,6 @@ export default {
         },
       ],
       },
-      // myeong-dong
       { key: area.seoul[2], value: [
         {
           latitude: 37.568933,
@@ -99,35 +126,35 @@ export default {
           longitude: 126.524663,
         },
         {
-          latitude: 33.499781,
-          longitude: 126.511951
+          latitude: 33.434145,
+          longitude: 126.286091,
         },
         {
-          latitude: 33.487112,
-          longitude: 126.534887
+          latitude: 33.464916,
+          longitude: 126.539818,
         },
         {
-          latitude: 33.502141,
-          longitude: 126.549929,
+          latitude: 33.546098,
+          longitude: 126.810510
         },
       ],
       },
       { key: area.jeju[1], value: [
         {
-          latitude: 33.259158,
-          longitude: 126.561299
+          latitude: 33.304173,
+          longitude: 126.562683
         },
         {
-          latitude: 33.253879,
-          longitude: 126.575245
+          latitude: 33.328827,
+          longitude: 126.812722
         },
         {
           latitude: 33.240068,
           longitude: 126.563832
         },
         {
-          latitude: 33.253140,
-          longitude: 126.555264
+          latitude: 33.235721,
+          longitude: 126.255851
         },
       ],
       },
