@@ -16,7 +16,7 @@ class HotelSearch extends Component {
     super(props);
 
     this.state = {
-      mainArea_Name: '',
+      mainArea_Name: '서울',
       checkInDate: new Date(),
       checkInText: '체크인 날짜 선택',
       checkOutDate: new Date(),
@@ -95,7 +95,7 @@ class HotelSearch extends Component {
             <Text style={styles.label}>지역</Text>
             <Picker style={{width: 100}}
               selectedValue={this.state.mainArea_Name}
-              onValueChange={() => this.onValueChange('mainArea_Name')}
+              onValueChange={(value) => this.onValueChange('mainArea_Name', value)}
               mode="dropdown">
               <Item label="서울" value="서울" />
               <Item label="제주" value="제주" />
