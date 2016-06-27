@@ -11,10 +11,9 @@ export default {
   signUp: (req, res) => {
 
     db.Client.create({
-      client_ID: req.body.client_ID,
+      client_Email: req.body.client_Email,
       client_PW: req.body.client_PW,
       client_Name: req.body.client_Name,
-      client_Email: req.body.client_Email,
       billingInfo: req.body.billingInfo,
       member: 1
     })
@@ -32,7 +31,7 @@ export default {
 
   signIn: (req, res) => {
 
-    db.Client.findAll({ where: {
+    db.Client.findOne({ where: {
       client_Email: req.body.client_Email,
       client_PW: req.body.client_PW
     }})
