@@ -66,17 +66,18 @@ sequelize
   3. Hotel table
  --------------------------------------------------------------------*/
 
-var Client = sequelize.define('Client', {
+let Client = sequelize.define('Client', {
   client_Index: {
     type: Sequelize.INTEGER,
     primaryKey: true,
     autoIncrement: true,
     field: 'client_Index'
   },
-  client_ID: {
+  client_Email: {
     type: Sequelize.STRING(128),
-    defaultValue: null,
-    field: 'client_ID'
+    allowNull: false,
+    unique: true,
+    field: 'client_Email'
   },
   client_PW: {
     type: Sequelize.STRING(128),
@@ -87,12 +88,6 @@ var Client = sequelize.define('Client', {
     type: Sequelize.STRING(128),
     allowNull: false,
     field: 'client_Name'
-  },
-  client_Email: {
-    type: Sequelize.STRING(128),
-    allowNull: false,
-    unique: true,
-    field: 'client_Email'
   },
   billingInfo: {
     type: Sequelize.STRING(128),
@@ -111,7 +106,6 @@ var Client = sequelize.define('Client', {
   associate: function(models) {
     Client.hasMany(models.Deal, {
       foreignKey: 'client_Index',
-      onDelete: 'cascade',
       onUpdate: 'cascade'
     })
   },
@@ -120,7 +114,67 @@ var Client = sequelize.define('Client', {
 });
 
 
-var Deal = sequelize.define('Deal', {
+let Hotel = sequelize.define('Hotel', {
+  hotel_Index: {
+    type: Sequelize.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    field: 'hotel_Index'
+  },
+  hotel_ID: {
+    type: Sequelize.STRING(128),
+    allowNull: false,
+    field: 'hotel_ID'
+  },
+  hotel_PW: {
+    type: Sequelize.STRING(128),
+    allowNull: false,
+    field: 'hotel_PW'
+  },
+  hotel_Name: {
+    type: Sequelize.STRING(128),
+    allowNull: false,
+    field: 'hotel_Name'
+  },
+  hotel_Address: {
+    type: Sequelize.STRING(128),
+    allowNull: false,
+    field: 'hotel_Address'
+  },
+  mainArea_Name: {
+    type: Sequelize.STRING(128),
+    allowNull: false,
+    field: 'mainArea_Name'
+  },
+  subArea_Name: {
+    type: Sequelize.STRING(128),
+    allowNull: false,
+    field: 'subArea_Name'
+  },
+  hotel_Rate: {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    field: 'hotel_Rate'
+  },
+  mgr_Name: {
+    type: Sequelize.STRING(128),
+    allowNull: false,
+    field: 'mgr_Name'
+  }
+}, {
+  tableName: 'Hotel',
+  associate: function(models) {
+    Hotel.hasMany(models.Deal, {
+      foreignKey: 'hotel_ID',
+      onUpdate: 'cascade'
+    })
+  },
+  timestamps: false,
+  freezeTableName: true
+});
+
+
+let Deal = sequelize.define('Deal', {
   booking_Num: {
     type: Sequelize.INTEGER,
     primaryKey: true,
@@ -175,91 +229,39 @@ var Deal = sequelize.define('Deal', {
     allowNull: false,
     defaultValue: false,
     field: 'bid_Transaction'
+  },
+  imp_uid: {
+    type: Sequelize.STRING(128),
+    allowNull: false,
+    field: 'imp_uid'
   }
 }, {
   tableName: 'Deal',
   associate: function(models) {
     Deal.belongsTo(models.Client, {foreignKey: 'client_Index'});
-    //Deal.belongsTo(models.Hotel, {foreignKey: 'booking_Num'});
+    Deal.belongsTo(models.Hotel, {foreignKey: 'hotel_ID'});
   },
   timestamps: false,
   freezeTableName: true
 });
 
-
-var Hotel = sequelize.define('Hotel', {
-  hotel_Index: {
-    type: Sequelize.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    field: 'hotel_Index'
-  },
-  hotel_ID: {
-    type: Sequelize.STRING(128),
-    allowNull: false,
-    field: 'hotel_ID'
-  },
-  hotel_PW: {
-    type: Sequelize.STRING(128),
-    allowNull: false,
-    field: 'hotel_PW'
-  },
-  hotel_Name: {
-    type: Sequelize.STRING(128),
-    allowNull: false,
-    field: 'hotel_Name'
-  },
-  hotel_Address: {
-    type: Sequelize.STRING(128),
-    allowNull: false,
-    field: 'hotel_Address'
-  },
-  mainArea_Name: {
-    type: Sequelize.STRING(128),
-    allowNull: false,
-    field: 'mainArea_Name'
-  },
-  subArea_Name: {
-    type: Sequelize.STRING(128),
-    allowNull: false,
-    field: 'subArea_Name'
-  },
-  hotel_Rate: {
-    type: Sequelize.INTEGER,
-    allowNull: false,
-    field: 'hotel_Rate'
-  },
-  mgr_Name: {
-    type: Sequelize.STRING(128),
-    allowNull: false,
-    field: 'mgr_Name'
-  }
-}, {
-  tableName: 'Hotel',
-  // associate: function(models) {
-  //   Hotel.hasMany(models.Deal, {
-  //     foreignKey: 'booking_Num',
-  //     onDelete: 'cascade',
-  //     onUpdate: 'cascade'
-  //   })
-  // },
-  timestamps: false,
-  freezeTableName: true
-});
 
 
 // sync to the table
-Client.sync().then(function() {
-  //console.log('now, can use Client table');
+Client.sync().then(() => {
+    console.log('now, can use Client table');
 });
 
-Deal.sync().then(function() {
-  //console.log('now, can use Deal table');
+Hotel.sync().then(() => {
+  console.log('now, can use Hotel table');
 });
 
-Hotel.sync().then(function() {
-  //console.log('now, can use Hotel table');
+
+Deal.sync().then(() => {
+  console.log('now, can use Deal table');
 });
+
+
 
 function makeTime(date) {
   var yyyymmdd = date.toISOString().split('T')[0];
@@ -357,73 +359,75 @@ function cancelPayment(results) {
     refund_account: ''
   }
 
+  function callback(result, err, response, body) {
+    if (err) {
+      return console.error('cancel failed: ' + err);
+    }
+    console.log('Cancel successful! Server response with: ', body);
+    console.log('before sendCancelNotification: ', result);
+    sendCancelNotification(result);
+  }
+
   for (var i = 0; i < results.length; i++) {
     request({
       url: url,
       method: 'post',
       formData: cancelRequest,
       json: true
-    }, function(err, response, body) {
-      if (err) {
-        return console.error('cancel failed: ' + err);
-      }
-      console.log('Cancel successful! Server response with: ', body);
-    })    
+    }, callback.bind(null, results[i]))    
   }
 
 }
 
 
-// function sendCancelNotification(results) {
+function sendCancelNotification(result) {
 
-//   function sendMail(client_Email) {
-//     console.log('client_Email:' + client_Email);
-//     //console.log('booking_Num:' + booking_Num);
-//     client_Email = 'gooday2.luv@gmail.com';
+  function sendMail(client_Email) {
+    console.log('client_Email:' + client_Email);
+    //console.log('booking_Num:' + booking_Num);
+    client_Email = 'gooday2.luv@gmail.com';
 
-//     var smtpTransport = nodemailer.createTransport("SMTP", {
-//       service: 'Gmail',
-//       auth: {
-//         user: client_Email,
-//         pass: 'a1082926'
-//       }
-//     }); 
+    var smtpTransport = nodemailer.createTransport("SMTP", {
+      service: 'Gmail',
+      auth: {
+        user: client_Email,
+        pass: 'a1082926'
+      }
+    }); 
 
-//     var mailOptions = {
-//       from: 'hotelreverse <korean.crossfitter@gmail.com>',
-//       to: client_Email,
-//       subject: 'Cancel Notification',
-//       text: '고객님, 주문번호가 취소되었습니다.'
-//     };
+    var mailOptions = {
+      from: 'hotelreverse <korean.crossfitter@gmail.com>',
+      to: client_Email,
+      subject: 'Cancel Notification',
+      text: '고객님, 주문번호 ' + result.booking_Num + ' 번의 거래가 취소되었습니다.'
+    };
 
-//     smtpTransport.sendMail(mailOptions, function(error, response){
+    smtpTransport.sendMail(mailOptions, function(error, response){
 
-//       if (error){
-//         console.log(error);
-//       } else {
-//         console.log("Message sent : " + response.message);
-//       }
-//       smtpTransport.close();
-//     });  
+      if (error){
+        console.log(error);
+      } else {
+        console.log("Message sent : " + response.message);
+      }
+      smtpTransport.close();
+    });  
 
-//   }
+  }
 
   
-//   console.log("result.client_Index", results.client_Index)
-//   Client.findOne({
-//     where: {client_Index: results.client_Index}
-//   })
-//   .then(function(client) {
-//     //console.log("results>>>");
-//     //console.log(self.results[i]);
-//     console.log(client.dataValues);
-//     sendMail(client.dataValues.client_Email);
-//   })
-//   .catch(function(error) {
-//     console.log('Error: ' + error)
-//   })
+  console.log("result.client_Index", result.client_Index)
+  Client.findOne({
+    where: {client_Index: result.client_Index}
+  })
+  .then(function(client) {
+    console.log(client.dataValues);
+    sendMail(client.dataValues.client_Email);
+  })
+  .catch(function(error) {
+    console.log('Error: ' + error)
+  })
 
-// }
+}
 
 var currentTime = makeTime(new Date());
 

@@ -15,7 +15,9 @@ export default {
     })
     .then((hotel) => {
       console.log(hotel.dataValues);
-      res.send('successfully registered');
+      res.status(201).send({
+        success: true
+      });
     })
     .catch((error) => {
       console.log("fail to register to the DB:", error);
