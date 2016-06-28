@@ -7,11 +7,19 @@ import {
   TextInput,
   AsyncStorage,
   ToastAndroid,
+  ScrollView,
 } from 'react-native';
 
 import Button from 'react-native-button';
 import axios from 'axios';
+import MapView from 'react-native-maps';
+import areaInfo from './assets/areaInfo';
 import config from './config';
+
+import { Dimensions } from 'react-native';
+const { width, height } = Dimensions.get('window');
+
+const ASPECT_RATIO = width / height / 2;
 
 const IMP_KEY = '3372420065794528';
 const IMP_SECRET = 'YwZIGQT4cEjESlJwSwrk4HadQE2QN4qLBpuhgnms2F7V1QrTmSdrAnEq2HhPLHBm76Enu0PwFXrGNTAa';
@@ -44,6 +52,46 @@ class GetLatestBidInfo extends Component {
     this.focusNextField = this.focusNextField.bind(this);
     this.promptConfirmMsg = this.promptConfirmMsg.bind(this);
     this.validateInput = this.validateInput.bind(this);
+    this.setMapView = this.setMapView.bind(this);
+  }
+
+  setMapView() {
+    let key;
+    if (this.props.searchData.mainArea_Name === '서울') {
+      key = 'seoul';
+    } else if (this.props.searchData.mainArea_Name === '제주시') {
+      key = 'jeju';
+    }
+    let region = key;
+    let idx = areaInfo.area[key].indexOf(this.props.bidData.subArea_Name);
+
+    let polygon = areaInfo.polygon[region][idx];
+    let marker = areaInfo.marker[region][idx];
+
+    let r = Math.floor(Math.random()*255), g = Math.floor(Math.random()*255), b = Math.floor(Math.random()*255);
+    let color = `rgba(${r},${g},${b}`;
+
+
+    this.region = {
+      latitude: marker.value.latitude,
+      longitude: marker.value.longitude,
+      latitudeDelta: 0.0522,
+      longitudeDelta: 0.1522 * ASPECT_RATIO
+    };
+
+    this.polygon = <MapView.Polygon
+        key={polygon.key}
+        coordinates={polygon.value}
+        fillColor={color + ',0.5)'}
+        strokeColor="rgba(0,0,0,0.5)"
+        stokeWidth={2}
+        />
+
+    this.marker = <MapView.Marker
+        coordinate={marker.value}
+        title={marker.key}
+        pinColor={color + ',0.7)'}
+        />
   }
 
   async _handlePress(where) {
@@ -110,6 +158,8 @@ class GetLatestBidInfo extends Component {
   async componentWillMount() {
     var email = await AsyncStorage.getItem('client_Email');
     this.onValueChange('client_Email', email);
+
+    this.setMapView();
   }
 
   focusNextField(nextField) {
@@ -140,12 +190,20 @@ class GetLatestBidInfo extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <ScrollView>
         <View style={styles.rowContainer}>
           <Text style={styles.title}>
             Your Wish List
           </Text>
         </View>
+
+        <MapView
+          style={{height: height/3}}
+          region={this.region}
+        >
+          {this.polygon}
+          {this.marker}
+        </MapView>
 
         <View style={styles.rowContainer}>
           <Text style={styles.category}>
@@ -203,7 +261,6 @@ class GetLatestBidInfo extends Component {
             카드 정보
           </Text>
         </View>
-
 
         <View style={styles.inputContainer}>
           <Text style={styles.label}>
@@ -292,8 +349,7 @@ class GetLatestBidInfo extends Component {
           </Button>
         </View>
 
-      </View>
-
+      </ScrollView>
     );
   }
 }
