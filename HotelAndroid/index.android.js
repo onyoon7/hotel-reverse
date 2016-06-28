@@ -70,11 +70,8 @@ class HotelAndroid extends Component {
   }
 
   async checkToken() {
-    console.log(2);
     var id_token = await AsyncStorage.getItem('id_token');
-    this.setState({'token' : id_token})
-    console.log('Start id_token : ', id_token)
-    console.log(3);
+    this.setState({token : id_token})
   }
 
   async _signOut() {
@@ -95,7 +92,7 @@ class HotelAndroid extends Component {
       case 'bid':
         return (<HotelBid navigator={navigator} onChange={this.bidStateChanged} searchData={this.state.searchData}/>);
       case 'signin':
-        return (<HotelSignin navigator={navigator} onChange={this.signinStateChanged}/>);
+        return (<HotelSignin navigator={navigator} onChange={this.signinStateChanged} naviView={this.componentWillMount()}/>);
       case 'register':
         return (<Register navigator={navigator}/>);
       case 'bidInfo':
@@ -116,40 +113,73 @@ class HotelAndroid extends Component {
     this.closeDrawer();
   }
 
+  _logout() {
+    this.setState({navigationView : (
+        <View style={styles.navView}>
+          <Button
+            containerStyle={styles.drawerBtn}
+            style={styles.drawerBtnText}
+            onPress={() => {this._signOut();this.componentWillMount();}}>로그아웃</Button>
+        </View>
+      )})
+  }
 
+  _login() {
+    this.setState({navigationView : (
+      <View style={styles.navView}>
+        <Button
+          containerStyle={styles.drawerBtn}
+          style={styles.drawerBtnText}
+          onPress={() => {this.renderMenuItem('register')}}>회원가입</Button>
+        <Button
+          containerStyle={styles.drawerBtn}
+          style={styles.drawerBtnText}
+          onPress={() => {this.renderMenuItem('signin')}}>로그인</Button>
+      </View> )})
+  }
+
+  async componentWillMount() {
+    let token = await AsyncStorage.getItem('id_token');
+    if(token) {
+      this._logout();
+    } else {
+      this._login();
+    }
+  }
 
   render() {
-    this.checkToken();
-    let navigationView
-    if(this.state.token) {
-      navigationView = (
-        <View style={styles.navView}>
-          <Button
-            containerStyle={styles.drawerBtn}
-            style={styles.drawerBtnText}
-            onPress={() => {this._signOut()}}>로그아웃</Button>
-        </View>
-      )
-    } else {
-      navigationView = (
-        <View style={styles.navView}>
-          <Button
-            containerStyle={styles.drawerBtn}
-            style={styles.drawerBtnText}
-            onPress={() => {this.renderMenuItem('register')}}>회원가입</Button>
-          <Button
-            containerStyle={styles.drawerBtn}
-            style={styles.drawerBtnText}
-            onPress={() => {this.renderMenuItem('signin')}}>로그인</Button>
-        </View> )
-    }
+    // this.checkToken();
+    // console.log(' <<< on redering >>>');
+    // let navigationView
+    // if(this.state.token) {
+    //   navigationView = (
+    //     <View style={styles.navView}>
+    //       <Button
+    //         containerStyle={styles.drawerBtn}
+    //         style={styles.drawerBtnText}
+    //         onPress={() => {this._signOut()}}>로그아웃</Button>
+    //     </View>
+    //   )
+    // } else {
+    //   navigationView = (
+    //     <View style={styles.navView}>
+    //       <Button
+    //         containerStyle={styles.drawerBtn}
+    //         style={styles.drawerBtnText}
+    //         onPress={() => {this.renderMenuItem('register')}}>회원가입</Button>
+    //       <Button
+    //         containerStyle={styles.drawerBtn}
+    //         style={styles.drawerBtnText}
+    //         onPress={() => {this.renderMenuItem('signin')}}>로그인</Button>
+    //     </View> )
+    // }
 
     return (
       <DrawerLayoutAndroid
         ref={(ref) => this._drawer = ref}
         drawerWidth={300}
         drawerPosition={DrawerLayoutAndroid.positions.Left}
-        renderNavigationView={() => navigationView}>
+        renderNavigationView={() => this.state.navigationView}>
         <Navigator
           initialRoute={{id: 'search'}}
           renderScene={this.navigatorRenderScene}
@@ -159,7 +189,6 @@ class HotelAndroid extends Component {
   }
 }
 
-//https://facebook.github.io/react-native/docs/backandroid.html
 BackAndroid.addEventListener('hardwareBackPress', () => {
   if (_navigator.getCurrentRoutes().length === 1) {
     return false;

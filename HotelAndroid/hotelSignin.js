@@ -12,11 +12,11 @@ import {
   import axios from 'axios'
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 import config from './config';
+import Button from 'react-native-button';
 
 class HotelSignin extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       client_Email : "",
       password : "",
@@ -30,10 +30,9 @@ class HotelSignin extends Component {
   }
 
   componentDidMount() {
+    console.log(1)
     this._setupGoogleSignin();
     console.log('state client_Email : ',this.state.client_Email);
-
-
   }
 
   async _setupGoogleSignin() {
@@ -46,12 +45,11 @@ class HotelSignin extends Component {
       });
 
       const user = await GoogleSignin.currentUserAsync();
-      //if you need user information, use the user object.
-      console.log('first user: ', user)
     }
     catch(err) {
       console.log("Play services error", err.code, err.message);
     }
+    // this.naviView();
   }
 
   async _signIn() {
@@ -70,6 +68,7 @@ class HotelSignin extends Component {
     catch(err) {
       console.log('WRONG SIGNIN', err);
     }
+    // this.naviView();
   }
 
   _signOut() {
@@ -97,6 +96,7 @@ class HotelSignin extends Component {
           await AsyncStorage.setItem('id_token', response.data.id_token);
           await AsyncStorage.setItem('client_Email', email);
           ToastAndroid.show('로그인에 성공하였습니다', ToastAndroid.SHORT);
+          this.props.naviView();
         }
       } catch(error) {
         console.log('NOoooooooooo!!!')
@@ -114,7 +114,6 @@ class HotelSignin extends Component {
       } else {
         ToastAndroid.show('이메일/비밀번호를 다시 확인해주세요', ToastAndroid.SHORT);
         console.log('NOoooooooooo!')
-
       }
       break;
     case 'register' :
