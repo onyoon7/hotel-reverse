@@ -45,10 +45,10 @@ export default {
 
   bidsInfo: (req, res) => {
 
-    db.Hotel.findOne({ 
-        where: { 
-          hotel_ID: req.params.hotel_ID 
-        } 
+    db.Hotel.findOne({
+        where: {
+          hotel_ID: req.params.hotel_ID
+        }
       })
       .then((hotel) => {
         console.log(hotel.dataValues.subArea_Name);
@@ -153,10 +153,10 @@ export default {
 
   bid: (req, res) => {
     // first check whether this bid is already captured
-    db.Deal.findOne({ 
-      where: { 
-        booking_Num: req.params.booking_Num 
-      } 
+    db.Deal.findOne({
+      where: {
+        booking_Num: req.params.booking_Num
+      }
     })
     .then((deal) => {
       if (deal.dataValues.bid_Transaction === 0) {
@@ -209,5 +209,3 @@ export default {
 
   }
 };
-
-
