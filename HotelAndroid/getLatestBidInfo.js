@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-    Alert,
+  Alert,
   StyleSheet,
   Text,
   View,
@@ -29,31 +29,12 @@ class GetLatestBidInfo extends Component {
     super(props);
 
     this.state = {
-      card_number: 'XXXX-XXXX-XXXX-XXXX',
-      expiry: 'YYYY-MM',
-      birth: 'YYMMDD',
-      pwd_2digit: 'XX',
-      client_Email : '',
+      card_number: '0000 0000 0000 0000 카드 번호',
+      expiry: 'YYYYMM 카드 만료일',
+      birth: 'YYMMDD 생년월일',
+      pwd_2digit: '카드 비밀번호 앞 두 자리',
+      client_Email: '',
     }
-  }
-
-  _convertDate(date) {
-    var newDate;
-    var d = date.split("/");
-    var y = d.splice(-1)[0];
-
-    d.splice(0, 0, y);
-    newDate = d.join("-");
-
-    return newDate;
-  }
-
-  bidInfo = {
-    checkIn_Date: this._convertDate(this.props.searchData.checkIn_Date),
-    checkOut_Date: this._convertDate(this.props.searchData.checkOut_Date),
-    mainArea_Name: this.props.searchData.mainArea_Name,
-    subArea_Name: this.props.bidData.subArea_Name,
-    bid_Price: +this.props.bidData.bid_Price,
   }
 
   async _handlePress(where) {
@@ -74,7 +55,7 @@ class GetLatestBidInfo extends Component {
       try {
         resp = (await axios.post('https://api.iamport.kr/subscribe/payments/onetime?_token=' + token, {
           merchant_uid: MERCHANT_UID,
-          amount: this.bidInfo.bid_Price,
+          amount: this.props.bidData.bid_Price,
           card_number: this.state.card_number,
           expiry: this.state.expiry,
           birth: this.state.birth,
@@ -84,16 +65,16 @@ class GetLatestBidInfo extends Component {
         console.error('payment err: ', error);
       }
 
-      //console.log(this.bidInfo, this.client_Email, resp);
+      //console.log(this.bidInfo, this.state.client_Email, resp);
       axios({
         url: config.serverUrl + '/client/bid/' + this.state.client_Email,
         method: 'put',
         data: {
-          checkIn_Date: this.bidInfo.checkIn_Date,
-          checkOut_Date: this.bidInfo.checkOut_Date,
-          mainArea_Name: this.bidInfo.mainArea_Name,
-          subArea_Name: this.bidInfo.subArea_Name,
-          bid_Price: this.bidInfo.bid_Price,
+          checkIn_Date: this.props.searchData.checkIn_Date,
+          checkOut_Date: this.props.searchData.checkOut_Date,
+          mainArea_Name: this.props.searchData.mainArea_Name,
+          subArea_Name: this.props.bidData.subArea_Name,
+          bid_Price: this.props.bidData.bid_Price,
           imp_uid: resp.imp_uid,
         }
       }).then(function(response) {
@@ -121,7 +102,7 @@ class GetLatestBidInfo extends Component {
 
   async componentWillMount() {
     var email = await AsyncStorage.getItem('client_Email');
-    this.setState({client_Email : email })
+    this.state.client_Email = email;
   }
 
   render() {
@@ -133,31 +114,31 @@ class GetLatestBidInfo extends Component {
 
         <View style={styles.smallRowContainer}>
           <Text>
-            {'-  '} 고객 이메일: {this.state.client_Email}
+            {`-  고객 이메일: ${this.state.client_Email}`}
           </Text>
         </View>
 
         <View style={styles.smallRowContainer}>
           <Text>
-            {'-  '} 희망 지역: {this.bidInfo.mainArea_Name + '  ' + this.bidInfo.subArea_Name}
+            {`-  희망 지역: ${this.props.searchData.mainArea_Name} ${this.props.bidData.subArea_Name}`}
           </Text>
         </View>
 
         <View style={styles.smallRowContainer}>
           <Text>
-            {'-  '} 체크인 날짜: {' ' + this.bidInfo.checkIn_Date}
+            {`-  체크인 날짜: ${this.props.searchData.checkIn_Date}`}
           </Text>
         </View>
 
         <View style={styles.smallRowContainer}>
           <Text>
-            {'-  '} 체크아웃 날짜: {' ' + this.bidInfo.checkOut_Date}
+            {`-  체크아웃 날짜: ${this.props.searchData.checkOut_Date}`}
           </Text>
         </View>
 
         <View style={styles.smallRowContainer}>
           <Text>
-            {'-  '} 희망 가격: {' ' + this.bidInfo.bid_Price}
+            {`-  희망 가격: ${this.props.bidData.bid_Price}`}
           </Text>
         </View>
 
