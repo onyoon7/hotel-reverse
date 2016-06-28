@@ -88,6 +88,7 @@ class GetLatestBidInfo extends Component {
         />
 
     this.marker = <MapView.Marker
+        key={marker.key}
         coordinate={marker.value}
         title={marker.key}
         pinColor={color + ',0.7)'}
