@@ -6,30 +6,38 @@ import {
   Text,
   TextInput,
   AsyncStorage,
+  Alert,
+  ToastAndroid,
 } from 'react-native';
-  import axios from 'axios'
+
+import axios from 'axios'
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 import config from './config';
+import Button from 'react-native-button';
 
 class HotelSignin extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       client_Email : "",
       password : "",
       error : "",
       user : "",
     }
-
     this._handlePress = this._handlePress.bind(this);
-    // this._signIn = this._signIn.bind(this);
-
   }
 
   componentDidMount() {
     this._setupGoogleSignin();
-    console.log('state client_Email : ',this.state.client_Email);
+  }
+
+  movePAGE(){
+    let naviArr = this.props.navigator.getCurrentRoutes();
+    if(naviArr[naviArr.length-2].id==='bid') {
+      this.props.navigator.push({id : 'bidInfo'});
+    } else {
+      this.props.navigator.pop();
+    }
   }
 
   async _setupGoogleSignin() {
@@ -42,8 +50,6 @@ class HotelSignin extends Component {
       });
 
       const user = await GoogleSignin.currentUserAsync();
-      //if you need user information, use the user object.
-      console.log('first user: ', user)
     }
     catch(err) {
       console.log("Play services error", err.code, err.message);
@@ -53,10 +59,10 @@ class HotelSignin extends Component {
   async _signIn() {
     try {
       let user = await GoogleSignin.signIn()
-      console.log(user)
       await AsyncStorage.setItem('id_token', user.id);
       await AsyncStorage.setItem('client_Email', user.email);
-      this.props.navigator.push({id : 'bidInfo'});
+      ToastAndroid.show('로그인에 성공하였습니다')
+      this.movePAGE();
     }
     catch(err) {
       console.log('WRONG SIGNIN', err);
@@ -76,7 +82,7 @@ class HotelSignin extends Component {
     switch(where) {
     case 'login' :
       try {
-        let id_token = await axios({
+        var response = await axios({
           url: config.serverUrl + '/client/signin/',
           method : 'post',
           data : {
@@ -84,14 +90,20 @@ class HotelSignin extends Component {
             client_PW : password
           }
         });
-        await AsyncStorage.setItem('id_token', id_token.data.id_token);
-        await AsyncStorage.setItem('client_Email', email);
+        if(response.data.id_token) {
+          await AsyncStorage.setItem('id_token', response.data.id_token);
+          await AsyncStorage.setItem('client_Email', email);
+          ToastAndroid.show('로그인에 성공하였습니다', ToastAndroid.SHORT);
+          this.props.naviView();
+        }
       } catch(error) {
         console.log(error);
       }
       var id_token = await AsyncStorage.getItem('id_token');
       if(id_token) {
-        this.props.navigator.push({id : 'bidInfo'})
+        this.movePAGE();
+      } else {
+        ToastAndroid.show('이메일/비밀번호를 다시 확인해주세요', ToastAndroid.SHORT);
       }
       break;
     case 'register' :
@@ -102,6 +114,10 @@ class HotelSignin extends Component {
     }
   }
 
+  focusNextField(nextField) {
+    this.refs[nextField].focus();
+  }
+
   render() {
     return (
       <View style = {styles.container}>
@@ -110,11 +126,18 @@ class HotelSignin extends Component {
           💃 Enjoy Hotel-Reverse 💃
         </Text>
         <TextInput
+        ref='1'
         onChangeText={ (text)=> this.setState({client_Email: text}) }
+        keyboardType='email-address'
+        returnKeyType='next'
+        onSubmitEditing={()=> this.focusNextField('2')}
         style={styles.input} placeholder="Email">
         </TextInput>
         <TextInput
+          ref='2'
           onChangeText={ (text)=> this.setState({password: text}) }
+          keyboardType='numbers-and-punctuation'
+          returnKeyType='done'
           style={styles.input}
           placeholder="Password"
           secureTextEntry={true}>
@@ -140,6 +163,7 @@ class HotelSignin extends Component {
         <Text style={styles.error}>
           {this.state.error}
         </Text>
+
       </View>
     )
   }
@@ -182,6 +206,5 @@ let styles = StyleSheet.create({
     paddingTop: 10
   },
 });
-
 
 export default HotelSignin;
