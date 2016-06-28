@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   StyleSheet,
   TextInput,
@@ -7,14 +8,15 @@ import {
   Text,
   View,
   AsyncStorage,
+  ToastAndroid,
 } from 'react-native';
 import axios from 'axios';
 import config from './config';
 
 
 class Register extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       name : '',
@@ -22,32 +24,41 @@ class Register extends Component {
       password : '',
       password_confirmation : '',
       errors : [],
+      showProgress : false,
     }
   }
 
-  _handlePress() {
-    let name = this.state.name;
-    let email = this.state.client_email;
-    let password = this.state.password;
-    let checkSuccess = false;
-    axios({
-      url: config.serverUrl + '/client/signup/',
-      method : 'post',
-      data : {
-        client_ID : email,
-        client_PW : password,
-        client_Name : name,
-        client_Email : email,
-        billingInfo : '1234-1234-1234-1234'
+  async _handlePress() {
+    this.setState({showProgress : true})
+    try {
+      let name = this.state.name;
+      let email = this.state.client_email;
+      let password = this.state.password;
+      let response = await axios({
+        url: config.serverUrl + '/client/signup/',
+        method : 'post',
+        data : {
+          client_ID : email,
+          client_PW : password,
+          client_Name : name,
+          client_Email : email,
+          billingInfo : '1234-1234-1234-1234'
+        }
+      });
+      console.log('response : ', response);
+      let id_token = await response.body;
+      console.log('id token : ', id_token);
+      ToastAndroid.show('회원가입을 축하드립니다', ToastAndroid.SHORT)
+      this.props.navigator.pop();
+    } catch(error) {
+      let errorMessage = error.data.errors[0].message
+      console.log('fail to regitster in front : ', errorMessage);
+      if(error.data.errors[0].message === 'client_Email must be unique') {
+        ToastAndroid.show('이미 등록된 이메일 주소입니다.다시 확인해주세요', ToastAndroid.LONG)
+      } else {
+        ToastAndroid.show('회원가입에 실패하였습니다.다시 시도해주세요', ToastAndroid.LONG)
       }
-    }).then(function(response) {
-      console.log("Thank you for your regitster")
-      console.log(response)
-    }).then(this.props.navigator.push({id : 'signin'}))
-    .catch(function(error) {
-      console.log("Register fail")
-      console.log(error);
-    })
+    }
   }
 
   render() {
@@ -76,29 +87,16 @@ class Register extends Component {
           secureTextEntry={true}>
         </TextInput>
 
-      <TouchableHighlight
-        style={styles.button}
-        onPress={() => Alert.alert('signup','가입을 축하드립니다',
-        [{text : 'congratulation', onPress: () => this._handlePress() }] )}>
+        <TouchableHighlight
+          style={styles.button}
+          onPress={() => this._handlePress()}>
           <Text style={styles.buttonText}>
             Register
           </Text>
         </TouchableHighlight>
 
-        <Errors errors={this.state.errors} />
-
-      </View>
-    );
-  }
-}
-
-
-const Errors = (props) => {
-  return (
-    <View>
-      {props.errors.map((error, i) => <Text key={i} style={styles.error}> {error} </Text>)}
     </View>
-  );
+  )}
 }
 
 const styles = StyleSheet.create({
