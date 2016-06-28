@@ -6,6 +6,7 @@ import {
   View,
   TextInput,
   AsyncStorage,
+  ToastAndroid,
 } from 'react-native';
 
 import Button from 'react-native-button';
@@ -16,7 +17,8 @@ const IMP_KEY = '3372420065794528';
 const IMP_SECRET = 'YwZIGQT4cEjESlJwSwrk4HadQE2QN4qLBpuhgnms2F7V1QrTmSdrAnEq2HhPLHBm76Enu0PwFXrGNTAa';
 const MERCHANT_UID = 'nictest14m';
 
-
+const validUnderlineColor = null; 
+const invalidUnderlineColor = 'red';
 /*----------------------------------------------------------------
   Structure
   Header: Your Wish List
@@ -33,10 +35,15 @@ class GetLatestBidInfo extends Component {
       birth: '',
       pwd_2digit: '',
       client_Email: '',
+      underlineColor1: validUnderlineColor,
+      underlineColor2: validUnderlineColor,
+      underlineColor3: validUnderlineColor,
+      underlineColor4: validUnderlineColor,
     }
 
     this.focusNextField = this.focusNextField.bind(this);
     this.promptConfirmMsg = this.promptConfirmMsg.bind(this);
+    this.validateInput = this.validateInput.bind(this);
   }
 
   async _handlePress(where) {
@@ -104,17 +111,31 @@ class GetLatestBidInfo extends Component {
     var email = await AsyncStorage.getItem('client_Email');
     this.onValueChange('client_Email', email);
   }
-  
+
   focusNextField(nextField) {
     this.refs[nextField].focus();
   }
 
   promptConfirmMsg() {
-    const alertMessage = '조심해라. 한번 체결되면 바로 돈 나간다!!!!'
-    Alert.alert('check', alertMessage, [
-        {text : 'Cancel', onPress: () => console.log('진행 취소')},
-        {text : 'OK', onPress: () => this._handlePress('thanks')}
-    ])
+    if (!this.state.underlineColor1 && !this.state.underlineColor2 &&
+      !this.state.underlineColor3 && !this.state.underlineColor4) {
+      const alertMessage = '조심해라. 한번 체결되면 바로 돈 나간다!!!!'
+      Alert.alert('check', alertMessage, [
+          {text : 'Cancel', onPress: () => console.log('진행 취소')},
+          {text : 'OK', onPress: () => this._handlePress('thanks')}
+      ])
+    } else {
+      const msg = '정보를 입력해주세요';
+      ToastAndroid.show(msg, ToastAndroid.SHORT);
+    }
+  }
+
+  validateInput(fieldIdx, maxLen, text) {
+    if (maxLen > text.length) {
+      this.onValueChange('underlineColor'+fieldIdx, invalidUnderlineColor);
+    } else {
+      this.onValueChange('underlineColor'+fieldIdx, validUnderlineColor);
+    }
   }
 
   render() {
@@ -197,6 +218,8 @@ class GetLatestBidInfo extends Component {
             onChangeText={(text) => this.onValueChange('card_number', text)}
             placeholder="0000 0000 0000 0000"
             onSubmitEditing={() => this.focusNextField('2')}
+            onEndEditing={(event) => this.validateInput(1, 16, event.nativeEvent.text)}
+            underlineColorAndroid={this.state.underlineColor1}
           />
         </View>
 
@@ -213,6 +236,8 @@ class GetLatestBidInfo extends Component {
             onChangeText={(text) => this.onValueChange('expiry', text)}
             placeholder="YYYYMM"
             onSubmitEditing={() => this.focusNextField('3')}
+            onEndEditing={(event) => this.validateInput(2, 6, event.nativeEvent.text)}
+            underlineColorAndroid={this.state.underlineColor2}
           />
 
           <Text style={styles.label}>
@@ -228,6 +253,8 @@ class GetLatestBidInfo extends Component {
             onChangeText={(text) => this.onValueChange('pwd_2digit', text)}
             placeholder="00"
             onSubmitEditing={() => this.focusNextField('4')}
+            onEndEditing={(event) => this.validateInput(3, 2, event.nativeEvent.text)}
+            underlineColorAndroid={this.state.underlineColor3}
           />
         </View>
 
@@ -244,6 +271,8 @@ class GetLatestBidInfo extends Component {
             onChangeText={(text) => this.onValueChange('birth', text)}
             placeholder="YYMMDD"
             onSubmitEditing={this.promptConfirmMsg}
+            onEndEditing={(event) => this.validateInput(4, 6, event.nativeEvent.text)}
+            underlineColorAndroid={this.state.underlineColor4}
           />
         </View>
 
