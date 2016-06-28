@@ -93,7 +93,7 @@ export default (app, express) => {
 
   app.get('/hotel/bid/:hotel_ID', hotelController.bidsInfo); // checked
   app.get('/hotel/bid/:hotel_ID/:booking_Num', hotelController.bidInfo);
-  
+
   app.get('/hotel/contracted/:hotel_ID', hotelController.contractedBids); // checked
   app.get('/hotel/contracted/:hotel_ID/:booking_Num', hotelController.contractedBid);
 
@@ -118,10 +118,10 @@ export default (app, express) => {
   // delete(client)   delete    /admin/:client_ID
   //
   ////////////////////////////////////////////////////////////////////////
- 
+
   app.get('/admin/pendingbid', adminController.pendingBids); // checked
   app.get('/admin/pendingbid/:booking_Num', adminController.pendingBid)
-  
+
   app.get('/admin/bidinfo', adminController.contractedBids); // checked
   app.get('/admin/bidinfo/:booking_Num', adminController.contractedBid)
 
