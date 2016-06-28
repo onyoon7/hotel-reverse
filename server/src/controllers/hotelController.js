@@ -43,7 +43,7 @@ export default {
 
   },
 
-  bidInfo: (req, res) => {
+  bidsInfo: (req, res) => {
 
     db.Hotel.findOne({ 
         where: { 
@@ -71,9 +71,39 @@ export default {
         res.send(results);
       })
       .catch((error) => {
-        console.log("cannot retrieve bid information: ", error);
+        console.log("cannot retrieve bids information: ", error);
         res.send(error);
       })
+  },
+
+  bidInfo: (req, res) => {
+
+    db.Hotel.findOne({
+      where: {
+        hotel_ID: req.params.hotel_ID
+      }
+    })
+    .then((hotel) => {
+      console.log("subArea_Name is: ", hotel.dataValues.subArea_Name);
+      return hotel.dataValues.subArea_Name;
+    })
+    .then((subArea_Name) => {
+      return db.Deal.findOne({
+        where: {
+          subArea_Name: subArea_Name,
+          booking_Num: req.params.booking_Num,
+          bid_Transaction: false
+        }
+      })
+    })
+    .then((deal) => {
+      console.log("deal.dataValues is: ", deal.dataValues);
+      res.send(deal.dataValues);
+    })
+    .catch((error) => {
+      console.log("cannot retrieve bid information: ", error);
+      res.send(error);
+    })
   },
 
   contractedBids: (req, res) => {
@@ -94,11 +124,32 @@ export default {
       res.send(results);
     })
     .catch((error) => {
-      console.log("cannot get contract information: ", error);
+      console.log("cannot get contract bids information: ", error);
       res.send(error);
     })
 
   },
+
+  contractedBid: (req, res) => {
+
+    db.Deal.findOne({
+      where: {
+        hotel_ID: req.params.hotel_ID,
+        booking_Num: req.params.booking_Num,
+        bid_Transaction: true
+      }
+    })
+    .then((deal) => {
+      console.log('>>> deal');
+      console.log(deal.dataValues);
+      res.send(deal.dataValues);
+    })
+    .catch((error) => {
+      console.log("cannot get contracted bid information: ", error);
+      res.send(error);
+    })
+  },
+
 
   bid: (req, res) => {
     // first check whether this bid is already captured

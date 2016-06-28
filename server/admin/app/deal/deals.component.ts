@@ -26,12 +26,13 @@ export class DealsComponent implements OnInit{
   constructor(private dealsService : DealsService){ }
 
   ngOnInit(){
+
     this.dealsService
       .getAllDeals()
       .subscribe(
         d => this.deals = d,
         error => console.error('Error: ' + error),
-        () => console.log('Successfully fetched all Deals!')
+        () => console.log('Successfully fetched all Deals!', this.deals)
       );
   }
 
