@@ -37,9 +37,9 @@ export default {
     }})
     .then((client) => {
       console.log('successfully loged in');
-      console.log(client[0].dataValues);
+      console.log(client.dataValues);
       res.status(200).send({
-        id_token: helpers.createToken(client[0].dataValues),
+        id_token: helpers.createToken(client.dataValues),
       });
     })
     .catch((error) => {

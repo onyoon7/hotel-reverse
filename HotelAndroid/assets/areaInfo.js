@@ -4,6 +4,7 @@ const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height / 2;
 
 const area = {
+  main: {서울: 'seoul', 제주: 'jeju'},
   seoul: ['강남구', '서초구', '명동', '여의도'],
   jeju: ['제주시', '서귀포시'],
 }
