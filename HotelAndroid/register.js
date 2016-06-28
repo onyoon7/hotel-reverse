@@ -24,6 +24,7 @@ class Register extends Component {
       password : '',
       password_confirmation : '',
       errors : [],
+      showProgress : false,
     }
   }
 
@@ -83,11 +84,6 @@ class Register extends Component {
         }
         this.setState({errors : errorsArray});
         console.log('fail to regitster in front : ', errorsArray);
-        // if(error.data.errors[0].message === 'client_Email must be unique') {
-        //   ToastAndroid.show('이미 등록된 이메일 주소입니다.다시 확인해주세요', ToastAndroid.LONG)
-        // } else {
-        //   ToastAndroid.show('회원가입에 실패하였습니다.다시 시도해주세요', ToastAndroid.LONG)
-        // }
       }
     }
   }
@@ -133,7 +129,9 @@ class Register extends Component {
           secureTextEntry={true}>
         </TextInput>
 
-        <TouchableHighlight style={styles.button} onPress={() => this._handlePress()}>
+        <TouchableHighlight
+          style={styles.button}
+          onPress={() => this._handlePress()}>
           <Text style={styles.buttonText}>
             Register
           </Text>
@@ -150,7 +148,7 @@ const Errors = (props) => {
     <View>
       {props.errors.map((error, i) => <Text key={i} style={styles.error}> {error} </Text>)}
     </View>
-  );
+  )}
 }
 
 const styles = StyleSheet.create({
