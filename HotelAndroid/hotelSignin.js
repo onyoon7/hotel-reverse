@@ -93,6 +93,7 @@ class HotelSignin extends Component {
           await AsyncStorage.setItem('id_token', response.data.id_token);
           await AsyncStorage.setItem('client_Email', email);
           ToastAndroid.show('로그인에 성공하였습니다', ToastAndroid.SHORT);
+          this.props.naviView();
         }
       } catch(error) {
         console.log(error);
