@@ -24,39 +24,70 @@ class Register extends Component {
       password : '',
       password_confirmation : '',
       errors : [],
-      showProgress : false,
     }
   }
 
+  focusNextField(nextField) {
+    this.refs[nextField].focus();
+  }
+
+  passwordCheck() {
+    if(this.state.password.length <= 8) {
+      ToastAndroid.show('비밀번호는 8자리이상 입력해주세요', ToastAndroid.LONG);
+      return false;
+    } else if(this.state.password !== this.state.password_confirmation) {
+      ToastAndroid.show('비밀번호가 서로 동일하지 않습니다', ToastAndroid.LONG);
+      return false;
+    } else if(this.state.client_email.indexOf('@') === -1) {
+      ToastAndroid.show('이메일 형식이 올바르지 않습니다', ToastAndroid.LONG);
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+
   async _handlePress() {
-    this.setState({showProgress : true})
-    try {
-      let name = this.state.name;
-      let email = this.state.client_email;
-      let password = this.state.password;
-      let response = await axios({
-        url: config.serverUrl + '/client/signup/',
-        method : 'post',
-        data : {
-          client_ID : email,
-          client_PW : password,
-          client_Name : name,
-          client_Email : email,
-          billingInfo : '1234-1234-1234-1234'
+    let result = this.passwordCheck();
+    if(result) {
+      try {
+        let name = this.state.name;
+        let email = this.state.client_email;
+        let password = this.state.password;
+        let response = await axios({
+          url: config.serverUrl + '/client/signup/',
+          method : 'post',
+          data : {
+            client_ID : email,
+            client_PW : password,
+            client_Name : name,
+            client_Email : email,
+            billingInfo : '1234-1234-1234-1234'
+          }
+        });
+        console.log('response : ', response);
+        let id_token = await response.body;
+        console.log('id token : ', id_token);
+        ToastAndroid.show('회원가입을 축하드립니다', ToastAndroid.SHORT)
+        this.props.navigator.pop();
+      } catch(error) {
+        let errors = error.data.errors;
+        let errorsArray = [];
+        // let errorMessage = errors[0].message
+        for (let key in errors) {
+          if(errors[key].length > 1) {
+            errors[key].message.map(error => errorsArray.push(`${key} ${error}`));
+          } else {
+            errorsArray.push(`${key} ${errors[key].message}`);
+          }
         }
-      });
-      console.log('response : ', response);
-      let id_token = await response.body;
-      console.log('id token : ', id_token);
-      ToastAndroid.show('회원가입을 축하드립니다', ToastAndroid.SHORT)
-      this.props.navigator.pop();
-    } catch(error) {
-      let errorMessage = error.data.errors[0].message
-      console.log('fail to regitster in front : ', errorMessage);
-      if(error.data.errors[0].message === 'client_Email must be unique') {
-        ToastAndroid.show('이미 등록된 이메일 주소입니다.다시 확인해주세요', ToastAndroid.LONG)
-      } else {
-        ToastAndroid.show('회원가입에 실패하였습니다.다시 시도해주세요', ToastAndroid.LONG)
+        this.setState({errors : errorsArray});
+        console.log('fail to regitster in front : ', errorsArray);
+        // if(error.data.errors[0].message === 'client_Email must be unique') {
+        //   ToastAndroid.show('이미 등록된 이메일 주소입니다.다시 확인해주세요', ToastAndroid.LONG)
+        // } else {
+        //   ToastAndroid.show('회원가입에 실패하였습니다.다시 시도해주세요', ToastAndroid.LONG)
+        // }
       }
     }
   }
@@ -69,34 +100,57 @@ class Register extends Component {
           Join us now!
         </Text>
         <TextInput
+          ref='1'
           onChangeText={ (text)=> this.setState({client_email : text})}
+          keyboardType='email-address'
+          returnKeyType='next'
+          onSubmitEditing={()=> this.focusNextField('2')}
           style = {styles.input} placeholder='Email'>
         </TextInput>
         <TextInput
+          ref='2'
           onChangeText={ (text)=> this.setState({name: text}) }
+          keyboardType='default'
+          returnKeyType='next'
+          onSubmitEditing={()=> this.focusNextField('3')}
           style={styles.input} placeholder='Name'>
         </TextInput>
         <TextInput
+          ref='3'
           onChangeText={ (text)=> this.setState({password: text}) }
+          keyboardType='numbers-and-punctuation'
+          returnKeyType='next'
+          onSubmitEditing={()=> this.focusNextField('4')}
           style={styles.input} placeholder='Password'
           secureTextEntry={true}>
         </TextInput>
         <TextInput
+          ref='4'
           onChangeText={ (text)=> this.setState({password_confirmation: text}) }
+          keyboardType='numbers-and-punctuation'
+          returnKeyType='done'
           style={styles.input} placeholder='Confirm Password'
           secureTextEntry={true}>
         </TextInput>
 
-        <TouchableHighlight
-          style={styles.button}
-          onPress={() => this._handlePress()}>
+        <TouchableHighlight style={styles.button} onPress={() => this._handlePress()}>
           <Text style={styles.buttonText}>
             Register
           </Text>
         </TouchableHighlight>
 
+        <Errors errors={this.state.errors}/>
+
     </View>
   )}
+}
+
+const Errors = (props) => {
+  return (
+    <View>
+      {props.errors.map((error, i) => <Text key={i} style={styles.error}> {error} </Text>)}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({

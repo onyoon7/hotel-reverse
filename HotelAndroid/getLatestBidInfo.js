@@ -118,7 +118,8 @@ class GetLatestBidInfo extends Component {
           expiry: this.state.expiry,
           birth: this.state.birth,
           pwd_2digit: this.state.pwd_2digit,
-        })).data.response;
+        })).data
+        // .response;
       } catch (error) {
         console.error('payment err: ', error);
       }

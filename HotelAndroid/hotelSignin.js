@@ -124,6 +124,10 @@ class HotelSignin extends Component {
     }
   }
 
+  focusNextField(nextField) {
+    this.refs[nextField].focus();
+  }
+
   render() {
     return (
       <View style = {styles.container}>
@@ -132,11 +136,18 @@ class HotelSignin extends Component {
           💃 Enjoy Hotel-Reverse 💃
         </Text>
         <TextInput
+        ref='1'
         onChangeText={ (text)=> this.setState({client_Email: text}) }
+        keyboardType='email-address'
+        returnKeyType='next'
+        onSubmitEditing={()=> this.focusNextField('2')}
         style={styles.input} placeholder="Email">
         </TextInput>
         <TextInput
+          ref='2'
           onChangeText={ (text)=> this.setState({password: text}) }
+          keyboardType='numbers-and-punctuation'
+          returnKeyType='done'
           style={styles.input}
           placeholder="Password"
           secureTextEntry={true}>
