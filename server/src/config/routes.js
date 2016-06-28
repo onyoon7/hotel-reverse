@@ -91,8 +91,11 @@ export default (app, express) => {
   app.post('/hotel/signup', hotelController.signUp);  // checked
   app.post('/hotel/signin', hotelController.signIn);  // checked
 
-  app.get('/hotel/bid/:hotel_ID', hotelController.bidInfo); // checked
+  app.get('/hotel/bid/:hotel_ID', hotelController.bidsInfo); // checked
+  app.get('/hotel/bid/:hotel_ID/:booking_Num', hotelController.bidInfo);
+  
   app.get('/hotel/contracted/:hotel_ID', hotelController.contractedBids); // checked
+  app.get('/hotel/contracted/:hotel_ID/:booking_Num', hotelController.contractedBid);
 
   app.put('/hotel/bid/:hotel_ID/:booking_Num', hotelController.bid); // checked
   app.post('/hotel/update/:hotel_ID', hotelController.updateInfo); // checked
@@ -118,6 +121,7 @@ export default (app, express) => {
  
   app.get('/admin/pendingbid', adminController.pendingBids); // checked
   app.get('/admin/pendingbid/:booking_Num', adminController.pendingBid)
+  
   app.get('/admin/bidinfo', adminController.contractedBids); // checked
   app.get('/admin/bidinfo/:booking_Num', adminController.contractedBid)
 

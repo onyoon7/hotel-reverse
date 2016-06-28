@@ -62,7 +62,7 @@ var client = [
     billingInfo: '000c-0001-0002-0003',
     member: 1
   },
-    {
+  {
     client_Email: '000d@gmail.com',
     client_PW: '000d',
     client_Name: 'Steven Tyler',
@@ -83,10 +83,32 @@ var client = [
     billingInfo: '000f-0001-0002-0003',
     member: 1
   },
+  {
+    client_Email: '000g@gmail.com',
+    client_PW: '000g',
+    client_Name: 'Harry Porter',
+    billingInfo: '000g-0001-0002-0003',
+    member: 1
+  },
+  {
+    client_Email: '000h@gmail.com',
+    client_PW: '000h',
+    client_Name: 'Dustin Johnson',
+    billingInfo: '000h-0001-0002-0003',
+    member: 1
+  },
+  {
+    client_Email: '000i@gmail.com',
+    client_PW: '000i',
+    client_Name: 'Rhee Jongwon',
+    billingInfo: '000i-0001-0002-0003',
+    member: 1
+  }  
 ];
 
 var deal = [
   {
+    hotel_ID: null,
     checkIn_Date: '2016-06-20',
     checkOut_Date: '2016-06-30',
     mainArea_Name: 'Seoul-si',
@@ -96,6 +118,7 @@ var deal = [
     imp_uid: 'imp_448280090638'
   },
   {
+    hotel_ID: null,
     checkIn_Date: '2016-07-14',
     checkOut_Date: '2016-07-29',
     mainArea_Name: 'Seoul-si',
@@ -105,6 +128,7 @@ var deal = [
     imp_uid: 'imp_448280090639'
   },
   {
+    hotel_ID: null,
     checkIn_Date: '2016-12-04',
     checkOut_Date: '2016-12-23',
     mainArea_Name: 'Jeju-do',
@@ -114,6 +138,7 @@ var deal = [
     imp_uid: 'imp_448280090640'
   },
   {
+    hotel_ID: null,
     checkIn_Date: '2016-07-05',
     checkOut_Date: '2016-07-08',
     mainArea_Name: 'Seoul-si',
@@ -123,6 +148,7 @@ var deal = [
     imp_uid:'imp_448280090641'
   },
   {
+    hotel_ID: null,
     checkIn_Date: '2016-08-14',
     checkOut_Date: '2016-08-17',
     mainArea_Name: 'Seoul-si',
@@ -132,6 +158,7 @@ var deal = [
     imp_uid: 'imp_448280090642'
   },
   {
+    hotel_ID: null,
     checkIn_Date: '2016-07-24',
     checkOut_Date: '2016-07-29',
     mainArea_Name: 'Jeju-do',
@@ -139,7 +166,38 @@ var deal = [
     bid_Price: 550000,
     bid_Transaction: 0,
     imp_uid: 'imp_448280090643'
-  }  
+  },
+  {
+    hotel_ID: 'a2',
+    checkIn_Date: '2016-09-05',
+    checkOut_Date: '2016-09-08',
+    mainArea_Name: 'Seoul-si',
+    subArea_Name: 'Seocho-gu',
+    bid_Price: 7770000,
+    bid_Transaction: 1,
+    imp_uid:'imp_448280090641'
+  },
+  {
+    hotel_ID: 'a2',
+    checkIn_Date: '2016-09-14',
+    checkOut_Date: '2016-09-17',
+    mainArea_Name: 'Seoul-si',
+    subArea_Name: 'Seocho-gu',
+    bid_Price: 333000,
+    bid_Transaction: 1,
+    imp_uid: 'imp_448280090642'
+  },
+  {
+    hotel_ID: 'a3',
+    checkIn_Date: '2016-09-24',
+    checkOut_Date: '2016-09-29',
+    mainArea_Name: 'Jeju-do',
+    subArea_Name: 'Seogipo-si',
+    bid_Price: 550000,
+    bid_Transaction: 1,
+    imp_uid: 'imp_448280090643'
+  }
+
 ];
 
 var hotel = [
@@ -232,8 +290,8 @@ connection.query('SELECT client_Index FROM Client', (err, results, fields) => {
 
 setTimeout(() => {
   for(var i = 0; i < deal.length; i++){
-    var query1 = 'INSERT INTO Deal SET client_Index=?, checkIn_Date=?, checkOut_Date=?, mainArea_Name=?, subArea_Name=?, bid_Price=?, bid_Transaction=?, bid_StartTime=now(), bid_EndTime=now()+INTERVAL 1 DAY, imp_uid=?';
-    var query2 = [rows[i].client_Index, deal[i].checkIn_Date, deal[i].checkOut_Date, deal[i].mainArea_Name, deal[i].subArea_Name, deal[i].bid_Price, deal[i].bid_Transaction, deal[i].imp_uid];
+    var query1 = 'INSERT INTO Deal SET client_Index=?, hotel_ID=?, checkIn_Date=?, checkOut_Date=?, mainArea_Name=?, subArea_Name=?, bid_Price=?, bid_Transaction=?, bid_StartTime=now(), bid_EndTime=now()+INTERVAL 1 DAY, imp_uid=?';
+    var query2 = [rows[i].client_Index, deal[i].hotel_ID, deal[i].checkIn_Date, deal[i].checkOut_Date, deal[i].mainArea_Name, deal[i].subArea_Name, deal[i].bid_Price, deal[i].bid_Transaction, deal[i].imp_uid];
 
     connection.query(query1, query2, function(err, results, fields){
       if(err){
