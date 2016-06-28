@@ -25,6 +25,7 @@ class HotelAndroid extends Component {
     super(props);
 
     this.state = {
+      token : '',
       searchData: {
         mainArea_Name : '',
         checkIn_Date : '체크인 날짜 선택',
@@ -68,9 +69,12 @@ class HotelAndroid extends Component {
     });
   }
 
-  async componentWillMount() {
+  async checkToken() {
+    console.log(2);
     var id_token = await AsyncStorage.getItem('id_token');
+    this.setState({'token' : id_token})
     console.log('Start id_token : ', id_token)
+    console.log(3);
   }
 
   async _signOut() {
@@ -115,22 +119,30 @@ class HotelAndroid extends Component {
 
 
   render() {
-    var navigationView = (
-      <View style={styles.navView}>
-        <Button
-          containerStyle={styles.drawerBtn}
-          style={styles.drawerBtnText}
-          onPress={() => {this.renderMenuItem('register')}}>Register</Button>
-        <Button
-          containerStyle={styles.drawerBtn}
-          style={styles.drawerBtnText}
-          onPress={() => {this.renderMenuItem('signin')}}>Sign in</Button>
-        <Button
-          containerStyle={styles.drawerBtn}
-          style={styles.drawerBtnText}
-          onPress={() => {this._signOut()}}>로그아웃</Button>
-      </View>
-    );
+    this.checkToken();
+    let navigationView
+    if(this.state.token) {
+      navigationView = (
+        <View style={styles.navView}>
+          <Button
+            containerStyle={styles.drawerBtn}
+            style={styles.drawerBtnText}
+            onPress={() => {this._signOut()}}>로그아웃</Button>
+        </View>
+      )
+    } else {
+      navigationView = (
+        <View style={styles.navView}>
+          <Button
+            containerStyle={styles.drawerBtn}
+            style={styles.drawerBtnText}
+            onPress={() => {this.renderMenuItem('register')}}>회원가입</Button>
+          <Button
+            containerStyle={styles.drawerBtn}
+            style={styles.drawerBtnText}
+            onPress={() => {this.renderMenuItem('signin')}}>로그인</Button>
+        </View> )
+    }
 
     return (
       <DrawerLayoutAndroid
