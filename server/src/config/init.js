@@ -6,7 +6,6 @@ var mysql = require('mysql');
   - password: (root password of individual installation,
                in my case: lion0787)
   - database: hotel-reverse (let's determine database name)
-
   2. Then connect to 'hotel-reverse' database
  --------------------------------------------------------------------*/
 
@@ -103,7 +102,7 @@ var client = [
     client_Name: 'Rhee Jongwon',
     billingInfo: '000i-0001-0002-0003',
     member: 1
-  }  
+  }
 ];
 
 var deal = [

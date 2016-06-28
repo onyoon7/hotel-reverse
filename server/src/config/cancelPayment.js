@@ -2,7 +2,7 @@
 //  usage:
 //  - command line에서 crontab -e 실행
 //  - */10 * * * * absolute_path_of_node absolute_path_of_canccelPayment.js
-//  
+//
 //  crontab format
 //  - MIN HOUR DOM MON DOW CMD
 //    * MIN: minute (0 ~ 59)
@@ -33,7 +33,6 @@ var nodemailer = require('nodemailer');
   - user: hotel
   - password: hotel
   - database: hotelreverse
-
   2. Then connect to 'hotelreverse' database
  --------------------------------------------------------------------*/
 
@@ -60,7 +59,6 @@ sequelize
 /*--------------------------------------------------------------------
   To use tables, set models
   We use already installed databases and tables
-
   1. Client table
   2. Deal table
   3. Hotel table
@@ -273,7 +271,7 @@ function makeTime(date) {
 
 /*
   Current Cancel Policy
-  Find all bids 
+  Find all bids
     - where bid_Transaction=0 &&
     - bid_EndTime < current_Time
  */
@@ -281,7 +279,6 @@ function makeTime(date) {
 
 /*---------------------------------------------
   rsponse form from iamport
-
     {
       "code": 0,
       "message": "string",
@@ -317,16 +314,13 @@ function makeTime(date) {
         "cancel_reason": "string",
         "receipt_url": "string"
       }
-    } 
-
+    }
     request format: multipart/form-data
     (usually, form data is sent to server with format
      application/x-www-form-urlencoded)
-
     to simplify the usage of multipar/form-data
     use npm package form-data
     (npm install form-data)
-
     {
       imp_uid: 'imp41836879', // 취소할 거래의 고유번호
       merchant_uid: 'merchant_uid'  // 가맹점에서 전달한 고유 거래번호
@@ -335,8 +329,7 @@ function makeTime(date) {
       refund_holder: 'refund_holder'  // 환불계좌 예금주(가상계좌 취소시 필수)
       refund_bank: 'refund_bank',      // 환불계좌 은행코드(가상계좌 취소시 필수)
       refund_account: 'refund_account'  // 환불계좌 계좌번호(가상계좌 취소시 필수)
-    } 
-
+    }
  ---------------------------------------------*/
 
 function cancelPayment(results) {
@@ -374,7 +367,7 @@ function cancelPayment(results) {
       method: 'post',
       formData: cancelRequest,
       json: true
-    }, callback.bind(null, results[i]))    
+    }, callback.bind(null, results[i]))
   }
 
 }
@@ -393,7 +386,7 @@ function sendCancelNotification(result) {
         user: client_Email,
         pass: 'a1082926'
       }
-    }); 
+    });
 
     var mailOptions = {
       from: 'hotelreverse <korean.crossfitter@gmail.com>',
@@ -410,11 +403,11 @@ function sendCancelNotification(result) {
         console.log("Message sent : " + response.message);
       }
       smtpTransport.close();
-    });  
+    });
 
   }
 
-  
+
   console.log("result.client_Index", result.client_Index)
   Client.findOne({
     where: {client_Index: result.client_Index}
