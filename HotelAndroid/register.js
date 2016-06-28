@@ -32,7 +32,7 @@ class Register extends Component {
   }
 
   passwordCheck() {
-    if(this.state.password.length <= 8) {
+    if(this.state.password.length <= 7) {
       ToastAndroid.show('비밀번호는 8자리이상 입력해주세요', ToastAndroid.LONG);
       return false;
     } else if(this.state.password !== this.state.password_confirmation) {
@@ -58,10 +58,9 @@ class Register extends Component {
           url: config.serverUrl + '/client/signup/',
           method : 'post',
           data : {
-            client_ID : email,
+            client_Email : email,
             client_PW : password,
             client_Name : name,
-            client_Email : email,
             billingInfo : '1234-1234-1234-1234'
           }
         });

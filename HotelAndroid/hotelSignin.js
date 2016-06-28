@@ -9,7 +9,8 @@ import {
   Alert,
   ToastAndroid,
 } from 'react-native';
-  import axios from 'axios'
+
+import axios from 'axios'
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 import config from './config';
 import Button from 'react-native-button';
@@ -162,6 +163,7 @@ class HotelSignin extends Component {
         <Text style={styles.error}>
           {this.state.error}
         </Text>
+
       </View>
     )
   }

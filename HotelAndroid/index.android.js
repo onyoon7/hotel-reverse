@@ -131,8 +131,8 @@ class HotelAndroid extends Component {
     }
   }
 
-  async componentWillMount() {
-    this.changeNaviView()
+  componentWillMount() {
+    this.changeNaviView();
   }
 
   render() {
