@@ -144,14 +144,6 @@ const Errors = (props) => {
     <View>
       {props.errors.map((error, i) => <Text key={i} style={styles.error}> {error} </Text>)}
     </View>
-  )}
-}
-
-const Errors = (props) => {
-  return (
-    <View>
-      {props.errors.map((error, i) => <Text key={i} style={styles.error}> {error} </Text>)}
-    </View>
   );
 }
 
