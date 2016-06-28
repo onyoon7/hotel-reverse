@@ -25,7 +25,6 @@ class HotelAndroid extends Component {
     super(props);
 
     this.state = {
-      token : '',
       searchData: {
         mainArea_Name : '',
         checkIn_Date : '체크인 날짜 선택',

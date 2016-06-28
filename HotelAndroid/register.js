@@ -24,7 +24,6 @@ class Register extends Component {
       password : '',
       password_confirmation : '',
       errors : [],
-      showProgress : false,
     }
   }
 
@@ -129,9 +128,7 @@ class Register extends Component {
           secureTextEntry={true}>
         </TextInput>
 
-        <TouchableHighlight
-          style={styles.button}
-          onPress={() => this._handlePress()}>
+        <TouchableHighlight style={styles.button} onPress={() => this._handlePress()}>
           <Text style={styles.buttonText}>
             Register
           </Text>
@@ -149,6 +146,14 @@ const Errors = (props) => {
       {props.errors.map((error, i) => <Text key={i} style={styles.error}> {error} </Text>)}
     </View>
   )}
+}
+
+const Errors = (props) => {
+  return (
+    <View>
+      {props.errors.map((error, i) => <Text key={i} style={styles.error}> {error} </Text>)}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
