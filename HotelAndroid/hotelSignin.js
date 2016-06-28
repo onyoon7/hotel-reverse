@@ -6,6 +6,8 @@ import {
   Text,
   TextInput,
   AsyncStorage,
+  Alert,
+  ToastAndroid,
 } from 'react-native';
   import axios from 'axios'
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
@@ -30,6 +32,8 @@ class HotelSignin extends Component {
   componentDidMount() {
     this._setupGoogleSignin();
     console.log('state client_Email : ',this.state.client_Email);
+
+
   }
 
   async _setupGoogleSignin() {
@@ -56,7 +60,12 @@ class HotelSignin extends Component {
       console.log(user)
       await AsyncStorage.setItem('id_token', user.id);
       await AsyncStorage.setItem('client_Email', user.email);
-      this.props.navigator.push({id : 'bidInfo'});
+      ToastAndroid.show('로그인에 성공하였습니다')
+      if(this.props.navigator[this.props.navigator.length-1]==='bid') {
+        this.props.navigator.push({id : 'bidInfo'});
+      } else {
+        this.props.navigator.pop();
+      }
     }
     catch(err) {
       console.log('WRONG SIGNIN', err);
@@ -76,7 +85,7 @@ class HotelSignin extends Component {
     switch(where) {
     case 'login' :
       try {
-        let id_token = await axios({
+        var response = await axios({
           url: config.serverUrl + '/client/signin/',
           method : 'post',
           data : {
@@ -84,14 +93,28 @@ class HotelSignin extends Component {
             client_PW : password
           }
         });
-        await AsyncStorage.setItem('id_token', id_token.data.id_token);
-        await AsyncStorage.setItem('client_Email', email);
+        if(response.data.id_token) {
+          await AsyncStorage.setItem('id_token', response.data.id_token);
+          await AsyncStorage.setItem('client_Email', email);
+          ToastAndroid.show('로그인에 성공하였습니다', ToastAndroid.SHORT);
+        }
       } catch(error) {
+        console.log('NOoooooooooo!!!')
         console.log(error);
       }
       var id_token = await AsyncStorage.getItem('id_token');
       if(id_token) {
-        this.props.navigator.push({id : 'bidInfo'})
+        let naviArr = this.props.navigator.getCurrentRoutes();
+        console.log(naviArr[naviArr.length-2])
+        if(naviArr[naviArr.length-2].id==='bid') {
+          this.props.navigator.push({id : 'bidInfo'});
+        } else {
+          this.props.navigator.pop();
+        }
+      } else {
+        ToastAndroid.show('이메일/비밀번호를 다시 확인해주세요', ToastAndroid.SHORT);
+        console.log('NOoooooooooo!')
+
       }
       break;
     case 'register' :
@@ -182,6 +205,5 @@ let styles = StyleSheet.create({
     paddingTop: 10
   },
 });
-
 
 export default HotelSignin;
