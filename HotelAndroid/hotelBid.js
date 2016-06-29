@@ -16,6 +16,8 @@ import areaInfo from './assets/areaInfo';
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height / 2;
 
+const normalMapStyle = { width: width, flex: 1 };
+
 class HotelBid extends Component {
   constructor(props){
     super(props)
@@ -25,7 +27,7 @@ class HotelBid extends Component {
       hotel_Rate: 5,
       bid_Price: '80000',
       bubbleText: '↕️',
-      mapStyle: {width: width, flex: 1},
+      mapStyle: normalMapStyle,
       region: {},
     }
 
@@ -89,21 +91,14 @@ class HotelBid extends Component {
   }
 
   componentWillMount() {
-    let objKey;
-    let mainArea = this.props.searchData.mainArea_Name;
-    if (mainArea === '서울'){
-      objKey = 'seoul';
-    } else if (mainArea === '제주'){
-      objKey = 'jeju';
-    }
+    let regionKey = areaInfo.area.main[this.props.searchData.mainArea_Name];
 
-    this.onValueChange('region', areaInfo.region[objKey]);
+    this.subArea = areaInfo.area[regionKey].map((val) => {
+      return <Item label={val} key={val} value={val} />;
+    });
 
-    this.subArea = [];
-    for(let i = 0; i < areaInfo.area[objKey].length; i++){
-      this.subArea.push(<Item label={areaInfo.area[objKey][i]} key={i} value={areaInfo.area[objKey][i]} />);
-    }
-    this.setMapView(objKey);
+    this.onValueChange('region', areaInfo.region[regionKey]);
+    this.setMapView(regionKey);
   }
 
   async _handlePress() {
@@ -128,10 +123,10 @@ class HotelBid extends Component {
     this.isFullScreen = !this.isFullScreen;
     if (this.isFullScreen) {
       this.onValueChange('bubbleText', '←');
-      this.onValueChange('mapStyle', {flex: 100, width: width, height: height});
+      this.onValueChange('mapStyle', styles.fullMap);
     } else {
       this.onValueChange('bubbleText', '↕️');
-      this.onValueChange('mapStyle', {width: width, flex: 1});
+      this.onValueChange('mapStyle', normalMapStyle);
     }
   }
 
@@ -276,9 +271,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'black',
   },
-  smallMap: {
+  fullMap: {
+    flex: 100,
     width: width,
-    flex: 1,
+    height: height,
   },
 });
 

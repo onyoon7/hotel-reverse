@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 const Item = Picker.Item;
 import Button from 'react-native-button';
+import areaInfo from './assets/areaInfo';
 
 const checkInHolder = '체크인 날짜 선택';
 const checkOutHolder = '체크아웃 날짜 선택';
@@ -29,6 +30,7 @@ class HotelSearch extends Component {
 
     this.onValueChange = this.onValueChange.bind(this);
     this.showPicker = this.showPicker.bind(this);
+    this.setDropDowns = this.setDropDowns.bind(this);
   }
 
   _convertDate(date) {
@@ -92,6 +94,16 @@ class HotelSearch extends Component {
     }
   }
 
+  setDropDowns() {
+    this.dropDowns = Object.keys(areaInfo.area.main).map((val) => {
+      return <Item label={val} key={val} value={val} />;
+    });
+  }
+
+  componentWillMount() {
+    this.setDropDowns();
+  }
+
   render() {
     return (
       <View style={{flex: 1}}>
@@ -106,8 +118,7 @@ class HotelSearch extends Component {
               selectedValue={this.state.mainArea_Name}
               onValueChange={(value) => this.onValueChange('mainArea_Name', value)}
               mode="dropdown">
-              <Item label="서울" value="서울" />
-              <Item label="제주" value="제주" />
+              {this.dropDowns}
             </Picker>
           </View>
 

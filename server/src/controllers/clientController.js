@@ -25,7 +25,7 @@ export default {
     })
     .catch((error) => {
       console.log("fail to register to the DB:", error);
-      res.status(400).send("fail to register");
+      res.status(400).send(error);
     })
   },
 
@@ -37,9 +37,9 @@ export default {
     }})
     .then((client) => {
       console.log('successfully loged in');
-      console.log(client[0].dataValues);
+      console.log(client.dataValues);
       res.status(200).send({
-        id_token: helpers.createToken(client[0].dataValues),
+        id_token: helpers.createToken(client.dataValues),
       });
     })
     .catch((error) => {
@@ -51,9 +51,9 @@ export default {
 
   getAllContracts: (req, res) => {
 
-    db.Client.findOne({ 
-      where: { 
-        client_Email: req.params.client_Email 
+    db.Client.findOne({
+      where: {
+        client_Email: req.params.client_Email
       }
     })
     .then((client) => {
@@ -86,9 +86,9 @@ export default {
 
   getContract: (req, res) => {
 
-    db.Client.findOne({ 
-      where: { 
-        client_Email: req.params.client_Email 
+    db.Client.findOne({
+      where: {
+        client_Email: req.params.client_Email
       }
     })
     .then((client) => {
@@ -117,9 +117,9 @@ export default {
 
   makeContract: (req, res) => {
 
-    db.Client.findOne({ 
+    db.Client.findOne({
       where: {
-        client_Email: req.params.client_Email 
+        client_Email: req.params.client_Email
       }
     })
     .then((client) => {
@@ -164,7 +164,7 @@ export default {
   },
 
   cancelContract: (req, res) => {
-    
+
   },
 
   // currently dummy function,

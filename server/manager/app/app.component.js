@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', 'angular2/http', './hotel_signin.component', './hotel_signup.component', './bid.component', './contracted.component', './update.component', './get.service', './post.service'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', './sign/login.component', './sign/signup.component', './services/sign.service', './deal/deals.component', './deal/deal-details.component', './services/deals.service', './contract/contracts.component', './contract/contract-details.component', './services/contracts.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', 'angular2/http', './hotel_s
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, http_1, hotel_signin_component_1, hotel_signup_component_1, bid_component_1, contracted_component_1, update_component_1, get_service_1, post_service_1;
+    var core_1, router_1, login_component_1, signup_component_1, sign_service_1, deals_component_1, deal_details_component_1, deals_service_1, contracts_component_1, contract_details_component_1, contracts_service_1;
     var AppComponent;
     return {
         setters:[
@@ -20,62 +20,62 @@ System.register(['angular2/core', 'angular2/router', 'angular2/http', './hotel_s
             function (router_1_1) {
                 router_1 = router_1_1;
             },
-            function (http_1_1) {
-                http_1 = http_1_1;
+            function (login_component_1_1) {
+                login_component_1 = login_component_1_1;
             },
-            function (hotel_signin_component_1_1) {
-                hotel_signin_component_1 = hotel_signin_component_1_1;
+            function (signup_component_1_1) {
+                signup_component_1 = signup_component_1_1;
             },
-            function (hotel_signup_component_1_1) {
-                hotel_signup_component_1 = hotel_signup_component_1_1;
+            function (sign_service_1_1) {
+                sign_service_1 = sign_service_1_1;
             },
-            function (bid_component_1_1) {
-                bid_component_1 = bid_component_1_1;
+            function (deals_component_1_1) {
+                deals_component_1 = deals_component_1_1;
             },
-            function (contracted_component_1_1) {
-                contracted_component_1 = contracted_component_1_1;
+            function (deal_details_component_1_1) {
+                deal_details_component_1 = deal_details_component_1_1;
             },
-            function (update_component_1_1) {
-                update_component_1 = update_component_1_1;
+            function (deals_service_1_1) {
+                deals_service_1 = deals_service_1_1;
             },
-            function (get_service_1_1) {
-                get_service_1 = get_service_1_1;
+            function (contracts_component_1_1) {
+                contracts_component_1 = contracts_component_1_1;
             },
-            function (post_service_1_1) {
-                post_service_1 = post_service_1_1;
+            function (contract_details_component_1_1) {
+                contract_details_component_1 = contract_details_component_1_1;
+            },
+            function (contracts_service_1_1) {
+                contracts_service_1 = contracts_service_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
-                function AppComponent(_getService, _postService) {
-                    this._getService = _getService;
-                    this._postService = _postService;
+                function AppComponent() {
                 }
-                AppComponent.prototype.ngOnInit = function () {
-                    this._getService.getHotels()
-                        .subscribe(function (hotels) { return console.log(hotels); });
-                    this._getService.getHotel()
-                        .subscribe(function (hotel) { return console.log(hotel); });
-                    this._getService.getPendingBid()
-                        .subscribe(function (pendingbids) { return console.log(pendingbids); });
-                    this._postService.hotelSignIn({ hotel_ID: 'a1', hotel_PW: 'a1' })
-                        .subscribe(function (hotel) { return console.log(hotel); });
-                };
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'my-app',
-                        template: "\n    <router-outlet></router-outlet>\n    ",
-                        providers: [get_service_1.GetService, post_service_1.PostService, http_1.HTTP_PROVIDERS],
-                        directives: [router_1.ROUTER_DIRECTIVES]
+                        directives: [login_component_1.LoginComponent, signup_component_1.SignupComponent, deals_component_1.DealsComponent, router_1.ROUTER_DIRECTIVES],
+                        providers: [sign_service_1.SignService, deals_service_1.DealsService, contracts_service_1.ContractsService],
+                        templateUrl: '/app/app.component.html'
                     }),
                     router_1.RouteConfig([
+<<<<<<< 293b7f2dbce22a5b878516d8f6d085afc6b33a2d
+                        { path: '/deals', name: 'Deals', component: deals_component_1.DealsComponent, useAsDefault: true },
+                        { path: '/deals/:hotel_ID/:booking_Num', name: 'Deal Details', component: deal_details_component_1.DealDetailsComponent },
+                        { path: '/contracts', name: 'Contracts', component: contracts_component_1.ContractsComponent },
+                        { path: '/contracts/:hotel_ID/:booking_Num', name: 'Contract Details', component: contract_details_component_1.ContractDetailsComponent },
+                        { path: '/login', name: 'Login', component: login_component_1.LoginComponent },
+                        { path: '/signup', name: 'Signup', component: signup_component_1.SignupComponent },
+=======
                         { path: '/', component: hotel_signin_component_1.HotelSignin, name: 'MainPage' },
                         { path: '/hotel/signin', component: hotel_signin_component_1.HotelSignin, name: 'HotelSignin' },
                         { path: '/hotel/signup', component: hotel_signup_component_1.HotelSignup, name: 'HotelSignup' },
-                        { path: '/hotel/bid/:hotel_ID', component: bid_component_1.HotelBid, name: 'HotelBid' },
+                        { path: '/hotel/bid/:hotel_ID/', component: bid_component_1.HotelBid, name: 'HotelBid' },
                         { path: '/hotel/contracted/:hotel_ID', component: contracted_component_1.HotelContracted, name: 'HotelContracted' },
                         { path: '/hotel/update/:hotel_ID', component: update_component_1.HotelUpdate, name: 'HotelUpdate' }
+>>>>>>> (feat) Modified something in coding
                     ]), 
-                    __metadata('design:paramtypes', [get_service_1.GetService, post_service_1.PostService])
+                    __metadata('design:paramtypes', [])
                 ], AppComponent);
                 return AppComponent;
             }());
