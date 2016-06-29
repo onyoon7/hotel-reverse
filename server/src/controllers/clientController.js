@@ -4,9 +4,11 @@ import helpers from '../config/helpers';
 import email from '../config/email';
 
 export default {
+  
   authCheck: (req, res) => {
     res.status(200).send(req.user.client_Email);
   },
+
 
   signUp: (req, res) => {
 
@@ -44,11 +46,13 @@ export default {
     })
     .catch((error) => {
       console.log("cannot log in:", error);
-      res.send(error);
+      res.status(400).send(error);
     })
 
   },
 
+
+  // find all relevant contracts
   getAllContracts: (req, res) => {
 
     db.Client.findOne({
@@ -75,15 +79,17 @@ export default {
         console.log(deals[i].dataValues);
         results.push(deals[i].dataValues);
       }
-      res.send(results);
+      res.status(200).send(results);
     })
     .catch((error) => {
       console.log("cannot get contract information: ", error);
-      res.send(error);
+      res.status(500).send(error);
     })
 
   },
 
+
+  // find a relevant contract
   getContract: (req, res) => {
 
     db.Client.findOne({
@@ -106,15 +112,17 @@ export default {
     })
     .then((deal) => {
       console.log(deal[0].dataValues);
-      res.send(deal[0].dataValues);
+      res.status(200).send(deal[0].dataValues);
     })
     .catch((error) => {
       console.log("cannot get contract information:", error);
-      res.send(error);
+      res.status(500).send(error);
     })
 
   },
 
+
+  // put the deal in queue
   makeContract: (req, res) => {
 
     db.Client.findOne({
@@ -154,11 +162,11 @@ export default {
     .then((bid) =>{
       console.log('>>>> bid');
       console.log(bid.dataValues);
-      res.send(bid.dataValues);
+      res.status(200).send(bid.dataValues);
     })
     .catch((error) => {
       console.log("fail to make contract: ", error);
-      res.send(error);
+      res.status(400).send(error);
     })
 
   },
@@ -173,24 +181,55 @@ export default {
 
   },
 
+
   updateInfo: (req, res) => {
 
-    db.Client.update({
-      client_PW: req.body.client_PW,
-      client_Name: req.body.client_Name,
-      billingInfo: req.body.billingInfo
-    }, {
+    db.Client.findOne({
       where: {
         client_Email: req.params.client_Email
       }
     })
-    .then((results) => {
-      console.log("#of updated rows: ", results[0]);
-      res.send("successfully updated");
+    .then((client) => {
+      return client.dataValues;
+    })
+    .then((client) => {
+      let data = {};
+      let body = req.body;
+
+      body.client_PW === undefined ?
+          data.client_PW = client.client_PW :
+          data.client_PW = body.client_PW;
+
+      body.client_Name === undefined ?
+          data.client_Name = client.client_Name :
+          data.client_Name = body.client_Name;
+
+      body.billingInfo === undefined ?
+          data.billingInfo = client.billingInfo :
+          data.billingInfo = body.billingInfo;
+
+      return data;
+    })
+    .then((data) => {
+      return db.Client.update({
+        client_PW: data.client_PW,
+        client_Name: data.client_Name,
+        billingInfo: data.billingInfo
+      }, {
+        where: {
+          client_Email: req.params.client_Email
+        }
+      })
+    })
+    .then((result) => {
+      console.log("# of updated rows: ", result);
+      res.status(200).send("successfully updated");
     })
     .catch((error) => {
       console.log("cannot update user information:", error);
-      res.send(error);
+      res.status(500).send(error);      
     })
+
   }
+
 };
