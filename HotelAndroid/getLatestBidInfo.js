@@ -25,7 +25,7 @@ const IMP_KEY = '3372420065794528';
 const IMP_SECRET = 'YwZIGQT4cEjESlJwSwrk4HadQE2QN4qLBpuhgnms2F7V1QrTmSdrAnEq2HhPLHBm76Enu0PwFXrGNTAa';
 const MERCHANT_UID = 'nictest14m';
 
-const validUnderlineColor = null; 
+const validUnderlineColor = null;
 const invalidUnderlineColor = 'red';
 /*----------------------------------------------------------------
   Structure

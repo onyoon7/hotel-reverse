@@ -25,7 +25,7 @@ class HotelSearch extends Component {
     this.state = {
       mainArea_Name: '서울',
       checkInDate: new Date(),
-      checkInText: checkInHolder, 
+      checkInText: checkInHolder,
       checkOutDate: new Date(),
       checkOutText: checkOutHolder,
       room_Number: 1,
@@ -84,7 +84,6 @@ class HotelSearch extends Component {
       var newState = {};
       const {action, year, month, day} = await DatePickerAndroid.open(options);
       if (action === DatePickerAndroid.dismissedAction) {
-        //newState[stateKey + 'Text'] = 'dismissed';
       } else {
         var date = new Date(year, month, day);
 
@@ -103,7 +102,7 @@ class HotelSearch extends Component {
     });
   }
 
-  componentWillMount() {
+ async componentWillMount() {
     this.setDropDowns();
   }
 

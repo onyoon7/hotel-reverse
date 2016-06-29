@@ -11,6 +11,8 @@ import {
 import Button from 'react-native-button';
 import ToolbarAndroid from 'ToolbarAndroid';
 
+import SplashPage from './splash';
+import TutorialPage from './tutorial';
 import HotelSearch from './hotelSearch';
 import HotelBid from './hotelBid';
 import GetLatestBidInfo from './getLatestBidInfo';
@@ -80,6 +82,8 @@ class HotelAndroid extends Component {
   navigatorRenderScene(route, navigator) {
     _navigator = navigator;
     switch (route.id) {
+      case 'splash':
+        return (<SplashPage navigator={navigator} />);
       case 'search':
         return (<HotelSearch navigator={navigator} onChange={this.searchStateChanged}/>);
       case 'bid':
@@ -92,6 +96,8 @@ class HotelAndroid extends Component {
         return (<GetLatestBidInfo navigator={navigator} searchData={this.state.searchData} bidData={this.state.bidData} />);
       case 'thanks':
         return (<ThanksALot navigator={navigator}/>);
+      case 'tutorial':
+        return (<TutorialPage navigator={navigator}/>);
     }
   }
 
@@ -136,7 +142,7 @@ class HotelAndroid extends Component {
     }
   }
 
-  componentWillMount() {
+  async componentWillMount() {
     this.changeNaviView();
   }
 
@@ -155,7 +161,7 @@ class HotelAndroid extends Component {
           title="Hotel Reverse"
           titleColor='white' />
         <Navigator
-          initialRoute={{id: 'search'}}
+          initialRoute={{id: 'splash'}}
           renderScene={this.navigatorRenderScene}
           configureScene={() => Navigator.SceneConfigs.FadeAndroid}/>
       </DrawerLayoutAndroid>
