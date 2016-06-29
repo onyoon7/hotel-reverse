@@ -6,11 +6,14 @@ import {
   DatePickerAndroid,
   TouchableWithoutFeedback,
   Picker,
+  ToastAndroid,
 } from 'react-native';
 const Item = Picker.Item;
 import Button from 'react-native-button';
 import areaInfo from './assets/areaInfo';
 
+const checkInHolder = '체크인 날짜 선택';
+const checkOutHolder = '체크아웃 날짜 선택';
 
 class HotelSearch extends Component {
   constructor(props){
@@ -19,9 +22,9 @@ class HotelSearch extends Component {
     this.state = {
       mainArea_Name: '서울',
       checkInDate: new Date(),
-      checkInText: '체크인 날짜 선택',
+      checkInText: checkInHolder, 
       checkOutDate: new Date(),
-      checkOutText: '체크아웃 날짜 선택',
+      checkOutText: checkOutHolder,
       room_Number: 1,
     }
 
@@ -57,9 +60,14 @@ class HotelSearch extends Component {
   }
 
   _handlePress() {
-    this.props.navigator.push({id: 'bid'});
-    this.props.onChange(this.state.mainArea_Name, this.state.checkInText,
-      this.state.checkOutText, this.state.room_Number);
+    if (this.state.checkInText === checkInHolder ||
+      this.state.checkOutText === checkOutHolder) {
+      const msg = '정보를 입력해주세요';
+      ToastAndroid.show(msg, ToastAndroid.SHORT);
+    } else {
+      this.props.navigator.push({id: 'bid'});
+      this.props.onChange(this.state.mainArea_Name, this.state.checkInText, this.state.checkOutText, this.state.room_Number);
+    }
   }
 
   onValueChange(key: string, value: string) {
