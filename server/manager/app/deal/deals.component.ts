@@ -9,20 +9,23 @@ import { DealsService } from '../services/deals.service';
 import { AuthenticationService } from '../services/authentication.service';
 import { SignService } from '../services/sign.service';
 
+import { MakeKoreanDateTimePipe } from '../custom-datetime.pipe';
+import { OrderByPipe } from '../pipe/orderby.pipe';
+
 @Component({
   selector: 'deals-list',
+  directives: [DealDetailsComponent, ROUTER_DIRECTIVES],
+  providers: [AuthenticationService, DealsService, SignService],
   template: `
 
     <ul>
-      <li *ngFor="#deal of deals">
-        <a href="#" [routerLink]="['Deal Details', {hotel_ID: hotel_ID, booking_Num: deal.booking_Num}]">{{deal.subArea_Name}}</a>
+      <li *ngFor="#deal of deals | orderby: orderby">
+        <a href="#" [routerLink]="['Deal Details', {hotel_ID: hotel_ID, booking_Num: deal.booking_Num}]">{{deal.bid_EndTime | makeKoreanDateTime}}, {{deal.bid_Price | number}}</a>
       </li>
     </ul>
     <a (click)="logout()" href="#">logout</a>
-
   `,
-  directives: [DealDetailsComponent, ROUTER_DIRECTIVES],
-  providers: [AuthenticationService, DealsService, SignService]
+  pipes: [MakeKoreanDateTimePipe, OrderByPipe]
 })
 
 export class DealsComponent implements OnInit{

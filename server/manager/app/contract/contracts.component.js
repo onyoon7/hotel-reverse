@@ -57,6 +57,9 @@ System.register(['angular2/core', 'angular2/router', './contract-details.compone
                 ContractsComponent.prototype.selectContract = function (contract) {
                     this.selectedContract = contract;
                 };
+                ContractsComponent.prototype.logout = function () {
+                    this._service.logout();
+                };
                 ContractsComponent = __decorate([
                     core_1.Component({
                         selector: 'contracts-list',

@@ -1,5 +1,5 @@
 import { Injectable } from 'angular2/core';
-import { Http, Response } from 'angular2/http';
+import { Http, Response, Headers } from 'angular2/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/Rx';
 
@@ -29,6 +29,22 @@ export class DealsService{
         .map(mapDeal);
 
     return deal;
+  }
+
+  getContract(hotel_ID, booking_Num) {
+    console.log("All data => ", hotel_ID, booking_Num);
+
+    let hotel_Info = "hotel_ID=" + hotel_ID + "&booking_Num=" + booking_Num;
+
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+
+    let contract = this._http
+        .put(`${this.baseUrl}/${hotel_ID}/${booking_Num}`, hotel_Info, { headers: headers })
+        .map(mapDeal);
+
+    return contract;
+
   }
 }
 
