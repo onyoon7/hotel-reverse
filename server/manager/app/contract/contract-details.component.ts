@@ -3,7 +3,7 @@ import { RouteParams, Router} from 'angular2/router';
 import { Response } from 'angular2/http';
 
 import { ContractsService } from '../services/contracts.service';
-import { Contract } from './contract';
+import { Contract } from '../model/contract';
 import { MakeKoreanDatePipe } from '../custom-date.pipe';
 import { MakeKoreanDateTimePipe } from '../custom-datetime.pipe';
 

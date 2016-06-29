@@ -3,7 +3,7 @@ import { ROUTER_DIRECTIVES } from 'angular2/router';
 import { RouteParams, Router } from 'angular2/router';
 import { Response } from 'angular2/http';
 
-import { Contract } from './contract';
+import { Contract } from '../model/contract';
 import { ContractDetailsComponent } from './contract-details.component';
 import { ContractsService } from '../services/contracts.service';
 import { AuthenticationService } from '../services/authentication.service';
@@ -57,5 +57,9 @@ export class ContractsComponent implements OnInit{
 
   selectContract(contract: Contract){
     this.selectedContract = contract;
+  }
+
+  logout() {
+    this._service.logout();
   }
 }
