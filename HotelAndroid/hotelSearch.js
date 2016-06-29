@@ -119,7 +119,7 @@ class HotelSearch extends Component {
         </View>
 
         <View style={styles.rowContainer}>
-          <Picker style={{width: 150, height: 30, color: 'green'}}
+          <Picker style={styles.dropdown}
             selectedValue={this.state.mainArea_Name}
             onValueChange={(value) => this.onValueChange('mainArea_Name', value)}
             mode="dropdown">
@@ -185,8 +185,8 @@ class HotelSearch extends Component {
           </View>
 
           <View style={[{marginTop: 50}, styles.centeredRow]}>
-            <Button style={styles.searchBtnText}
-              containerStyle={styles.searchBtn}
+            <Button style={styles.submitBtnText}
+              containerStyle={styles.submitBtn}
               onPress={() => this._handlePress()}>
               호텔 검색
             </Button>
@@ -213,7 +213,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     textAlign: 'center',
-    color: '#000',
+    color: 'black',
     margin: 10,
     marginTop: 30,
     marginBottom: 40,
@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
     color: 'grey',
     fontSize: 15,
   },
-  searchBtn: {
+  submitBtn: {
     width: width - 30,
     padding: 10,
     height: 40,
@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  searchBtnText: {
+  submitBtnText: {
     fontSize: 18,
     color: 'white',
   },
@@ -266,6 +266,11 @@ const styles = StyleSheet.create({
     marginLeft: 30,
     marginRight: 30,
     justifyContent: 'flex-start',
+  },
+  dropdown: {
+    width: 150,
+    height: 30,
+    color: 'green'
   },
 });
 
