@@ -47,7 +47,7 @@ class HotelSignin extends Component {
       await GoogleSignin.hasPlayServices({ autoResolve: true });
       await GoogleSignin.configure({
         scopes: ['https://www.googleapis.com/auth/drive.readonly'],
-        webClientId: '370846469277 q-p2lvjnb4u0jcjt1br44h9pmpct82849c.apps.googleusercontent.com',
+        webClientId: '370846469277-p2lvjnb4u0jcjt1br44h9pmpct82849c.apps.googleusercontent.com',
         offlineAccess: true
       });
 

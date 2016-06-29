@@ -102,7 +102,7 @@ class HotelSearch extends Component {
     });
   }
 
- async componentWillMount() {
+  componentWillMount() {
     this.setDropDowns();
   }
 
