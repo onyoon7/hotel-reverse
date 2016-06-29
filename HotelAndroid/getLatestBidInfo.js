@@ -278,6 +278,7 @@ class GetLatestBidInfo extends Component {
             onSubmitEditing={() => this.focusNextField('2')}
             onEndEditing={(event) => this.validateInput(1, 16, event.nativeEvent.text)}
             underlineColorAndroid={this.state.underlineColor1}
+            autoFocus={true}
           />
         </View>
 
