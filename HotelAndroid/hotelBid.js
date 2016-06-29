@@ -7,6 +7,7 @@ import {
   Dimensions,
   Slider,
   AsyncStorage,
+  ScrollView,
 } from 'react-native';
 const Item = Picker.Item;
 import Button from 'react-native-button';
@@ -16,7 +17,7 @@ import areaInfo from './assets/areaInfo';
 const { width, height } = Dimensions.get('window');
 const ASPECT_RATIO = width / height / 2;
 
-const normalMapStyle = { width: width, flex: 1 };
+const normalMapStyle = { width: width, flex: 0.7 };
 
 class HotelBid extends Component {
   constructor(props){
@@ -52,11 +53,11 @@ class HotelBid extends Component {
     this.polygon = polygons.map((item, i) => {
       return (
         <MapView.Polygon
-        key={item.key}
-        coordinates={item.value}
-        fillColor={colors[i] + ',0.5)'}
-        strokeColor="rgba(0,0,0,0.5)"
-        stokeWidth={2}
+          key={item.key}
+          coordinates={item.value}
+          fillColor={colors[i] + ',0.5)'}
+          strokeColor="rgba(0,0,0,0.5)"
+          stokeWidth={2}
         />
       )
     }
@@ -65,18 +66,18 @@ class HotelBid extends Component {
     this.marker = markers.map((item, i) => {
       return (
         <MapView.Marker
-        key={item.key}
-        coordinate={item.value}
-        title={item.key}
-        pinColor={colors[i] + ',0.7)'}
-        onPress={() => {
-          this.onValueChange('subArea_Name', item.key);
-          if (this.isFullScreen) {
-            this.toggleFullScreen()
+          key={item.key}
+          coordinate={item.value}
+          title={item.key}
+          pinColor={colors[i] + ',0.7)'}
+          onPress={() => {
+            this.onValueChange('subArea_Name', item.key);
+            if (this.isFullScreen) {
+              this.toggleFullScreen()
+            }
+            this.setRegionToMarker(item.value);
           }
-          this.setRegionToMarker(item.value);
-        }
-        }
+          }
         />
       )
     }
@@ -133,12 +134,6 @@ class HotelBid extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.rowContainer}>
-          <Text style={styles.title}>
-            {this.props.searchData.mainArea_Name}의 어디에서 묵고 싶나요?
-          </Text>
-        </View>
-
         <MapView
           style={this.state.mapStyle}
           region={this.state.region}
@@ -157,14 +152,19 @@ class HotelBid extends Component {
             containerStyle={styles.bubble}
             style={{color: 'black', fontSize: 30}}
             onPress={this.toggleFullScreen}>
-              {this.state.bubbleText}
+            {this.state.bubbleText}
           </Button>
         </View>
 
-        <View style={{flex: 1}}>
+        <ScrollView style={{flex: 1, width: width}}>
+          <View style={styles.rowContainer}>
+            <Text style={styles.title}>
+              {this.props.searchData.mainArea_Name}의 어디에서 묵고 싶나요?
+            </Text>
+          </View>
           <View style={styles.rowContainer}>
             <Text style={styles.label}>세부지역</Text>
-            <Picker style={{width: 150}}
+            <Picker style={styles.dropdown}
               selectedValue={this.state.subArea_Name}
               onValueChange={value => this.onValueChange('subArea_Name', value)}
               mode="dropdown">
@@ -174,39 +174,42 @@ class HotelBid extends Component {
 
           <View style={styles.rowContainer}>
             <Text style={styles.label}>호텔등급</Text>
-            <Picker style={{width: 150}}
+            <Picker style={styles.dropdown}
               selectedValue={this.state.hotel_Rate}
               onValueChange={value => this.onValueChange('hotel_Rate', value)}
               mode="dropdown">
-                <Item label="★★★★★" value="5" />
-                <Item label="★★★★" value="4" />
-                <Item label="★★★" value="3" />
+              <Item label="★★★★★" value="5" />
+              <Item label="★★★★" value="4" />
+              <Item label="★★★" value="3" />
             </Picker>
           </View>
 
           <View style={styles.rowContainer}>
-            <Text style={styles.price}>
+            <Text style={styles.text}>
               ₩ {this.state.bid_Price}
             </Text>
           </View>
 
-          <Slider
-            minimumValue={40000}
-            maximumValue={150000}
-            value={80000}
-            step={1000}
-            onValueChange={(value) => this.setState({bid_Price: value})}
-          />
+          <View style={[styles.centeredRow]}>
+            <Slider
+              style={{width: 300}}
+              minimumValue={40000}
+              maximumValue={150000}
+              value={80000}
+              step={1000}
+              onValueChange={(value) => this.setState({bid_Price: value})}
+            />
+          </View>
 
-          <View style={styles.rowContainer}>
+          <View style={[{marginTop: 50}, styles.rowContainer]}>
             <Button
-              containerStyle={styles.button}
-              style={styles.buttonText}
+              containerStyle={styles.submitBtn}
+              style={styles.submitBtnText}
               onPress={() => this._handlePress()}>
-                계속하기
+              계속하기
             </Button>
           </View>
-        </View>
+        </ScrollView>
       </View>
     );
   }
@@ -228,21 +231,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     margin: 10,
   },
+  centeredRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   title: {
     fontSize: 20,
     textAlign: 'center',
-    color: '#000',
+    color: 'black',
+    marginTop: 15,
+    marginBottom: 15,
   },
   label: {
-    width: 60,
+    width: 80,
     textAlign: 'left',
-    margin: 10,
-    color: 'black',
+    color: 'grey',
+    fontSize: 15,
   },
-  button: {
-    width: 150,
+  submitBtn: {
+    width: width - 30,
     padding: 10,
-    height: 30,
+    height: 40,
     overflow: 'hidden',
     borderColor: 'black',
     borderWidth: 2,
@@ -250,10 +260,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'green',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 30,
   },
-  buttonText: {
-    fontSize: 15,
+  submitBtnText: {
+    fontSize: 18,
     color: 'white',
   },
   bubble: {
@@ -264,17 +273,21 @@ const styles = StyleSheet.create({
   },
   bubbleContainer: {
     position: 'absolute',
-    top: 60,
-    left: 10,
+    top: 15,
+    left: 15,
   },
-  price: {
-    fontSize: 18,
-    color: 'black',
+  text: {
+    fontSize: 17,
+    color: 'green',
   },
   fullMap: {
-    flex: 100,
     width: width,
     height: height,
+  },
+  dropdown: {
+    width: 150,
+    height: 30,
+    color: 'green'
   },
 });
 

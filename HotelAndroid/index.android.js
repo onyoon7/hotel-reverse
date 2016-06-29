@@ -9,6 +9,7 @@ import {
   AsyncStorage,
 } from 'react-native';
 import Button from 'react-native-button';
+import ToolbarAndroid from 'ToolbarAndroid';
 
 import HotelSearch from './hotelSearch';
 import HotelBid from './hotelBid';
@@ -16,7 +17,6 @@ import GetLatestBidInfo from './getLatestBidInfo';
 import ThanksALot from './thanksALot';
 import HotelSignin from './hotelSignin';
 import Register from './register';
-import axios from 'axios';
 
 let _navigator;
 
@@ -41,6 +41,7 @@ class HotelAndroid extends Component {
     this.searchStateChanged = this.searchStateChanged.bind(this);
     this.bidStateChanged = this.bidStateChanged.bind(this);
     this.navigatorRenderScene = this.navigatorRenderScene.bind(this);
+    this.openDrawer = this.openDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
     this.renderMenuItem = this.renderMenuItem.bind(this);
   }
@@ -94,6 +95,10 @@ class HotelAndroid extends Component {
     }
   }
 
+  openDrawer() {
+    this._drawer.openDrawer();
+  }
+
   closeDrawer() {
     this._drawer.closeDrawer();
   }
@@ -143,10 +148,16 @@ class HotelAndroid extends Component {
         drawerWidth={300}
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         renderNavigationView={() => this.state.navigationView}>
+        <ToolbarAndroid
+          navIcon={require('./assets/img/ic_menu_white_24dp.png')}
+          onIconClicked={() => this.openDrawer() }
+          style={styles.toolbar}
+          title="Hotel Reverse"
+          titleColor='white' />
         <Navigator
           initialRoute={{id: 'search'}}
           renderScene={this.navigatorRenderScene}
-          configureScene={(route, routeStack) => Navigator.SceneConfigs.FadeAndroid}/>
+          configureScene={() => Navigator.SceneConfigs.FadeAndroid}/>
       </DrawerLayoutAndroid>
     );
   }
@@ -182,5 +193,9 @@ const styles = StyleSheet.create({
   drawerBtnText: {
     fontSize: 25,
     color: 'black',
+  },
+  toolbar: {
+    backgroundColor: 'green',
+    height: 56,
   },
 });

@@ -7,10 +7,13 @@ import {
   TouchableWithoutFeedback,
   Picker,
   ToastAndroid,
+  Dimensions,
 } from 'react-native';
 const Item = Picker.Item;
 import Button from 'react-native-button';
 import areaInfo from './assets/areaInfo';
+
+const { width } = Dimensions.get('window');
 
 const checkInHolder = '체크인 날짜 선택';
 const checkOutHolder = '체크아웃 날짜 선택';
@@ -107,51 +110,56 @@ class HotelSearch extends Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <Text style={styles.appName}>
-          HOTEL REVERSE
+        <Text style={styles.title}>
+          호텔을 검색하세요
         </Text>
 
-        <View>
-          <View style={styles.rowContainer}>
-            <Text style={styles.label}>지역</Text>
-            <Picker style={{width: 100}}
-              selectedValue={this.state.mainArea_Name}
-              onValueChange={(value) => this.onValueChange('mainArea_Name', value)}
-              mode="dropdown">
-              {this.dropDowns}
-            </Picker>
+        <View style={styles.rowContainer}>
+          <Text style={styles.label}>지역</Text>
+        </View>
+
+        <View style={styles.rowContainer}>
+          <Picker style={styles.dropdown}
+            selectedValue={this.state.mainArea_Name}
+            onValueChange={(value) => this.onValueChange('mainArea_Name', value)}
+            mode="dropdown">
+            {this.dropDowns}
+          </Picker>
+        </View>
+
+        <View style={[styles.centeredRow]}>
+          <View style={[styles.datePickerRow]}>
+            <Text style={[styles.label]}>체크인</Text>
           </View>
-
-          <View style={styles.rowContainer}>
-
-            <Text style={styles.label}>체크인</Text>
-
-            <TouchableWithoutFeedback
-                onPress={() => this.showPicker('checkIn', {
-                  date: this.state.checkInDate,
-                  minDate: new Date(),
-                  maxDate: new Date().setDate(new Date().getDate() + 14),
-                })}>
-              <View>
-                <Text style={styles.text}>{this.state.checkInText}</Text>
-              </View>
-            </TouchableWithoutFeedback>
+          <View style={[styles.datePickerRow]}>
+            <Text style={[styles.label]}>체크아웃</Text>
           </View>
+        </View>
 
-          <View style={styles.rowContainer}>
-            <Text style={styles.label}>체크아웃</Text>
-            <TouchableWithoutFeedback
-                onPress={() => {
-                  let maxDate = new Date(this.state.checkInDate);
-                  maxDate.setDate(maxDate.getDate() + 14);
+        <View style={[styles.centeredRow]}>
+          <TouchableWithoutFeedback
+            onPress={() => this.showPicker('checkIn', {
+              date: this.state.checkInDate,
+              minDate: new Date(),
+              maxDate: new Date().setDate(new Date().getDate() + 14),
+            })}>
+            <View style={styles.datePickerRow}>
+              <Text style={styles.text}>{this.state.checkInText}</Text>
+            </View>
+          </TouchableWithoutFeedback>
 
-                  let options = {
-                    date: this.state.checkOutDate,
-                    minDate: this.state.checkInDate,
-                    maxDate: maxDate,
-                  };
-                  this.showPicker('checkOut', options)}}>
-              <View>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              let maxDate = new Date(this.state.checkInDate);
+              maxDate.setDate(maxDate.getDate() + 14);
+
+              let options = {
+                date: this.state.checkOutDate,
+                minDate: this.state.checkInDate,
+                maxDate: maxDate,
+              };
+              this.showPicker('checkOut', options)}}>
+              <View style={styles.datePickerRow}>
                 <Text style={styles.text}>{this.state.checkOutText}</Text>
               </View>
             </TouchableWithoutFeedback>
@@ -159,27 +167,31 @@ class HotelSearch extends Component {
 
           <View style={styles.rowContainer}>
             <Text style={styles.label}>객실수</Text>
+            <View style={{marginRight: 15}}>
+              <Button style={styles.roomBtnText}
+                containerStyle={styles.roomBtn}
+                onPress={() => this._decRoomNumber()}>
+                -
+              </Button>
+            </View>
+            <Text style={styles.text}>{this.state.room_Number}</Text>
+            <View style={{marginLeft: 15}}>
+              <Button style={styles.roomBtnText}
+                containerStyle={styles.roomBtn}
+                onPress={() => this._incRoomNumber()}>
+                +
+              </Button>
+            </View>
+          </View>
 
-            <Button
-              onPress={() => this._decRoomNumber()}>
-              -&nbsp;
-            </Button>
-            <Text>{this.state.room_Number}</Text>
-            <Button
-              onPress={() => this._incRoomNumber()}>
-              &nbsp;+
+          <View style={[{marginTop: 50}, styles.centeredRow]}>
+            <Button style={styles.submitBtnText}
+              containerStyle={styles.submitBtn}
+              onPress={() => this._handlePress()}>
+              호텔 검색
             </Button>
           </View>
         </View>
-
-        <View style={styles.rowContainer}>
-          <Button style={styles.searchBtnText}
-            containerStyle={styles.searchBtn}
-            onPress={() => this._handlePress()}>
-            호텔 검색
-          </Button>
-        </View>
-      </View>
     );
   }
 }
@@ -187,26 +199,35 @@ class HotelSearch extends Component {
 const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    margin: 8,
+    marginLeft: 30,
+    marginRight: 30,
+  },
+  centeredRow: {
+    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10,
   },
-  appName: {
+  title: {
     fontSize: 20,
     textAlign: 'center',
-    color: '#000',
+    color: 'black',
     margin: 10,
+    marginTop: 30,
+    marginBottom: 40,
   },
   label: {
-    width: 60,
+    width: 80,
     textAlign: 'left',
-    margin: 10,
-    color: 'black',
+    color: 'grey',
+    fontSize: 15,
   },
-  searchBtn: {
-    width: 150,
-    padding:10,
-    height: 30,
+  submitBtn: {
+    width: width - 30,
+    padding: 10,
+    height: 40,
     overflow: 'hidden',
     borderColor: 'black',
     borderWidth: 2,
@@ -215,9 +236,41 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  searchBtnText: {
-    fontSize: 15,
+  submitBtnText: {
+    fontSize: 18,
     color: 'white',
+  },
+  roomBtn: {
+    width: 28,
+    height: 28,
+    overflow: 'hidden',
+    borderColor: 'green',
+    borderWidth: 2,
+    borderStyle: 'solid',
+    borderRadius: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  roomBtnText: {
+    fontSize: 20,
+    color: 'green',
+  },
+  text: {
+    fontSize: 17,
+    color: 'green',
+  },
+  datePickerRow: {
+    width: width/2-60,
+    marginTop: 8,
+    marginBottom: 8,
+    marginLeft: 30,
+    marginRight: 30,
+    justifyContent: 'flex-start',
+  },
+  dropdown: {
+    width: 150,
+    height: 30,
+    color: 'green'
   },
 });
 
