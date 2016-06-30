@@ -46,7 +46,6 @@ class HotelAndroid extends Component {
     this.searchStateChanged = this.searchStateChanged.bind(this);
     this.bidStateChanged = this.bidStateChanged.bind(this);
     this.navigatorRenderScene = this.navigatorRenderScene.bind(this);
-    this.createToolbar = this.createToolbar.bind(this);
     this.openDrawer = this.openDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
     this.renderMenuItem = this.renderMenuItem.bind(this);
@@ -96,7 +95,7 @@ class HotelAndroid extends Component {
       case 'splash':
         return (<SplashPage navigator={navigator} />);
       case 'search':
-        return (<HotelSearch navigator={navigator} onChange={this.searchStateChanged} onToolbar={this.createToolbar()} onFlagChange={this.flagStateChanged} />);
+        return (<HotelSearch navigator={navigator} onChange={this.searchStateChanged} onFlagChange={this.flagStateChanged} />);
       case 'bid':
         return (<HotelBid navigator={navigator} onChange={this.bidStateChanged} searchData={this.state.searchData}/>);
       case 'signin':
@@ -153,21 +152,30 @@ class HotelAndroid extends Component {
     }
   }
 
-  createToolbar() {
-      _toolBar = (<ToolbarAndroid
-            navIcon={require('./assets/img/ic_menu_white_24dp.png')}
-            onIconClicked={() => this.openDrawer() }
-            style={styles.toolbar}
-            title="Hotel Reverse"
-            titleColor='white' />
-      )
-  }
+  // createToolbar() {
+  //     _toolBar = (<ToolbarAndroid
+  //           navIcon={require('./assets/img/ic_menu_white_24dp.png')}
+  //           onIconClicked={() => this.openDrawer() }
+  //           style={styles.toolbar}
+  //           title="Hotel Reverse"
+  //           titleColor='white' />
+  //     )
+  // }
 
   componentWillMount() {
     this.changeNaviView();
   }
 
   render() {
+    console.log('i am rendering>>>>')
+    if (this.state.flag) {
+          _toolBar = <ToolbarAndroid
+            navIcon={require('./assets/img/ic_menu_white_24dp.png')}
+            onIconClicked={() => this.openDrawer() }
+            style={styles.toolbar}
+            title="Hotel Reverse"
+            titleColor='white' />
+        }
     return (
       <DrawerLayoutAndroid
         ref={(ref) => this._drawer = ref}

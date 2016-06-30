@@ -152,7 +152,7 @@ class HotelSearch extends Component {
             onPress={() => {
               let minDate = new Date(this.state.checkInDate);
               let maxDate = new Date(this.state.checkInDate);
-              minDate.setDate(minDate.getDate() + 1);
+              minDate.setDate(minDate.getDate() + 2);
               maxDate.setDate(maxDate.getDate() + 14);
 
               let options = {
