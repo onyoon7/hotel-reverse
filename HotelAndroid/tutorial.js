@@ -9,14 +9,8 @@ import {
   ViewPagerAndroid,
 } from 'react-native'
 
-let IMAGES = [
-  './assets/bg_1.jpg',
-  './assets/bg_2.jpg',
-  './assets/bg_3.jpg',
-  './assets/bg_4.jpg',
-  './assets/bg_5.jpg',
-];
-let PAGES = IMAGES.length;
+let pages = [];
+let button ;
 
 class ToturialPage extends Component {
   constructor(props) {
@@ -33,128 +27,122 @@ class ToturialPage extends Component {
     }
   }
 
-
-  onPageSelected (e) {
-    console.log('onPageSelected : ', e.nativeEvent.position)
-    this.setState({page: e.nativeEvent.position});
-  }
-
   onPageScroll(e) {
-    console.log('onPageScroll : ', e.nativeEvent)
-    this.setState({progress: e.nativeEvent})
+    this.setState({progress: e.nativeEvent}) // offset : place, position : key value of page
   }
 
-  onPageScrollStateChanged (state : ViewPagerScrollState) {
-    this.setState({scrollState: state});
-  }
+  // onPageScrollStateChanged (state : ViewPagerScrollState) {
+  //   console.log('onPageScrollStateChanged :', state)
+  //   this.setState({scrollState: state}); // state : idle, dagging, settling
+  // }
 
   async _handlePress (where) {
     await AsyncStorage.setItem('tutorial','true')
     this.props.navigator.push({id : where});
   }
 
-  render() {
-    let pages = [];
-    for(let i=0; i<PAGES; i++) {
+  loadPage(i) {
+    if(i===0) {
       pages.push(
-        <View key={i} collapsable={false}>
+        <View key={0} collapsable={false}>
           <Image
-            sylte={styles.image}
+            style={styles.image}
             source={require('./assets/bg_1.jpg')}
           />
         </View>
       )
+    } else if (i===1){
+      pages.push(
+        <View key={1} collapsable={false}>
+          <Image
+            style={styles.image}
+            source={require('./assets/bg_2.jpg')}
+          />
+        </View>
+      )
+    } else if (i===2){
+      pages.push(
+        <View key={2} collapsable={false}>
+          <Image
+            style={styles.image}
+            source={require('./assets/bg_3.jpg')}
+          />
+        </View>
+      )
+    } else if (i===3){
+      pages.push(
+        <View key={3} collapsable={false}>
+          <Image
+            style={styles.image}
+            source={require('./assets/bg_4.jpg')}
+          />
+        </View>
+      )
+    } else if (i===4){
+      pages.push(
+        <View key={4} collapsable={false}>
+          <Image
+            style={styles.image}
+            source={require('./assets/bg_5.jpg')}
+          />
+        </View>
+      )
     }
-    console.log(pages)
+  }
+
+  showButton() {
+    if(this.state.progress.position === 4) {
+      button = (<TouchableHighlight
+          onPress = {()=>this._handlePress('search')}
+          >
+          <Text style={styles.text}>호텔리버스 시작하기 ➜</Text>
+        </TouchableHighlight>)
+    }
+  }
+
+  componentWillMount() {
+    for(let i=0; i<5; i++) {
+      this.loadPage(i)
+    }
+  }
+
+  render() {
+    this.showButton();
     return (
       <View style = {styles.container}>
         <ViewPagerAndroid
           style={styles.viewPager}
           initialPage={0}
           onPageScroll = {this.onPageScroll.bind(this)}
-          onPageScrollStateChanged = {this.onPageScrollStateChanged.bind(this)}
           scrollEnabled = {this.state.scrollEnabled}
           pageMargin = {0}
           ref = {(viewPager) => {this.viewPager = viewPager;}}>
-          {pages}
+        {pages}
         </ViewPagerAndroid>
-        <TouchableHighlight
-          onPress = {()=>this._handlePress('search')}>
-          <Text>skip</Text>
-        </TouchableHighlight>
+        {button}
       </View>
     )
   }
 }
 
 const styles = StyleSheet.create({
-  buttons: {
-    flexDirection: 'row',
-    height: 30,
-    backgroundColor: 'black',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-  },
-  button: {
-    flex: 1,
-    width: 0,
-    margin: 5,
-    borderColor: 'gray',
-    borderWidth: 1,
-    backgroundColor: 'gray',
-  },
-  buttonDisabled: {
-    backgroundColor: 'black',
-    opacity: 0.5,
-  },
-  buttonText: {
-    color: 'white',
-  },
-  scrollStateText: {
-    color: '#99d1b7',
-  },
   container: {
     flex: 1,
-    backgroundColor: 'white',
   },
   image: {
     flex : 1,
-    position : 'absolute',
-    width: 300,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  likeButton: {
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    borderColor: '#333333',
-    borderWidth: 1,
-    borderRadius: 5,
-    flex: 1,
-    margin: 8,
-    padding: 8,
-  },
-  likeContainer: {
-    flexDirection: 'row',
-  },
-  likesText: {
-    flex: 1,
-    fontSize: 18,
-    alignSelf: 'center',
-  },
-  progressBarContainer: {
-    height: 10,
-    margin: 10,
-    borderColor: '#eeeeee',
-    borderWidth: 2,
-  },
-  progressBar: {
-    alignSelf: 'flex-start',
-    flex: 1,
-    backgroundColor: '#eeeeee',
+    resizeMode : 'cover',
   },
   viewPager: {
     flex: 1,
   },
+  text: {
+    flex : 1,
+    fontSize : 20,
+    textAlign : 'center',
+    fontWeight : 'bold',
+    fontFamily : 'sans-serif',
+  }
 });
 
 export default ToturialPage;
