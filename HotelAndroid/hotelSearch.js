@@ -103,6 +103,7 @@ class HotelSearch extends Component {
   }
 
   componentWillMount() {
+    this.props.onFlagChange(true);
     this.setDropDowns();
   }
 
@@ -149,12 +150,14 @@ class HotelSearch extends Component {
 
           <TouchableWithoutFeedback
             onPress={() => {
+              let minDate = new Date(this.state.checkInDate);
               let maxDate = new Date(this.state.checkInDate);
+              minDate.setDate(minDate.getDate() + 1);
               maxDate.setDate(maxDate.getDate() + 14);
 
               let options = {
                 date: this.state.checkOutDate,
-                minDate: this.state.checkInDate,
+                minDate: minDate,
                 maxDate: maxDate,
               };
               this.showPicker('checkOut', options)}}>
