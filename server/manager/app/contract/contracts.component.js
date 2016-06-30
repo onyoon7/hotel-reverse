@@ -51,7 +51,15 @@ System.register(['angular2/core', 'angular2/router', './contract-details.compone
                         console.log('hotel_ID: ', this.hotel_ID);
                         this.contractsService
                             .getAllContracts(this.hotel_ID)
-                            .subscribe(function (c) { return _this.contracts = c; }, function (error) { return console.error('Error: ' + error); }, function () { return console.log('Successfully fetched Contracts data!'); });
+                            .subscribe(function (c) {
+                            c.sort(function (a, b) {
+                                var endTime_1 = new Date("" + a.bid_EndTime);
+                                var endTime_2 = new Date("" + b.bid_EndTime);
+                                var endTime = endTime_1 - endTime_2;
+                                return endTime;
+                            });
+                            _this.contracts = c;
+                        }, function (error) { return console.error('Error: ' + error); }, function () { return console.log('Successfully fetched Contracts data!'); });
                     }
                 };
                 ContractsComponent.prototype.selectContract = function (contract) {
@@ -65,7 +73,7 @@ System.register(['angular2/core', 'angular2/router', './contract-details.compone
                         selector: 'contracts-list',
                         directives: [contract_details_component_1.ContractDetailsComponent, router_1.ROUTER_DIRECTIVES],
                         providers: [authentication_service_1.AuthenticationService, contracts_service_1.ContractsService],
-                        template: "\n\n    <ul>\n      <li *ngFor=\"#contract of contracts\">\n        <a href=\"#\" [routerLink]=\"['Contract Details', {hotel_ID: hotel_ID, booking_Num: contract.booking_Num}]\">{{contract.subArea_Name}}</a>\n      </li>\n    </ul>\n    <a (click)=\"logout()\" href=\"#\">logout</a>\n  "
+                        template: "\n\n    <ul>\n      <li *ngFor=\"#contract of contracts\">\n        <a href=\"#\" [routerLink]=\"['Contract Details', {hotel_ID: hotel_ID, booking_Num: contract.booking_Num}]\">{{contract.booking_Num}}</a>\n      </li>\n    </ul>\n    <a (click)=\"logout()\" href=\"#\">logout</a>\n  "
                     }), 
                     __metadata('design:paramtypes', [contracts_service_1.ContractsService, router_2.RouteParams, router_2.Router, authentication_service_1.AuthenticationService])
                 ], ContractsComponent);

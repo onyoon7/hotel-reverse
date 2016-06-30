@@ -10,7 +10,6 @@ import { AuthenticationService } from '../services/authentication.service';
 import { SignService } from '../services/sign.service';
 
 import { MakeKoreanDateTimePipe } from '../custom-datetime.pipe';
-import { OrderByPipe } from '../pipe/orderby.pipe';
 
 @Component({
   selector: 'deals-list',
@@ -19,13 +18,14 @@ import { OrderByPipe } from '../pipe/orderby.pipe';
   template: `
 
     <ul>
-      <li *ngFor="#deal of deals | orderby: orderby">
-        <a href="#" [routerLink]="['Deal Details', {hotel_ID: hotel_ID, booking_Num: deal.booking_Num}]">{{deal.bid_EndTime | makeKoreanDateTime}}, {{deal.bid_Price | number}}</a>
+      <li *ngFor="#deal of deals">
+        <a href="#" [routerLink]="['Deal Details', {hotel_ID: hotel_ID, booking_Num: deal.booking_Num}]">{{deal.bid_EndTime | makeKoreanDateTime}} </a>
+        {{deal.bid_Price | number}}
       </li>
     </ul>
     <a (click)="logout()" href="#">logout</a>
   `,
-  pipes: [MakeKoreanDateTimePipe, OrderByPipe]
+  pipes: [MakeKoreanDateTimePipe]
 })
 
 export class DealsComponent implements OnInit{
@@ -38,35 +38,36 @@ export class DealsComponent implements OnInit{
               private routeParams : RouteParams,
               private router : Router,
               private _service : AuthenticationService){
-
     this.flag = _service.checkCredentials();
   }
 
   ngOnInit(){
 
-   // if (this._service.checkCredentials()) {
-     // this._service.checkCredentials();
      if (this.flag) {
       let hotel = localStorage.getItem("hotel");
       console.log('hotel getItem: ', hotel);
       let temp = JSON.parse(hotel);
       this.hotel_ID = temp.hotel_ID;
 
-      console.log('hotel_ID: ', this.hotel_ID);
-
       this.dealsService
         .getAllDeals(this.hotel_ID)
         .subscribe(
-          d => this.deals = d,
+          d => {
+            d.sort((a: Deal, b: Deal) => {
+              let endTime_1: any = new Date(`${a.bid_EndTime}`);
+              let endTime_2: any = new Date(`${b.bid_EndTime}`);
+              let endTime = endTime_1 - endTime_2;
+
+              return endTime;
+            })
+
+            this.deals = d;
+          },
           error => console.error('Error: ' + error),
           () => console.log('Successfully fetched all Deals!', this.deals)
         );
      }
-    //}
-  }
 
-  selectDeal(deal: Deal){
-    this.selectedDeal = deal;
   }
 
   logout() {
