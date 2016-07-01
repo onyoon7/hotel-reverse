@@ -11,6 +11,8 @@ import {
 import Button from 'react-native-button';
 import ToolbarAndroid from 'ToolbarAndroid';
 
+import SplashPage from './splash';
+import TutorialPage from './tutorial';
 import HotelSearch from './hotelSearch';
 import HotelBid from './hotelBid';
 import GetLatestBidInfo from './getLatestBidInfo';
@@ -19,12 +21,14 @@ import HotelSignin from './hotelSignin';
 import Register from './register';
 
 let _navigator;
+let _toolBar;
 
 class HotelAndroid extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      flag : false,
       searchData: {
         mainArea_Name : '',
         checkIn_Date : '체크인 날짜 선택',
@@ -38,6 +42,7 @@ class HotelAndroid extends Component {
       },
     };
 
+    this.flagStateChanged = this.flagStateChanged.bind(this);
     this.searchStateChanged = this.searchStateChanged.bind(this);
     this.bidStateChanged = this.bidStateChanged.bind(this);
     this.navigatorRenderScene = this.navigatorRenderScene.bind(this);
@@ -46,8 +51,15 @@ class HotelAndroid extends Component {
     this.renderMenuItem = this.renderMenuItem.bind(this);
   }
 
+  flagStateChanged(flag) {
+    this.setState({
+      flag : flag,
+    })
+  }
+
   searchStateChanged(mainArea_Name, checkIn_Date, checkOut_Date, room_Number) {
     let searchData = {
+
       mainArea_Name : mainArea_Name,
       checkIn_Date : checkIn_Date,
       checkOut_Date : checkOut_Date,
@@ -80,8 +92,10 @@ class HotelAndroid extends Component {
   navigatorRenderScene(route, navigator) {
     _navigator = navigator;
     switch (route.id) {
+      case 'splash':
+        return (<SplashPage navigator={navigator} />);
       case 'search':
-        return (<HotelSearch navigator={navigator} onChange={this.searchStateChanged}/>);
+        return (<HotelSearch navigator={navigator} onChange={this.searchStateChanged} onFlagChange={this.flagStateChanged} />);
       case 'bid':
         return (<HotelBid navigator={navigator} onChange={this.bidStateChanged} searchData={this.state.searchData}/>);
       case 'signin':
@@ -92,6 +106,8 @@ class HotelAndroid extends Component {
         return (<GetLatestBidInfo navigator={navigator} searchData={this.state.searchData} bidData={this.state.bidData} />);
       case 'thanks':
         return (<ThanksALot navigator={navigator}/>);
+      case 'tutorial':
+        return (<TutorialPage navigator={navigator}/>);
     }
   }
 
@@ -136,26 +152,39 @@ class HotelAndroid extends Component {
     }
   }
 
+  // createToolbar() {
+  //     _toolBar = (<ToolbarAndroid
+  //           navIcon={require('./assets/img/ic_menu_white_24dp.png')}
+  //           onIconClicked={() => this.openDrawer() }
+  //           style={styles.toolbar}
+  //           title="Hotel Reverse"
+  //           titleColor='white' />
+  //     )
+  // }
+
   componentWillMount() {
     this.changeNaviView();
   }
 
   render() {
-
+    console.log('i am rendering>>>>')
+    if (this.state.flag) {
+          _toolBar = <ToolbarAndroid
+            navIcon={require('./assets/img/ic_menu_white_24dp.png')}
+            onIconClicked={() => this.openDrawer() }
+            style={styles.toolbar}
+            title="Hotel Reverse"
+            titleColor='white' />
+        }
     return (
       <DrawerLayoutAndroid
         ref={(ref) => this._drawer = ref}
         drawerWidth={300}
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         renderNavigationView={() => this.state.navigationView}>
-        <ToolbarAndroid
-          navIcon={require('./assets/img/ic_menu_white_24dp.png')}
-          onIconClicked={() => this.openDrawer() }
-          style={styles.toolbar}
-          title="Hotel Reverse"
-          titleColor='white' />
+        {_toolBar}
         <Navigator
-          initialRoute={{id: 'search'}}
+          initialRoute={{id: 'splash'}}
           renderScene={this.navigatorRenderScene}
           configureScene={() => Navigator.SceneConfigs.FadeAndroid}/>
       </DrawerLayoutAndroid>
@@ -164,7 +193,7 @@ class HotelAndroid extends Component {
 }
 
 BackAndroid.addEventListener('hardwareBackPress', () => {
-  if (_navigator.getCurrentRoutes().length === 1) {
+  if (_navigator.getCurrentRoutes().length === 2) {
     return false;
   }
 

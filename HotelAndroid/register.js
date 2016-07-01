@@ -13,6 +13,8 @@ import {
 import axios from 'axios';
 import config from './config';
 
+const validUnderlineColor = null;
+const invalidUnderlineColor = 'red';
 
 class Register extends Component {
   constructor(props) {
@@ -24,6 +26,10 @@ class Register extends Component {
       password : '',
       password_confirmation : '',
       errors : [],
+      underlineColor1 : validUnderlineColor,
+      underlineColor2 : validUnderlineColor,
+      underlineColor3 : validUnderlineColor,
+      underlineColor4 : validUnderlineColor,
     }
   }
 
@@ -33,12 +39,16 @@ class Register extends Component {
 
   passwordCheck() {
     if(this.state.password.length <= 7) {
+      this.validateInput(3)
       ToastAndroid.show('비밀번호는 8자리이상 입력해주세요', ToastAndroid.LONG);
       return false;
     } else if(this.state.password !== this.state.password_confirmation) {
+      this.validateInput(3);
+      this.validateInput(4);
       ToastAndroid.show('비밀번호가 서로 동일하지 않습니다', ToastAndroid.LONG);
       return false;
     } else if(this.state.client_email.indexOf('@') === -1) {
+      this.validateInput(1)
       ToastAndroid.show('이메일 형식이 올바르지 않습니다', ToastAndroid.LONG);
       return false;
     } else {
@@ -46,6 +56,11 @@ class Register extends Component {
     }
   }
 
+  onValueChange(key: string, value: string) {
+    const newState = {};
+    newState[key] = value;
+    this.setState(newState);
+  }
 
   async _handlePress() {
     let result = this.passwordCheck();
@@ -86,6 +101,10 @@ class Register extends Component {
     }
   }
 
+  validateInput(fieldIdx) {
+      this.onValueChange('underlineColor'+fieldIdx, invalidUnderlineColor);
+  }
+
   render() {
 
     return (
@@ -99,7 +118,9 @@ class Register extends Component {
           keyboardType='email-address'
           returnKeyType='next'
           onSubmitEditing={()=> this.focusNextField('2')}
-          style = {styles.input} placeholder='Email'>
+          underlineColorAndroid={this.state.underlineColor1}
+          style = {styles.input} placeholder='Email'
+          autoFucus = {true}>
         </TextInput>
         <TextInput
           ref='2'
@@ -107,6 +128,7 @@ class Register extends Component {
           keyboardType='default'
           returnKeyType='next'
           onSubmitEditing={()=> this.focusNextField('3')}
+          underlineColorAndroid={this.state.underlineColor2}
           style={styles.input} placeholder='Name'>
         </TextInput>
         <TextInput
@@ -115,6 +137,7 @@ class Register extends Component {
           keyboardType='numbers-and-punctuation'
           returnKeyType='next'
           onSubmitEditing={()=> this.focusNextField('4')}
+          underlineColorAndroid={this.state.underlineColor3}
           style={styles.input} placeholder='Password'
           secureTextEntry={true}>
         </TextInput>
@@ -123,6 +146,7 @@ class Register extends Component {
           onChangeText={ (text)=> this.setState({password_confirmation: text}) }
           keyboardType='numbers-and-punctuation'
           returnKeyType='done'
+          underlineColorAndroid={this.state.underlineColor4}
           style={styles.input} placeholder='Confirm Password'
           secureTextEntry={true}>
         </TextInput>
