@@ -16,7 +16,7 @@ import { AuthenticationService } from '../services/authentication.service';
 
     <ul>
       <li *ngFor="#contract of contracts">
-        <a href="#" [routerLink]="['Contract Details', {hotel_ID: hotel_ID, booking_Num: contract.booking_Num}]">{{contract.subArea_Name}}</a>
+        <a href="#" [routerLink]="['Contract Details', {hotel_ID: hotel_ID, booking_Num: contract.booking_Num}]">{{contract.booking_Num}}</a>
       </li>
     </ul>
     <a (click)="logout()" href="#">logout</a>
@@ -48,7 +48,16 @@ export class ContractsComponent implements OnInit{
       this.contractsService
         .getAllContracts(this.hotel_ID)
         .subscribe(
-          c => this.contracts = c,
+          c => {
+            c.sort((a: Contract, b: Contract) => {
+              let endTime_1: any = new Date(`${a.bid_EndTime}`);
+              let endTime_2: any = new Date(`${b.bid_EndTime}`);
+              let endTime = endTime_1 - endTime_2;
+
+              return endTime;
+            })
+            this.contracts = c
+          },
           error => console.error('Error: ' + error),
           () => console.log('Successfully fetched Contracts data!')
         );

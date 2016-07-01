@@ -1,0 +1,28 @@
+<!--
+<h2>My Heroes</h2>
+  <ul class="heroes">
+    <li *ngFor="let hero of heroes" (click)="onSelect(hero)" [class.selected]="hero === selectedHero">
+      <span class="hero-element">
+        <span class="badge">{{hero.id}}</span> {{hero.name}}
+      </span>
+    </li>
+  </ul>
+!-->
+<div class="col-md-4 col-md-offset-2">
+  <ul class="bidding">
+    <li *ngFor="#deal of deals" (click)="onSelect(deal)">
+      <span class="deal-element">
+        <span>{{deal.bid_EndTime | makeKoreanDateTime}}</span>
+        <span class="badge">{{deal.bid_Price | number}}</span>
+      </span>
+    </li>
+  </ul>
+</div>
+
+
+
+<!--
+<h3>
+  <a href="#" class="list-group-item" [routerLink]="['Deal Details', {hotel_ID: hotel_ID, booking_Num: deal.booking_Num}]">{{deal.bid_EndTime | makeKoreanDateTime}} <span class="badge">{{deal.bid_Price | number}}</span></a>
+</h3>
+!-->
