@@ -195,7 +195,37 @@ var deal = [
     bid_Price: 550000,
     bid_Transaction: 1,
     imp_uid: 'imp_448280090643'
-  }
+  },
+  {
+    hotel_ID: 'a2',
+    checkIn_Date: '2016-11-05',
+    checkOut_Date: '2016-11-08',
+    mainArea_Name: 'Seoul-si',
+    subArea_Name: 'Seocho-gu',
+    bid_Price: 6000000,
+    bid_Transaction: 1,
+    imp_uid:'imp_448280090650'
+  },
+  {
+    hotel_ID: 'a5',
+    checkIn_Date: '2016-09-14',
+    checkOut_Date: '2016-09-17',
+    mainArea_Name: 'Seoul-si',
+    subArea_Name: 'Seocho-gu',
+    bid_Price: 333000,
+    bid_Transaction: 1,
+    imp_uid: 'imp_448280090651'
+  },
+  {
+    hotel_ID: 'a6',
+    checkIn_Date: '2016-10-01',
+    checkOut_Date: '2016-10-03',
+    mainArea_Name: 'Jeju-do',
+    subArea_Name: 'Seogipo-si',
+    bid_Price: 900000,
+    bid_Transaction: 1,
+    imp_uid: 'imp_448280090652'
+  }  
 
 ];
 

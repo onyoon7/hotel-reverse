@@ -8,6 +8,7 @@ import {
   AsyncStorage,
   ToastAndroid,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 
 import Button from 'react-native-button';
@@ -16,7 +17,6 @@ import MapView from 'react-native-maps';
 import areaInfo from './assets/areaInfo';
 import config from './config';
 
-import { Dimensions } from 'react-native';
 const { width, height } = Dimensions.get('window');
 
 const ASPECT_RATIO = width / height / 2;
@@ -25,7 +25,7 @@ const IMP_KEY = '3372420065794528';
 const IMP_SECRET = 'YwZIGQT4cEjESlJwSwrk4HadQE2QN4qLBpuhgnms2F7V1QrTmSdrAnEq2HhPLHBm76Enu0PwFXrGNTAa';
 const MERCHANT_UID = 'nictest14m';
 
-const validUnderlineColor = null; 
+const validUnderlineColor = null;
 const invalidUnderlineColor = 'red';
 /*----------------------------------------------------------------
   Structure
@@ -171,7 +171,7 @@ class GetLatestBidInfo extends Component {
     if (!this.state.underlineColor1 && !this.state.underlineColor2 &&
       !this.state.underlineColor3 && !this.state.underlineColor4) {
       const alertMessage = '조심해라. 한번 체결되면 바로 돈 나간다!!!!'
-      Alert.alert('check', alertMessage, [
+      Alert.alert('확인', alertMessage, [
           {text : 'Cancel', onPress: () => console.log('진행 취소')},
           {text : 'OK', onPress: () => this._handlePress('thanks')}
       ])
@@ -194,7 +194,7 @@ class GetLatestBidInfo extends Component {
       <ScrollView>
         <View style={styles.rowContainer}>
           <Text style={styles.title}>
-            Your Wish List
+            호텔예약 신청정보
           </Text>
         </View>
 
@@ -394,9 +394,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   searchBtn: {
-    width: 150,
-    padding:10,
-    height: 30,
+    width: width - 30,
+    padding: 10,
+    height: 40,
     overflow: 'hidden',
     borderColor: 'black',
     borderWidth: 2,

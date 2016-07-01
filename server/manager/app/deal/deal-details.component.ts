@@ -37,6 +37,7 @@ import { MakeKoreanDateTimePipe } from '../custom-datetime.pipe';
             <td>{{deal.bid_Price | number }}</td>
             <td>{{deal.bid_StartTime | makeKoreanDateTime }}</td>
             <td>{{deal.bid_EndTime | makeKoreanDateTime }}</td>
+            <button class="btn btn-success" (click)="getContract()">거래</button>
           </tr>
         </tbody>
       </table>
@@ -50,6 +51,8 @@ import { MakeKoreanDateTimePipe } from '../custom-datetime.pipe';
 
 export class DealDetailsComponent implements OnInit {
   @Input() deal : Deal;
+  hotel_ID: string;
+  booking_Num: number;
 
   constructor(private dealsService: DealsService,
               private routeParams: RouteParams,
@@ -57,13 +60,13 @@ export class DealDetailsComponent implements OnInit {
   }
 
   ngOnInit(){
-    let hotel_ID = this.routeParams.get('hotel_ID');
-    let booking_Num = Number.parseInt(this.routeParams.get('booking_Num'));
+    this.hotel_ID = this.routeParams.get('hotel_ID');
+    this.booking_Num = Number.parseInt(this.routeParams.get('booking_Num'));
 
-    console.log('getting deal with booking_Num: ', booking_Num);
+    console.log('getting deal with booking_Num: ', this.booking_Num);
 
     this.dealsService
-      .getDeal(hotel_ID, booking_Num)
+      .getDeal(this.hotel_ID, this.booking_Num)
       .subscribe(
         d => this.deal = d,
         error => console.error('Error: ' + error),
@@ -74,5 +77,15 @@ export class DealDetailsComponent implements OnInit {
   gotoDealsList(){
     let link = ['Deals'];
     this.router.navigate(link);
+  }
+
+  getContract(){
+    this.dealsService
+      .getContract(this.hotel_ID, this.booking_Num)
+      .subscribe(
+        d => console.log(d),
+        error => console.log(error),
+        () => console.log("done")
+      )
   }
 }

@@ -8,12 +8,16 @@ import {
   AsyncStorage,
   Alert,
   ToastAndroid,
+  Dimensions,
 } from 'react-native';
 
 import axios from 'axios'
 import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 import config from './config';
-import Button from 'react-native-button';
+
+const validUnderlineColor = null;
+const invalidUnderlineColor = 'red';
+const { width } = Dimensions.get('window');
 
 class HotelSignin extends Component {
   constructor(props) {
@@ -142,24 +146,25 @@ class HotelSignin extends Component {
           placeholder="Password"
           secureTextEntry={true}>
         </TextInput>
-        <TouchableHighlight onPress={()=>this._handlePress('login')} style={styles.button}>
+        <View style={styles.padding}>
+        <TouchableHighlight onPress={()=>this._handlePress('login')} style={styles.submitBtn}>
           <Text style={styles.buttonText}>
             Log In
           </Text>
         </TouchableHighlight>
-
+        </View>
+        <View style={styles.padding}>
         <TouchableHighlight
-          style={styles.button}
+          style={styles.submitBtn}
           onPress = {()=>this._handlePress('register')}>
           <Text style={styles.buttonText}>Register</Text>
         </TouchableHighlight>
-
+        </View>
+        <View style={styles.padding}>
         <GoogleSigninButton
-          style={styles.button}
-          size = {GoogleSigninButton.Size.Icon}
-          color = {GoogleSigninButton.Color.Dark}
+          style={styles.submitBtn}
           onPress = {()=>this._signIn()}/>
-
+        </View>
         <Text style={styles.error}>
           {this.state.error}
         </Text>
@@ -192,6 +197,21 @@ let styles = StyleSheet.create({
     alignSelf: 'stretch',
     marginTop: 10,
     justifyContent: 'center'
+  },
+  padding : {
+    padding : 10,
+  },
+  submitBtn: {
+    width: width - 30,
+    padding: 10,
+    height: 40,
+    overflow: 'hidden',
+    borderColor: 'black',
+    borderWidth: 2,
+    borderStyle: 'solid',
+    backgroundColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   buttonText: {
     fontSize: 22,

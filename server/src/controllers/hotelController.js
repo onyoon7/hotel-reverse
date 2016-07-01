@@ -21,9 +21,10 @@ export default {
     })
     .catch((error) => {
       console.log("fail to register to the DB:", error);
-      res.send(error);
+      res.status(500).send(error);
     })
   },
+
 
   signIn: (req, res) => {
 
@@ -34,48 +35,52 @@ export default {
     .then((hotel) => {
       console.log('successfully loged in');
       console.log(hotel[0].dataValues);
-      res.send(hotel[0].dataValues);
+      res.status(200).send(hotel[0].dataValues);
     })
     .catch((error) => {
       console.log("cannot log in:", error);
-      res.send(error);
+      res.status(404).send(error);
     })
 
   },
 
+
+  // find all the bids to be settled
   bidsInfo: (req, res) => {
 
-    db.Hotel.findOne({
+    db.Hotel.findOne({ 
+      where: { 
+        hotel_ID: req.params.hotel_ID 
+      } 
+    })
+    .then((hotel) => {
+      console.log(hotel.dataValues.subArea_Name);
+      return hotel.dataValues.subArea_Name;
+    })
+    .then((subArea_Name) => {
+      return db.Deal.findAll({
         where: {
-          hotel_ID: req.params.hotel_ID
+          subArea_Name: subArea_Name,
+          bid_Transaction: false
         }
       })
-      .then((hotel) => {
-        console.log(hotel.dataValues.subArea_Name);
-        return hotel.dataValues.subArea_Name;
-      })
-      .then((subArea_Name) => {
-        return db.Deal.findAll({
-          where: {
-            subArea_Name: subArea_Name,
-            bid_Transaction: false
-          }
-        })
-      })
-      .then((deals) => {
-        var results = [];
-        for (var i = 0; i < deals.length; i++) {
-          console.log(deals[i].dataValues);
-          results.push(deals[i].dataValues);
-        }
-        res.send(results);
-      })
-      .catch((error) => {
-        console.log("cannot retrieve bids information: ", error);
-        res.send(error);
-      })
+    })
+    .then((deals) => {
+      let results = [];
+      for (let i = 0; i < deals.length; i++) {
+        console.log(deals[i].dataValues);
+        results.push(deals[i].dataValues);
+      }
+      res.status(200).send(results);
+    })
+    .catch((error) => {
+      console.log("cannot retrieve bids information: ", error);
+      res.status(500).send(error);
+    })
   },
 
+
+  // find the specific bid info
   bidInfo: (req, res) => {
 
     db.Hotel.findOne({
@@ -98,14 +103,16 @@ export default {
     })
     .then((deal) => {
       console.log("deal.dataValues is: ", deal.dataValues);
-      res.send(deal.dataValues);
+      res.status(200).send(deal.dataValues);
     })
     .catch((error) => {
       console.log("cannot retrieve bid information: ", error);
-      res.send(error);
+      res.status(500).send(error);
     })
   },
 
+
+  // find all the contracted bids
   contractedBids: (req, res) => {
 
     db.Deal.findAll({
@@ -116,20 +123,22 @@ export default {
     })
     .then((deals) => {
       console.log('>>>> deals');
-      var results = [];
-      for (var i = 0; i < deals.length; i++) {
+      let results = [];
+      for (let i = 0; i < deals.length; i++) {
         console.log(deals[i].dataValues);
         results.push(deals[i].dataValues);
       }
-      res.send(results);
+      res.status(200).send(results);
     })
     .catch((error) => {
       console.log("cannot get contract bids information: ", error);
-      res.send(error);
+      res.status(500).send(error);
     })
 
   },
 
+
+  // find the specific contracted bid
   contractedBid: (req, res) => {
 
     db.Deal.findOne({
@@ -142,15 +151,16 @@ export default {
     .then((deal) => {
       console.log('>>> deal');
       console.log(deal.dataValues);
-      res.send(deal.dataValues);
+      res.status(200).send(deal.dataValues);
     })
     .catch((error) => {
       console.log("cannot get contracted bid information: ", error);
-      res.send(error);
+      res.status(500).send(error);
     })
   },
 
 
+  // capture a pending bid
   bid: (req, res) => {
     // first check whether this bid is already captured
     db.Deal.findOne({
@@ -159,7 +169,7 @@ export default {
       }
     })
     .then((deal) => {
-      if (deal.dataValues.bid_Transaction === 0) {
+      if (deal.dataValues.bid_Transaction === false) {
         return db.Deal.update({
           hotel_ID: req.params.hotel_ID,
           bid_Transaction: true
@@ -169,42 +179,88 @@ export default {
           }
         })
       } else {
-        return "this deal alreay captured";
+        return "captured deal";
       }
     })
     .then((result) => {
       console.log('bid result: ', result);
-      res.send(result);
+      res.status(200).send(result);
     })
     .catch((error) => {
       console.log("cannot update deal DB: ", error);
-      res.send(error);
+      res.status(500).send(error);
     })
   },
 
 
+  // update hotel information
   updateInfo: (req, res) => {
 
-    db.Hotel.update({
-      hotel_PW: req.body.hotel_PW,
-      hotel_Name: req.body.hotel_Name,
-      hotel_Address: req.body.hotel_Address,
-      mainArea_Name: req.body.mainArea_Name,
-      subArea_Name: req.body.subArea_Name,
-      hotel_Rate: req.body.hotel_Rate,
-      mgr_Name: req.body.mgr_Name
-    }, {
+    db.Hotel.findOne({
       where: {
         hotel_ID: req.params.hotel_ID
       }
     })
-    .then((results) => {
-      console.log("#of updated rows: ", results[0]);
-      res.send("successfully updated");
+    .then((hotel) => {
+      return hotel.dataValues;
+    })
+    .then((hotel) => {
+      var data = {};
+      var body = req.body;
+
+      body.hotel_PW === undefined ? 
+        data.hotel_PW = hotel.hotel_PW : 
+        data.hotel_PW = body.hotel_PW; 
+
+      body.hotel_Name === undefined ?
+        data.hotel_Name = hotel.hotel_Name :
+        data.hotel_Name = body.hotel_Name;
+
+      body.hotel_Address === undefined ?
+        data.hotel_Address = hotel.hotel_Address :
+        data.hotel_Address = body.hotel_Address;
+
+      body.mainArea_Name === undefined ?
+        data.mainArea_Name = hotel.mainArea_Name :
+        data.mainArea_Name = body.mainArea_Name;
+
+      body.subArea_Name === undefined ?
+        data.subArea_Name = hotel.subArea_Name :
+        data.subArea_Name = body.subArea_Name;  
+
+      body.hotel_Rate === undefined ?
+        data.hotel_Rate = +hotel.hotel_Rate :
+        data.hotel_Rate = +body.hotel_Rate;
+      
+      body.mgr_Name === undefined ?
+        data.mgr_Name = hotel.mgr_Name :
+        data.mgr_Name = body.mgr_Name;
+
+      return data;
+    })
+    .then((data) => {
+
+      return db.Hotel.update({
+        hotel_PW: data.hotel_PW,
+        hotel_Name: data.hotel_Name,
+        hotel_Address: data.hotel_Address,
+        mainArea_Name: data.mainArea_Name,
+        subArea_Name: data.subArea_Name,
+        hotel_Rate: data.hotel_Rate,
+        mgr_Name: data.mgr_Name
+      }, {
+        where: {
+          hotel_ID: req.params.hotel_ID
+        }
+      })      
+    })
+    .then((result) => {
+      console.log("#of updated rows: ", result);
+      res.status(200).send("successfully updated");
     })
     .catch((error) => {
       console.log("cannot update user information:", error);
-      res.send(error);
+      res.status(500).send(error);
     })
 
   }
