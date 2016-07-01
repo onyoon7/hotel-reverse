@@ -15,7 +15,7 @@ class SplashPage extends Component {
   }
 
   async movePage () {
-    await AsyncStorage.setItem('tutorial','false'); // --> !!!!!!change to comment in Product!!!!!!!
+    //await AsyncStorage.setItem('tutorial','false'); // --> !!!!!!change to comment in Product!!!!!!!
     let tutorial = await AsyncStorage.getItem('tutorial')
     if(tutorial==='true') {
       this.props.navigator.push({id : 'search'});

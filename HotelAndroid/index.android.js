@@ -183,6 +183,7 @@ class HotelAndroid extends Component {
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         renderNavigationView={() => this.state.navigationView}>
         {_toolBar}
+        <View style={{borderColor: 'grey', borderWidth: 0.8}}></View>
         <Navigator
           initialRoute={{id: 'splash'}}
           renderScene={this.navigatorRenderScene}

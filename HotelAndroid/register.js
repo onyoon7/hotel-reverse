@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import {
-  ActivityIndicator,
-  Alert,
   StyleSheet,
   TextInput,
   TouchableHighlight,
   Text,
   View,
-  AsyncStorage,
   ToastAndroid,
+  Dimensions,
 } from 'react-native';
 import axios from 'axios';
 import config from './config';
+
+const { width } = Dimensions.get('window');
 
 const validUnderlineColor = null;
 const invalidUnderlineColor = 'red';
@@ -151,8 +151,8 @@ class Register extends Component {
           secureTextEntry={true}>
         </TextInput>
 
-        <TouchableHighlight style={styles.button} onPress={() => this._handlePress()}>
-          <Text style={styles.buttonText}>
+        <TouchableHighlight style={[{marginTop: 35}, styles.submitBtn]} onPress={() => this._handlePress()}>
+          <Text style={styles.submitBtnText}>
             Register
           </Text>
         </TouchableHighlight>
@@ -176,7 +176,6 @@ const styles = StyleSheet.create({
     flex : 1,
     justifyContent : 'flex-start',
     alignItems : 'center',
-    backgroundColor : '#F5FCFF',
     padding : 10,
     paddingTop : 80,
   },
@@ -188,17 +187,21 @@ const styles = StyleSheet.create({
     borderWidth : 1,
     borderColor : '#48bbec',
   },
-  button : {
-    height : 50,
-    backgroundColor : '#48BBEC',
-    alignSelf : 'stretch',
-    marginTop : 10,
-    justifyContent : 'center',
+  submitBtn: {
+    width: width - 30,
+    padding: 10,
+    height: 40,
+    overflow: 'hidden',
+    borderColor: 'black',
+    borderWidth: 2,
+    borderStyle: 'solid',
+    backgroundColor: 'green',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  buttonText : {
-    fontSize : 22,
-    color : '#FFF',
-    alignSelf : 'center',
+  submitBtnText: {
+    fontSize: 18,
+    color: 'white',
   },
   heading : {
     fontSize : 30,
