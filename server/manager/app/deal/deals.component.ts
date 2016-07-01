@@ -15,16 +15,8 @@ import { MakeKoreanDateTimePipe } from '../custom-datetime.pipe';
   selector: 'deals-list',
   directives: [DealDetailsComponent, ROUTER_DIRECTIVES],
   providers: [AuthenticationService, DealsService, SignService],
-  template: `
-
-    <ul>
-      <li *ngFor="#deal of deals">
-        <a href="#" [routerLink]="['Deal Details', {hotel_ID: hotel_ID, booking_Num: deal.booking_Num}]">{{deal.bid_EndTime | makeKoreanDateTime}} </a>
-        {{deal.bid_Price | number}}
-      </li>
-    </ul>
-    <a (click)="logout()" href="#">logout</a>
-  `,
+  templateUrl: './app/template/deals.html',
+  styleUrls: ['./app/style/deals.css'],
   pipes: [MakeKoreanDateTimePipe]
 })
 
@@ -70,7 +62,8 @@ export class DealsComponent implements OnInit{
 
   }
 
-  logout() {
-    this._service.logout();
+  onSelect(deal: Deal) {
+      this.router.navigate(['Deal Details', {hotel_ID: this.hotel_ID, booking_Num: deal.booking_Num}]);
   }
+
 }

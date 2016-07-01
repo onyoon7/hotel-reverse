@@ -1,6 +1,5 @@
-<nav class="navbar navbar-default">
+<!-- <nav class="navbar navbar-default">
   <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
       aria-expanded="false">
@@ -12,7 +11,6 @@
       <a class="navbar-brand" href="#">Hotel Reverse</a>
     </div>
 
-    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li><a [routerLink]="['Deals']">거래(진행)</a></li>
@@ -20,9 +18,44 @@
         <li><a [routerLink]="['Update']">정보수정</a></li>
       </ul>
     </div>
-    <!-- /.navbar-collapse -->
   </div>
-  <!-- /.container-fluid -->
 </nav>
+ -->
+
+<!--navigation!-->
+
+<div id="wrapper">
+    <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="index.html">HotelReverse Manager Page</a>
+        </div>
+        <ul class="nav navbar-top-links navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="glyphicon glyphicon-user"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-user">
+                    <li><a (click)="logout()"> Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+        <div class="navbar-default sidebar" role="navigation">
+            <div class="sidebar-nav navbar-collapse">
+                <ul class="nav" id="side-menu">
+                    <li>
+                        <a [routerLink]="['Deals']" ><i class="fa fa-dashboard fa-fw"></i> Transaction(bidding)</a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['Contracts']"><i class="fa fa-table fa-fw"></i> Transaction(end)</a>
+                    </li>
+                    <li>
+                        <a [routerLink]="['Update']"><i class="fa fa-edit fa-fw"></i> Update</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>
+
 
 <router-outlet></router-outlet>

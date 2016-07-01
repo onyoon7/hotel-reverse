@@ -67,15 +67,16 @@ System.register(['angular2/core', 'angular2/router', './deal-details.component',
                         }, function (error) { return console.error('Error: ' + error); }, function () { return console.log('Successfully fetched all Deals!', _this.deals); });
                     }
                 };
-                DealsComponent.prototype.logout = function () {
-                    this._service.logout();
+                DealsComponent.prototype.onSelect = function (deal) {
+                    this.router.navigate(['Deal Details', { hotel_ID: this.hotel_ID, booking_Num: deal.booking_Num }]);
                 };
                 DealsComponent = __decorate([
                     core_1.Component({
                         selector: 'deals-list',
                         directives: [deal_details_component_1.DealDetailsComponent, router_1.ROUTER_DIRECTIVES],
                         providers: [authentication_service_1.AuthenticationService, deals_service_1.DealsService, sign_service_1.SignService],
-                        template: "\n\n    <ul>\n      <li *ngFor=\"#deal of deals\">\n        <a href=\"#\" [routerLink]=\"['Deal Details', {hotel_ID: hotel_ID, booking_Num: deal.booking_Num}]\">{{deal.bid_EndTime | makeKoreanDateTime}} </a>\n        {{deal.bid_Price | number}}\n      </li>\n    </ul>\n    <a (click)=\"logout()\" href=\"#\">logout</a>\n  ",
+                        templateUrl: './app/template/deals.html',
+                        styleUrls: ['./app/style/deals.css'],
                         pipes: [custom_datetime_pipe_1.MakeKoreanDateTimePipe]
                     }), 
                     __metadata('design:paramtypes', [deals_service_1.DealsService, router_2.RouteParams, router_2.Router, authentication_service_1.AuthenticationService])
