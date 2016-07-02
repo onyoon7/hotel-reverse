@@ -4,11 +4,12 @@ import { Observable } from 'rxjs/Rx';
 import 'rxjs/Rx';
 
 import { Client } from '../client/client';
+import { hostUrl } from './host-url';
 
 
 @Injectable()
 export class ClientsService{
-  private baseUrl: string = 'http://localhost:4444/admin';
+  private baseUrl: string = hostUrl + 'admin';
 
   constructor(private _http: Http) { }
   
