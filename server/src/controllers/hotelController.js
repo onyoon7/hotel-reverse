@@ -1,8 +1,30 @@
 import db from '../db';
+import path from 'path';
 
-export default {
-  signUp: (req, res) => {
+////////////////////////////////////////////////////////////////////////
+// hotel
+//
+// function         method    url
+// ----------------------------------------------------------------------
+// signup           post      /hotel/signup
+// signin           post      /hotel/signin
+// pending bids     post      /hotel/bid/:hotel_ID
+// settled bids     post      /hotel/bid/:hotel_ID/:start_Date/:end_Date
+//                            Date format -> yyyy-mm-dd
+// bid              put       /hotel/:booking_Num
+// update hotel     post      /hotel/update/:hotel_ID
+//
+////////////////////////////////////////////////////////////////////////
 
+
+export default (express) => {
+  let router = express.Router();
+
+  router.get('/', (req, res) => {
+    res.status(200).sendFile('index.html', { root: path.join(__dirname, '../../manager/') });
+  });
+
+  router.post('/signup', (req, res) => {
     db.Hotel.create({
       hotel_ID: req.body.hotel_ID,
       hotel_PW: req.body.hotel_PW,
@@ -23,11 +45,9 @@ export default {
       console.log("fail to register to the DB:", error);
       res.status(500).send(error);
     })
-  },
+  });
 
-
-  signIn: (req, res) => {
-
+  router.post('/signin', (req, res) => {
     db.Hotel.findAll({ where: {
       hotel_ID: req.body.hotel_ID,
       hotel_PW: req.body.hotel_PW
@@ -41,13 +61,9 @@ export default {
       console.log("cannot log in:", error);
       res.status(404).send(error);
     })
+  });
 
-  },
-
-
-  // find all the bids to be settled
-  bidsInfo: (req, res) => {
-
+  router.get('/bid/:hotel_ID', (req, res) => {
     db.Hotel.findOne({ 
       where: { 
         hotel_ID: req.params.hotel_ID 
@@ -77,12 +93,9 @@ export default {
       console.log("cannot retrieve bids information: ", error);
       res.status(500).send(error);
     })
-  },
+  });
 
-
-  // find the specific bid info
-  bidInfo: (req, res) => {
-
+  router.get('/bid/:hotel_ID/:booking_Num', (req, res) => {
     db.Hotel.findOne({
       where: {
         hotel_ID: req.params.hotel_ID
@@ -109,12 +122,9 @@ export default {
       console.log("cannot retrieve bid information: ", error);
       res.status(500).send(error);
     })
-  },
+  });
 
-
-  // find all the contracted bids
-  contractedBids: (req, res) => {
-
+  router.get('/contracted/:hotel_ID', (req, res) => {
     db.Deal.findAll({
       where: {
         hotel_ID: req.params.hotel_ID,
@@ -134,13 +144,9 @@ export default {
       console.log("cannot get contract bids information: ", error);
       res.status(500).send(error);
     })
+  });
 
-  },
-
-
-  // find the specific contracted bid
-  contractedBid: (req, res) => {
-
+  router.get('/contracted/:hotel_ID/:booking_Num', (req, res) => {
     db.Deal.findOne({
       where: {
         hotel_ID: req.params.hotel_ID,
@@ -157,11 +163,9 @@ export default {
       console.log("cannot get contracted bid information: ", error);
       res.status(500).send(error);
     })
-  },
+  });
 
-
-  // capture a pending bid
-  bid: (req, res) => {
+  router.put('/bid/:hotel_ID/:booking_Num', (req, res) => {
     // first check whether this bid is already captured
     db.Deal.findOne({
       where: {
@@ -190,12 +194,9 @@ export default {
       console.log("cannot update deal DB: ", error);
       res.status(500).send(error);
     })
-  },
+  });
 
-
-  // update hotel information
-  updateInfo: (req, res) => {
-
+  router.post('/update/:hotel_ID', (req, res) => {
     db.Hotel.findOne({
       where: {
         hotel_ID: req.params.hotel_ID
@@ -231,7 +232,7 @@ export default {
       body.hotel_Rate === undefined ?
         data.hotel_Rate = +hotel.hotel_Rate :
         data.hotel_Rate = +body.hotel_Rate;
-      
+
       body.mgr_Name === undefined ?
         data.mgr_Name = hotel.mgr_Name :
         data.mgr_Name = body.mgr_Name;
@@ -262,6 +263,7 @@ export default {
       console.log("cannot update user information:", error);
       res.status(500).send(error);
     })
+  });
 
-  }
+  return router;
 };

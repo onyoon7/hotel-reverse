@@ -1,9 +1,34 @@
 import db from '../db';
+import path from 'path';
 
-export default {
+////////////////////////////////////////////////////////////////////////
+// admin
+//
+// function         method    url
+// ----------------------------------------------------------------------
+// pending bid      get       /admin/pendigbid
+// settled bid      get       /admin/bidinfo
+// hotels           get       /admin/hotels
+// hotel            get       /admin/hotels/:hotel_ID
+// hotels(area)     get       /admin/hotels/:subArea_Name
+//
+// clients(info)    get       /admin/clients
+// client(info)     get       /admin/clients/:client_Email
+//
+// delete(hotel)    delete    /admin/:hotel_ID
+// delete(client)   delete    /admin/:client_ID
+//
+////////////////////////////////////////////////////////////////////////
+
+export default (express) => {
+  let router = express.Router();
+
+  router.get('/', (req, res) => {
+    res.status(200).sendFile('index.html', { root: path.join(__dirname, '../../admin/') });
+  });
 
   // find all the bids to be settled
-  pendingBids: function(req, res) {
+  router.get('/pendingbid', function(req, res) {
 
     db.Deal.findAll({ 
       where: { 
@@ -22,11 +47,10 @@ export default {
       console.log("fail to get pending bid transactions", error);
       res.status(404).send(error);
     })
-  },
-
+  });
 
   // find the specific bit to be settled
-  pendingBid: function(req, res) {
+  router.get('/pendingbid/:booking_Num', function(req, res) {
 
     db.Deal.findOne({
       where: {
@@ -41,11 +65,10 @@ export default {
       console.log("fail to get pending bid transaction", error);
       res.status(404).send(error);
     })
-  },
-
+  });
 
   // find all the settled bids
-  contractedBids: function(req, res) {
+  router.get('/bidinfo', function(req, res) {
 
     db.Deal.findAll({
       where: {
@@ -64,11 +87,10 @@ export default {
       console.log("cannot retrieve bid information: ", error);
       res.status(404).send(error);
     })
-  },
-
+  });
 
   // find the specific settled bid
-  contractedBid: function(req, res) {
+  router.get('/bidinfo/:booking_Num', function(req, res) {
 
     db.Deal.findOne({
       where: {
@@ -83,11 +105,10 @@ export default {
       console.log("cannot retrieve bid information: ", error);
       res.status(404).send(error);
     })
-  },
-
+  })
 
   // find all the hotels registered
-  getHotels: function(req, res) {
+  router.get('/hotels', function(req, res) {
 
     db.Hotel.findAll()
     .then((hotels) => {
@@ -102,12 +123,10 @@ export default {
       console.log("fail to retrieve hotel information:", error);
       res.status(404).send(error);
     })
-  },
-
+  });
 
   // find the specific hotel
-  getHotel: function(req, res) {
-    
+  router.get('/hotels/:hotel_ID', function(req, res) {
     db.Hotel.findOne({ 
       where: { 
         hotel_ID: req.params.hotel_ID 
@@ -123,11 +142,10 @@ export default {
                   req.params.hotel_ID, error);
       res.status(404).send(error);
     })
-  },
-
+  });
 
   // find all the hotels in specified region
-  getHotelsByRegion: (req, res) => {
+  router.get('/hotelarea/:subArea_Name', (req, res) => {
 
     db.Hotel.findAll({
       where: { 
@@ -146,11 +164,10 @@ export default {
       console.log("fail to retrieve hotel information(region): ", error);
       res.status(404).send(error);
     })
-  },
-
+  });
 
   // find all the clients
-  getClients: (req, res) => {
+  router.get('/clients', (req, res) => {
 
     db.Client.findAll()
     .then(function(clients) {
@@ -165,11 +182,10 @@ export default {
       console.log("cannot retrieve clients information:", error);
       res.status(404).send(error);
     })
-  },
-
+  });
 
   // find the specific client
-  getClient: function(req, res) {
+  router.get('/clients/:client_Email', function(req, res) {
 
     db.Client.findOne({ 
       where: { 
@@ -184,12 +200,11 @@ export default {
       console.log("cannot retrieve client information:", error);
       res.status(404).send(error);
     })
-  },
-
+  });
 
   // delete the specified hotel
-  deleteHotel: function(req, res) {
-    
+  router.delete('/client/:client_Email', function(req, res) {
+
     db.Hotel.destroy({ 
       where: { 
         hotel_ID: req.params.hotel_ID 
@@ -204,11 +219,10 @@ export default {
                   req.params.hotel_ID, " :", error);
       res.status(500).send(error);
     })
-  },
-
+  });
 
   // delete the specified client
-  deleteClient: function(req, res) {
+  router.delete('/hotel/:hotel_ID', function(req, res) {
 
     db.Client.destroy({ 
       where: {
@@ -224,5 +238,7 @@ export default {
                   req.params.client_Email, " :", error);
       res.status(500).send(error);
     })
-  }
+  });
+
+  return router;
 };
