@@ -19,6 +19,7 @@ import GetLatestBidInfo from './getLatestBidInfo';
 import ThanksALot from './thanksALot';
 import HotelSignin from './hotelSignin';
 import Register from './register';
+import MyPage from './myPage';
 
 let _navigator;
 let _toolBar;
@@ -108,6 +109,8 @@ class HotelAndroid extends Component {
         return (<ThanksALot navigator={navigator}/>);
       case 'tutorial':
         return (<TutorialPage navigator={navigator}/>);
+      case 'mypage':
+        return (<MyPage navigator={navigator} />);
     }
   }
 
@@ -134,6 +137,10 @@ class HotelAndroid extends Component {
           <Button
             containerStyle={styles.drawerBtn}
             style={styles.drawerBtnText}
+            onPress={() => {this.renderMenuItem('mypage')}}>결제 내역</Button>
+          <Button
+            containerStyle={styles.drawerBtn}
+            style={styles.drawerBtnText}
             onPress={() => {this._signOut();this.changeNaviView();}}>로그아웃</Button>
         </View>
       )})
@@ -152,22 +159,11 @@ class HotelAndroid extends Component {
     }
   }
 
-  // createToolbar() {
-  //     _toolBar = (<ToolbarAndroid
-  //           navIcon={require('./assets/img/ic_menu_white_24dp.png')}
-  //           onIconClicked={() => this.openDrawer() }
-  //           style={styles.toolbar}
-  //           title="Hotel Reverse"
-  //           titleColor='white' />
-  //     )
-  // }
-
   componentWillMount() {
     this.changeNaviView();
   }
 
   render() {
-    console.log('i am rendering>>>>')
     if (this.state.flag) {
           _toolBar = <ToolbarAndroid
             navIcon={require('./assets/img/ic_menu_white_24dp.png')}
