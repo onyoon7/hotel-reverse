@@ -88,6 +88,7 @@ export default (app, express) => {
   //
   ////////////////////////////////////////////////////////////////////////
 
+  app.get('/hotel', hotelController.getHome);
   app.post('/hotel/signup', hotelController.signUp);  // checked
   app.post('/hotel/signin', hotelController.signIn);  // checked
 
@@ -119,6 +120,7 @@ export default (app, express) => {
   //
   ////////////////////////////////////////////////////////////////////////
 
+  app.get('/admin', adminController.getHome);
   app.get('/admin/pendingbid', adminController.pendingBids); // checked
   app.get('/admin/pendingbid/:booking_Num', adminController.pendingBid)
 

@@ -1,6 +1,10 @@
 import db from '../db';
+import path from 'path';
 
 export default {
+  getHome: (req, res) => {
+    res.status(200).sendFile('index.html', { root: path.join(__dirname, '../../admin/') });
+  },
 
   // find all the bids to be settled
   pendingBids: function(req, res) {
