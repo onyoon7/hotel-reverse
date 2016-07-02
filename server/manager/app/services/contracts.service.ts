@@ -3,12 +3,13 @@ import { Http, Response } from 'angular2/http';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/Rx';
 
-import { Contract } from '../contract/contract';
+import { ContractsComponent } from '../contract/contracts.component';
+import { hostUrl } from './host-url';
 
 
 @Injectable()
 export class ContractsService{
-  private baseUrl: string = 'http://localhost:4444/hotel/contracted';
+  private baseUrl: string = hostUrl + 'hotel/contracted';
 
   constructor(private _http: Http) { }
 

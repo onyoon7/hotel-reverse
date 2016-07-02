@@ -5,11 +5,12 @@ import 'rxjs/Rx';
 
 import { Deal } from '../model/deal';
 import { Hotel } from '../model/hotel';
+import { hostUrl } from './host-url';
 
 @Injectable()
 
 export class UpdateService {
-  private baseUrl: string = "http://localhost:4444/hotel";
+  private baseUrl: string = hostUrl + "hotel";
 
   constructor(private _http: Http) { }
 
