@@ -7,37 +7,8 @@ import {SignService} from '../services/sign.service';
   selector: 'login-form',
   providers: [AuthenticationService, SignService],
   directives: [ROUTER_DIRECTIVES],
-  template: `
-    <div class="container" >
-      <div class="panel-body">
-        <div class="row">
-          <div class="input-field col s12">
-            <label for="hotel_ID">아이디</label><br>
-            <input [(ngModel)]="hotel.hotel_ID" id="hotel_ID"
-                  type="text">
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="input-field col s12">
-            <label for="hotel_PW">비밀번호</label><br>
-            <input [(ngModel)]="hotel.hotel_PW" id="hotel_PW"
-                type="password" class="validate">
-          </div>
-        </div>
-
-        <span>{{errorMsg}}</span>
-        <button (click)="login()"
-            class="btn btn-primary"
-            type="submit" name="action">Login</button>
-
-        <span><button (click)="signup()"
-            class="btn btn-primary"
-            type="submit" name="action">Signup</button></span>
-
-      </div>
-    </div>
-    `
+  templateUrl: './app/template/login.html',
+  styleUrls: ['./app/style/login.css'],
 })
 
 export class LoginComponent {
@@ -51,6 +22,7 @@ export class LoginComponent {
   login() {
     if(!this.service.login(this.hotel)){
         this.errorMsg = 'Failed to login';
+        // alert("plz try again");
     }
   }
   signup() {

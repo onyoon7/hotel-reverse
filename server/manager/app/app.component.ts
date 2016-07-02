@@ -5,7 +5,6 @@ import { LoginComponent } from './sign/login.component';
 import { SignupComponent } from './sign/signup.component';
 import { SignService } from './services/sign.service';
 
-
 import { DealsComponent } from './deal/deals.component';
 import { DealDetailsComponent } from './deal/deal-details.component';
 import { DealsService } from './services/deals.service';
@@ -17,11 +16,14 @@ import { ContractsService } from './services/contracts.service';
 import { UpdateComponent } from './update/update.component';
 import { UpdateService } from './services/update.service';
 
+import {AuthenticationService} from './services/authentication.service';
+
 @Component({
   selector: 'my-app',
   directives: [LoginComponent, SignupComponent, DealsComponent, UpdateComponent, ROUTER_DIRECTIVES],
-  providers: [SignService, DealsService, ContractsService, UpdateService],
-  templateUrl: '/app/app.component.html'
+  providers: [SignService, DealsService, ContractsService, UpdateService, AuthenticationService],
+  templateUrl: '/app/app.component.html',
+  styleUrls: ['./app/style/app.css'],
 })
 
 @RouteConfig([
@@ -34,4 +36,9 @@ import { UpdateService } from './services/update.service';
   { path: '/update', name: 'Update', component: UpdateComponent}
 ])
 
-export class AppComponent {}
+export class AppComponent {
+  constructor(private _service:AuthenticationService){};
+  logout() {
+    this._service.logout();
+  }
+}

@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/router', './sign/login.component', './sign/signup.component', './services/sign.service', './deal/deals.component', './deal/deal-details.component', './services/deals.service', './contract/contracts.component', './contract/contract-details.component', './services/contracts.service', './update/update.component', './services/update.service'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/router', './sign/login.component', './sign/signup.component', './services/sign.service', './deal/deals.component', './deal/deal-details.component', './services/deals.service', './contract/contracts.component', './contract/contract-details.component', './services/contracts.service', './update/update.component', './services/update.service', './services/authentication.service'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/router', './sign/login.component', '
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, router_1, login_component_1, signup_component_1, sign_service_1, deals_component_1, deal_details_component_1, deals_service_1, contracts_component_1, contract_details_component_1, contracts_service_1, update_component_1, update_service_1;
+    var core_1, router_1, login_component_1, signup_component_1, sign_service_1, deals_component_1, deal_details_component_1, deals_service_1, contracts_component_1, contract_details_component_1, contracts_service_1, update_component_1, update_service_1, authentication_service_1;
     var AppComponent;
     return {
         setters:[
@@ -52,17 +52,26 @@ System.register(['angular2/core', 'angular2/router', './sign/login.component', '
             },
             function (update_service_1_1) {
                 update_service_1 = update_service_1_1;
+            },
+            function (authentication_service_1_1) {
+                authentication_service_1 = authentication_service_1_1;
             }],
         execute: function() {
             AppComponent = (function () {
-                function AppComponent() {
+                function AppComponent(_service) {
+                    this._service = _service;
                 }
+                ;
+                AppComponent.prototype.logout = function () {
+                    this._service.logout();
+                };
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'my-app',
                         directives: [login_component_1.LoginComponent, signup_component_1.SignupComponent, deals_component_1.DealsComponent, update_component_1.UpdateComponent, router_1.ROUTER_DIRECTIVES],
-                        providers: [sign_service_1.SignService, deals_service_1.DealsService, contracts_service_1.ContractsService, update_service_1.UpdateService],
-                        templateUrl: '/app/app.component.html'
+                        providers: [sign_service_1.SignService, deals_service_1.DealsService, contracts_service_1.ContractsService, update_service_1.UpdateService, authentication_service_1.AuthenticationService],
+                        templateUrl: '/app/app.component.html',
+                        styleUrls: ['./app/style/app.css'],
                     }),
                     router_1.RouteConfig([
                         { path: '/login', name: 'Login', component: login_component_1.LoginComponent },
@@ -73,7 +82,7 @@ System.register(['angular2/core', 'angular2/router', './sign/login.component', '
                         { path: '/contracts/:hotel_ID/:booking_Num', name: 'Contract Details', component: contract_details_component_1.ContractDetailsComponent },
                         { path: '/update', name: 'Update', component: update_component_1.UpdateComponent }
                     ]), 
-                    __metadata('design:paramtypes', [])
+                    __metadata('design:paramtypes', [authentication_service_1.AuthenticationService])
                 ], AppComponent);
                 return AppComponent;
             }());

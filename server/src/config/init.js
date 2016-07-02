@@ -10,32 +10,34 @@ var mysql = require('mysql');
  --------------------------------------------------------------------*/
 
 var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'hotel',
-  password: 'hotel',
+  host: 'hotelreverse.ciwn6bqswuat.us-west-2.rds.amazonaws.com',
+  user: 'hotelreverse',
+  password: 'hotelreverse',
   database: 'hotelreverse'
 });
 
 connection.connect((err) => {
   if (err) {
-    console.log('can`t connect to mysql database');
+    console.log("can't connect to mysql database");
     return;
   }
     console.log('successfully connected to database...');
 });
 
 //delete all rows in client, deal, hotel
-connection.query('DELETE FROM client', (err, results, fields)  => {
+connection.query('DELETE FROM Deal', (err, results, fields)  => {
   if(err) throw err;
-  console.log("Successfully deleted");
+  console.log("Deal, Successfully deleted");
 });
-connection.query('DELETE FROM deal', (err, results, fields)  => {
+
+connection.query('DELETE FROM Client', (err, results, fields)  => {
   if(err) throw err;
-  console.log("Successfully deleted");
+  console.log("Client, Successfully deleted");
 });
-connection.query('DELETE FROM hotel', (err, results, fields)  => {
+
+connection.query('DELETE FROM Hotel', (err, results, fields)  => {
   if(err) throw err;
-  console.log("Successfully deleted");
+  console.log("Hotel, Successfully deleted");
 });
 
 //create dummy data in client, deal, hotel
@@ -102,7 +104,28 @@ var client = [
     client_Name: 'Rhee Jongwon',
     billingInfo: '000i-0001-0002-0003',
     member: 1
-  }
+  },
+  {
+    client_Email: '000j@gmail.com',
+    client_PW: '000j',
+    client_Name: 'Jerry Porter',
+    billingInfo: '000j-0001-0002-0003',
+    member: 1
+  },
+  {
+    client_Email: '00k@gmail.com',
+    client_PW: '000k',
+    client_Name: 'Kustin Kohnson',
+    billingInfo: '000k-0001-0002-0003',
+    member: 1
+  },
+  {
+    client_Email: '000l@gmail.com',
+    client_PW: '000l',
+    client_Name: 'Lhee Longwon',
+    billingInfo: '000l-0001-0002-0003',
+    member: 1
+  } 
 ];
 
 var deal = [
@@ -292,58 +315,55 @@ var hotel = [
   }
 ];
 
-for(var i = 0; i < client.length; i++){
+for(var i = 0; i < client.length; i++) {
   var query1 = 'INSERT INTO Client SET client_Email=?, client_PW=?, client_Name=?, billingInfo=?, member=?';
   var query2 = [client[i].client_Email, client[i].client_PW, client[i].client_Name, client[i].billingInfo, client[i].member];
 
-  connection.query(query1, query2, function(err, results, fields){
-    if(err){
-      console.log('client error:  ' + err)
-      console.log('Client is unsuccessful!');
-    }else{
-      console.log('Client is successful!');
+  connection.query(query1, query2, function(err, results, fields) {
+    if (err) {
+      console.log('Client Insertion unsuccessful: ' + err);
+    } else {
+      console.log('Client Insertion successful!');
     }
   })
 }
 
-var rows;
+  
+for (var i = 0; i < hotel.length; i++) {
+  var query1 = 'INSERT INTO Hotel SET hotel_ID=?, hotel_PW=?, hotel_Name=?, hotel_Address=?, mainArea_Name=?, subArea_Name=?, hotel_Rate=?, mgr_Name=?';
+  var query2 = [hotel[i].hotel_ID, hotel[i].hotel_PW, hotel[i].hotel_Name, hotel[i].hotel_Address, hotel[i].mainArea_Name, hotel[i].subArea_Name, hotel[i].hotel_Rate, hotel[i].mgr_Name];
 
-connection.query('SELECT client_Index FROM Client', (err, results, fields) => {
-  if(err){
-    console.log('Selecting client_Index is unsuccessful');
-  }else{
-    rows = results;
-    console.log('rows : ' + rows);
+  connection.query(query1, query2, (err, results, fields) => {
+    if (err) {
+      console.log('Hotel Insertion unsuccessful: ' + err);
+    } else {
+      console.log('Hotel Insertion successful!');
+    }
+  })
+}
+
+
+connection.query('SELECT client_Index FROM Client', (err, rows, fields) => {
+  if (err) {
+    console.log('Selecting client_Index unsuccessful: ' + err);
+  } else {
+    console.log("results is : ", rows);
+
+    for (var i = 0; i < deal.length; i++) {
+      var query1 = 'INSERT INTO Deal SET client_Index=?, hotel_ID=?, checkIn_Date=?, checkOut_Date=?, mainArea_Name=?, subArea_Name=?, bid_Price=?, bid_Transaction=?, bid_StartTime=now(), bid_EndTime=now()+INTERVAL 1 DAY, imp_uid=?';
+      var query2 = [rows[i].client_Index, deal[i].hotel_ID, deal[i].checkIn_Date, deal[i].checkOut_Date, deal[i].mainArea_Name, deal[i].subArea_Name, deal[i].bid_Price, deal[i].bid_Transaction, deal[i].imp_uid];
+
+      connection.query(query1, query2, function(err, results, fields){
+        if(err){
+          console.log('Deal is unsuccessful!');
+          console.log(err);
+        }else{
+          console.log('Deal is successful!');
+        }
+      })
+    }
+
+    connection.end();
   }
 })
 
-setTimeout(() => {
-  for(var i = 0; i < deal.length; i++){
-    var query1 = 'INSERT INTO Deal SET client_Index=?, hotel_ID=?, checkIn_Date=?, checkOut_Date=?, mainArea_Name=?, subArea_Name=?, bid_Price=?, bid_Transaction=?, bid_StartTime=now(), bid_EndTime=now()+INTERVAL 1 DAY, imp_uid=?';
-    var query2 = [rows[i].client_Index, deal[i].hotel_ID, deal[i].checkIn_Date, deal[i].checkOut_Date, deal[i].mainArea_Name, deal[i].subArea_Name, deal[i].bid_Price, deal[i].bid_Transaction, deal[i].imp_uid];
-
-    connection.query(query1, query2, function(err, results, fields){
-      if(err){
-        console.log('Deal is unsuccessful!');
-        console.log(err);
-      }else{
-        console.log('Deal is successful!');
-      }
-    })
-  }
-  connection.end();
-}, 1000)
-
-for(var i = 0; i < hotel.length; i++){
-    var query1 = 'INSERT INTO Hotel SET hotel_ID=?, hotel_PW=?, hotel_Name=?, hotel_Address=?, mainArea_Name=?, subArea_Name=?, hotel_Rate=?, mgr_Name=?';
-  var query2 = [hotel[i].hotel_ID, hotel[i].hotel_PW, hotel[i].hotel_Name, hotel[i].hotel_Address, hotel[i].mainArea_Name, hotel[i].subArea_Name, hotel[i].hotel_Rate, hotel[i].mgr_Name];
-
-  connection.query(query1, query2, (err, results, fields)=>{
-    if(err){
-      console.log(err);
-      console.log('Hotel is unsuccessful!');
-    }else{
-      console.log('Hotel is successful!');
-    }
-  })
-}
