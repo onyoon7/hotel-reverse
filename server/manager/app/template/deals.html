@@ -8,7 +8,7 @@
     </li>
   </ul>
 !-->
-<div class="col-md-4 col-md-offset-2">
+<!-- <div class="col-md-4 col-md-offset-2">
   <ul class="bidding">
     <li *ngFor="#deal of deals" (click)="onSelect(deal)">
       <span class="deal-element">
@@ -17,10 +17,38 @@
       </span>
     </li>
   </ul>
+</div> -->
+
+<div id="wrapper" class="col-md-8 col-md-offset-2">
+  <div id="container">
+      <div class="row">
+          <div class="col-lg-12">
+              <h1 class="page-header">Transaction(bidding)</h1>
+          </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="panel panel-default">
+            <div class="panel-heading">Bidding List</div>
+            <div class="panel-body">
+              <ul class="bidding">
+                <li *ngFor="#deal of deals">
+                  <h3 style="font-weight: bold">
+                    <!-- <span class="glyphicon glyphicon-briefcase" style="color:#337ab7"></span>&nbsp; -->
+                    <span class="label label-primary">Bid End_Time</span>
+                    : {{deal.bid_EndTime | makeKoreanDateTime}}&nbsp;
+                    <span class="label label-primary">Bid Price</span>
+                    : {{deal.bid_Price | number}}&nbsp;&nbsp;
+                    <button class="btn btn-info pull-right" (click)="onSelect(deal)">See details</button>
+                  </h3>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
 </div>
-
-
-
 <!--
 <h3>
   <a href="#" class="list-group-item" [routerLink]="['Deal Details', {hotel_ID: hotel_ID, booking_Num: deal.booking_Num}]">{{deal.bid_EndTime | makeKoreanDateTime}} <span class="badge">{{deal.bid_Price | number}}</span></a>

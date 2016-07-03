@@ -8,66 +8,7 @@ import {AuthenticationService} from '../services/authentication.service';
   selector: 'update-form',
   providers: [AuthenticationService, UpdateService],
   directives: [ROUTER_DIRECTIVES],
-  template: `
-    <div class="container" >
-      <div class="panel-body">
-        <div class="row">
-          <div class="input-field col s12">
-            <label for="hotel_PW">비밀번호</label><br>
-            <input [(ngModel)]="hotel.hotel_PW" id="hotel_PW"
-                type="password" class="validate" required>
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <label for="hotel_Name">호텔명</label><br>
-            <input [(ngModel)]="hotel.hotel_Name" id="hotel_Name"
-                type="text" >
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <label for="hotel_Address">주소</label><br>
-            <input [(ngModel)]="hotel.hotel_Address" id="hotel_Address"
-                type="text">
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <label for="mainArea_Name">지역(시)</label><br>
-            <input [(ngModel)]="hotel.mainArea_Name" id="mainArea_Name"
-                type="text">
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <label for="subArea_Name">지역(구)</label><br>
-            <input [(ngModel)]="hotel.subArea_Name" id="subArea_Name"
-                type="text">
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <label for="hotel_Rate">호텔등급</label><br>
-            <input [(ngModel)]="hotel.hotel_Rate" id="hotel_Rate"
-                type="text">
-          </div>
-        </div>
-        <div class="row">
-          <div class="input-field col s12">
-            <label for="mgr_Name">담당자 성명</label><br>
-            <input [(ngModel)]="hotel.mgr_Name" id="mgr_Name"
-                type="text">
-          </div>
-        </div>
-
-        <button (click)="update()"
-            class="btn btn-primary"
-            type="submit" name="action">완료</button>
-        <a (click)="logout()" href="#">logout</a>
-      </div>
-    </div>
-    `
+  templateUrl: './app/template/update.html',
 })
 
 export class UpdateComponent implements OnInit{

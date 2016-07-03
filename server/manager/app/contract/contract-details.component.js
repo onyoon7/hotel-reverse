@@ -38,12 +38,15 @@ System.register(['angular2/core', 'angular2/router', '../services/contracts.serv
                 }
                 ContractDetailsComponent.prototype.ngOnInit = function () {
                     var _this = this;
-                    var hotel_ID = this.routeParams.get('hotel_ID');
-                    var booking_Num = Number.parseInt(this.routeParams.get('booking_Num'));
-                    console.log('getting contract with booking_Num: ', booking_Num);
+                    this.hotel_ID = this.routeParams.get('hotel_ID');
+                    this.booking_Num = Number.parseInt(this.routeParams.get('booking_Num'));
+                    console.log('getting contract with booking_Num: ', this.booking_Num);
                     this.contractsService
-                        .getContract(hotel_ID, booking_Num)
-                        .subscribe(function (c) { return _this.contract = c; }, function (error) { return console.error('Error: ' + error); }, function () { return console.log('Successfully fetched a Contract data!'); });
+                        .getContract(this.hotel_ID, this.booking_Num)
+                        .subscribe(function (c) {
+                        _this.contract = c;
+                        console.log("dddddddddddddddd", _this.contract);
+                    }, function (error) { return console.error('Error: ' + error); }, function () { return console.log('Successfully fetched a Contract data!'); });
                 };
                 ContractDetailsComponent.prototype.gotoContractsList = function () {
                     var link = ['Contracts'];
@@ -56,7 +59,7 @@ System.register(['angular2/core', 'angular2/router', '../services/contracts.serv
                 ContractDetailsComponent = __decorate([
                     core_1.Component({
                         selector: 'contract-details',
-                        template: "\n\n    <div class=\"container\" *ngIf=\"contract\">\n      <table class=\"table table-hover table-bordered table-striped\">\n        <thead>\n          <tr>\n            <th>\uC608\uC57D\uBC88\uD638</th>\n            <th>\uACE0\uAC1D\uBC88\uD638</th>\n            <th>\uCCB4\uD06C\uC778</th>\n            <th>\uCCB4\uD06C\uC544\uC6C3</th>\n            <th>\uC9C0\uC5ED</th>\n            <th>\uC785\uCC30\uAC00\uACA9</th>\n            <th>\uC785\uCC30 \uC2DC\uC791\uC2DC\uAC04</th>\n            <th>\uC785\uCC30 \uC885\uB8CC\uC2DC\uAC04</th>\n          </tr>\n        </thead>\n        <tbody>\n          <tr>\n            <td>{{contract.booking_Num}}</td>\n            <td>{{contract.client_Index}}</td>\n            <td>{{contract.checkIn_Date | makeKoreanDate }}</td>\n            <td>{{contract.checkOut_Date | makeKoreanDate }}</td>\n            <td>{{contract.mainArea_Name + ' ' + contract.subArea_Name}}</td>\n            <td>{{contract.bid_Price | number }}</td>\n            <td>{{contract.bid_StartTime | makeKoreanDateTime }}</td>\n            <td>{{contract.bid_EndTime | makeKoreanDateTime }}</td>\n          </tr>\n        </tbody>\n      </table>\n\n      <button class=\"btn btn-success\" (click)=\"gotoContractsList()\">\uCCB4\uACB0 \uB0B4\uC5ED\uC73C\uB85C \uB3CC\uC544\uAC00\uAE30</button>\n    </div>\n\n  ",
+                        templateUrl: './app/template/contract-details.html',
                         pipes: [custom_date_pipe_1.MakeKoreanDatePipe, custom_datetime_pipe_1.MakeKoreanDateTimePipe]
                     }), 
                     __metadata('design:paramtypes', [contracts_service_1.ContractsService, router_1.RouteParams, router_1.Router])

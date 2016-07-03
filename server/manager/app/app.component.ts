@@ -20,7 +20,7 @@ import {AuthenticationService} from './services/authentication.service';
 
 @Component({
   selector: 'my-app',
-  directives: [LoginComponent, SignupComponent, DealsComponent, UpdateComponent, ROUTER_DIRECTIVES],
+  directives: [LoginComponent, SignupComponent, DealsComponent, UpdateComponent, ContractsComponent, ROUTER_DIRECTIVES],
   providers: [SignService, DealsService, ContractsService, UpdateService, AuthenticationService],
   templateUrl: '/app/app.component.html',
   styleUrls: ['./app/style/app.css'],

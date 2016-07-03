@@ -68,7 +68,7 @@ System.register(['angular2/core', 'angular2/router', './sign/login.component', '
                 AppComponent = __decorate([
                     core_1.Component({
                         selector: 'my-app',
-                        directives: [login_component_1.LoginComponent, signup_component_1.SignupComponent, deals_component_1.DealsComponent, update_component_1.UpdateComponent, router_1.ROUTER_DIRECTIVES],
+                        directives: [login_component_1.LoginComponent, signup_component_1.SignupComponent, deals_component_1.DealsComponent, update_component_1.UpdateComponent, contracts_component_1.ContractsComponent, router_1.ROUTER_DIRECTIVES],
                         providers: [sign_service_1.SignService, deals_service_1.DealsService, contracts_service_1.ContractsService, update_service_1.UpdateService, authentication_service_1.AuthenticationService],
                         templateUrl: '/app/app.component.html',
                         styleUrls: ['./app/style/app.css'],

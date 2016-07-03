@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Rx';
 import 'rxjs/Rx';
 
 import { ContractsComponent } from '../contract/contracts.component';
+import { Contract } from '../model/contract'
 import { hostUrl } from './host-url';
 
 

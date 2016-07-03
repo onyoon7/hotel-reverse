@@ -1,11 +1,8 @@
-h3 {
-  padding-left: 15px;
-}
-.bidding {
-  margin: 6em 6em 6em 3px;
+/*.bidding {
+  margin: 0 6em 6em 3px;
   list-style-type: none;
   padding: 0;
-  width: 30em;
+  width: 40em;
 }
 .bidding li {
   cursor: pointer;
@@ -15,14 +12,13 @@ h3 {
   margin: .5em;
   padding: 1em 5em 2em 5em;
   height: 1.6em;
-  border-radius: 4px;
 }
 .bidding li:hover {
   color: #607D8B;
   background-color: #DDD;
   left: .1em;
-}
-.bidding .badge {
+}*/
+/*.bidding .badge {
   display: inline-block;
   font-size: small;
   color: white;
@@ -38,4 +34,4 @@ h3 {
 }
 .button {
   padding-left: 15px;
-}
+}*/

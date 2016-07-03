@@ -7,20 +7,16 @@ import { Contract } from '../model/contract';
 import { ContractDetailsComponent } from './contract-details.component';
 import { ContractsService } from '../services/contracts.service';
 import { AuthenticationService } from '../services/authentication.service';
+import { SignService } from '../services/sign.service';
+
+import { MakeKoreanDatePipe } from '../custom-date.pipe';
 
 @Component({
   selector: 'contracts-list',
   directives: [ContractDetailsComponent, ROUTER_DIRECTIVES],
-  providers: [AuthenticationService, ContractsService],
-  template: `
-
-    <ul>
-      <li *ngFor="#contract of contracts">
-        <a href="#" [routerLink]="['Contract Details', {hotel_ID: hotel_ID, booking_Num: contract.booking_Num}]">{{contract.booking_Num}}</a>
-      </li>
-    </ul>
-    <a (click)="logout()" href="#">logout</a>
-  `
+  providers: [AuthenticationService, ContractsService, SignService],
+  templateUrl: './app/template/contracts.html',
+  pipes: [MakeKoreanDatePipe]
 })
 
 export class ContractsComponent implements OnInit{
@@ -37,6 +33,7 @@ export class ContractsComponent implements OnInit{
   }
 
   ngOnInit(){
+
     if (this.flag) {
       let hotel = localStorage.getItem("hotel");
       console.log('hotel getItem: ', hotel);
@@ -57,6 +54,7 @@ export class ContractsComponent implements OnInit{
               return endTime;
             })
             this.contracts = c
+            console.log(this.contracts)
           },
           error => console.error('Error: ' + error),
           () => console.log('Successfully fetched Contracts data!')
@@ -68,7 +66,4 @@ export class ContractsComponent implements OnInit{
     this.selectedContract = contract;
   }
 
-  logout() {
-    this._service.logout();
-  }
 }
