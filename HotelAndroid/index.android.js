@@ -11,6 +11,7 @@ import {
 import Button from 'react-native-button';
 import ToolbarAndroid from 'ToolbarAndroid';
 
+
 import SplashPage from './splash';
 import TutorialPage from './tutorial';
 import HotelSearch from './hotelSearch';
@@ -20,6 +21,8 @@ import ThanksALot from './thanksALot';
 import HotelSignin from './hotelSignin';
 import Register from './register';
 import MyPage from './myPage';
+
+import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
 
 let _navigator;
 let _toolBar;
@@ -43,6 +46,7 @@ class HotelAndroid extends Component {
       },
     };
 
+    this._googleSignOut = this._googleSignOut.bind(this);
     this.flagStateChanged = this.flagStateChanged.bind(this);
     this.searchStateChanged = this.searchStateChanged.bind(this);
     this.bidStateChanged = this.bidStateChanged.bind(this);
@@ -82,9 +86,18 @@ class HotelAndroid extends Component {
     });
   }
 
+  _googleSignOut() {
+    GoogleSignin.revokeAccess().then(() => GoogleSignin.signOut()).then(() => {
+      this.setState({client_Email: null});
+    })
+    .done();
+  }
+
   async _signOut() {
     try {
-      await AsyncStorage.removeItem('id_token')
+      await AsyncStorage.removeItem('id_token');
+      await AsyncStorage.removeItem('client_Email');
+      this._googleSignOut();
     } catch(error) {
       console.log('signout error : ', error);
     }
