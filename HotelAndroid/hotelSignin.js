@@ -48,7 +48,6 @@ class HotelSignin extends Component {
     try {
       await GoogleSignin.hasPlayServices({ autoResolve: true });
       await GoogleSignin.configure({
-        scopes: ['https://www.googleapis.com/auth/drive.readonly'],
         webClientId: '370846469277-p2lvjnb4u0jcjt1br44h9pmpct82849c.apps.googleusercontent.com',
         offlineAccess: true
       });
@@ -71,13 +70,6 @@ class HotelSignin extends Component {
     catch(err) {
       console.log('WRONG SIGNIN', err);
     }
-  }
-
-  _signOut() {
-    GoogleSignin.revokeAccess().then(() => GoogleSignin.signOut()).then(() => {
-      this.setState({client_Email: null});
-    })
-    .done();
   }
 
   async _handlePress(where) {
