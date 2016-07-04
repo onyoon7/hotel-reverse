@@ -384,7 +384,7 @@ function sendCancelNotification(result) {
       service: 'Gmail',
       auth: {
         user: client_Email,
-        pass: 'a1082926'
+        pass: 'password'
       }
     });
 
