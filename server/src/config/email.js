@@ -7,7 +7,7 @@ export default {
       service: "Gmail",
       auth: {
           user: "gooday2.luv@gmail.com",
-          pass: "a1082926"
+          pass: "password"
       }
   });
 
