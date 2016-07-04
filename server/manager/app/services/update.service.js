@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'rxjs/Rx'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './host-url'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx'], function(exports_
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1;
+    var core_1, http_1, host_url_1;
     var UpdateService;
     function mapHotel(response) {
         console.log("single hotel >>>>> ");
@@ -25,12 +25,15 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx'], function(exports_
             function (http_1_1) {
                 http_1 = http_1_1;
             },
-            function (_1) {}],
+            function (_1) {},
+            function (host_url_1_1) {
+                host_url_1 = host_url_1_1;
+            }],
         execute: function() {
             UpdateService = (function () {
                 function UpdateService(_http) {
                     this._http = _http;
-                    this.baseUrl = "http://localhost:4444/hotel";
+                    this.baseUrl = host_url_1.hostUrl + "hotel";
                 }
                 UpdateService.prototype.update = function (hotel, hotel_ID) {
                     var id = hotel_ID;
