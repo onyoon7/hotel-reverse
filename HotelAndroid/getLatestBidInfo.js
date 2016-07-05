@@ -396,17 +396,14 @@ const styles = StyleSheet.create({
   searchBtn: {
     width: width - 30,
     padding: 10,
-    height: 40,
+    height: 56,
     overflow: 'hidden',
-    borderColor: 'black',
-    borderWidth: 2,
-    borderStyle: 'solid',
-    backgroundColor: 'green',
+    backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
   },
   searchBtnText: {
-    fontSize: 15,
+    fontSize: 22,
     color: 'white',
   },
   textInput: {

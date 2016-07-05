@@ -17,7 +17,7 @@ import areaInfo from './assets/areaInfo';
 const { width } = Dimensions.get('window');
 
 const checkInHolder = 'Check in';
-const checkOutHolder = 'Chack out';
+const checkOutHolder = 'Check out';
 
 class HotelSearch extends Component {
   constructor(props){
@@ -119,8 +119,8 @@ class HotelSearch extends Component {
               <Image source={require('./assets/luggage.png')} />
             </View>
             <View style={[styles.datePickerRow]}>
-              <Image source={require('./assets/bed.png')} />              
-            </View>  
+              <Image source={require('./assets/bed.png')} />
+            </View>
             </View>
         </View>
 
@@ -135,7 +135,6 @@ class HotelSearch extends Component {
           </View>
 
           <View style={[styles.view,styles.rowContainer,styles.roomNumber]}>
-              
             <View style={{marginRight: 25}}>
               <Button style={styles.roomBtnText}
                 containerStyle={styles.roomBtn}
@@ -152,8 +151,7 @@ class HotelSearch extends Component {
               </Button>
             </View>
           </View>
-        
-        </View> 
+        </View>
 
         <View style={[styles.centeredRow,styles.rowContainer]}>
           <View style={[styles.datePickerRow]}>
@@ -220,7 +218,6 @@ const styles = StyleSheet.create({
   },
   centeredRow: {
     flexDirection: 'row',
-    // justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
@@ -236,22 +233,12 @@ const styles = StyleSheet.create({
     textAlign: 'left',
     color: 'grey',
     fontSize: 20,
-    
   },
-  view: {
-    // borderColor: 'black',
-    // borderWidth: 2,
-    // borderStyle: 'solid',
-  },
-
   submitBtn: {
     width: width,
     padding: 10,
     height: 60,
     overflow: 'hidden',
-    // borderColor: 'black',
-    // borderWidth: 2,
-    // borderStyle: 'solid',
     backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
@@ -260,19 +247,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
   },
-
   button: {
     position: 'absolute',
     bottom: 0,
   },
-
   roomBtn: {
     width: 28,
     height: 28,
     overflow: 'hidden',
-    // borderColor: 'black',
-    // borderWidth: 1,
-    // borderStyle: 'solid',
     borderRadius: 100,
     backgroundColor: '#CACACA',
     justifyContent: 'center',

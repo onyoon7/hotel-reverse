@@ -57,37 +57,37 @@ class HotelSignin extends Component {
     let email = this.state.client_Email;
     let password = this.state.password;
     switch(where) {
-    case 'login' :
-      try {
-        var response = await axios({
-          url: config.serverUrl + '/client/signin/',
-          method : 'post',
-          data : {
-            client_Email : email,
-            client_PW : password
+      case 'login' :
+        try {
+          var response = await axios({
+            url: config.serverUrl + '/client/signin/',
+            method : 'post',
+            data : {
+              client_Email : email,
+              client_PW : password
+            }
+          });
+          if(response.data.id_token) {
+            await AsyncStorage.setItem('id_token', response.data.id_token);
+            await AsyncStorage.setItem('client_Email', email);
+            ToastAndroid.show('로그인에 성공하였습니다', ToastAndroid.SHORT);
+            this.props.naviView();
           }
-        });
-        if(response.data.id_token) {
-          await AsyncStorage.setItem('id_token', response.data.id_token);
-          await AsyncStorage.setItem('client_Email', email);
-          ToastAndroid.show('로그인에 성공하였습니다', ToastAndroid.SHORT);
-          this.props.naviView();
+        } catch(error) {
+          console.log(error);
         }
-      } catch(error) {
-        console.log(error);
-      }
-      var id_token = await AsyncStorage.getItem('id_token');
-      if(id_token) {
-        this.movePAGE();
-      } else {
-        ToastAndroid.show('이메일/비밀번호를 다시 확인해주세요', ToastAndroid.SHORT);
-      }
-      break;
-    case 'register' :
-      this.props.navigator.push({
-        id : where,
-      })
-      break;
+        var id_token = await AsyncStorage.getItem('id_token');
+        if(id_token) {
+          this.movePAGE();
+        } else {
+          ToastAndroid.show('이메일/비밀번호를 다시 확인해주세요', ToastAndroid.SHORT);
+        }
+        break;
+      case 'register' :
+        this.props.navigator.push({
+          id : where,
+        })
+        break;
     }
   }
 
@@ -97,10 +97,9 @@ class HotelSignin extends Component {
 
   render() {
     return (
-      <View style = {styles.container}>
-
+      <View style={styles.container}>
         <Text style={styles.heading}>
-            Enjoy Hotel-Reverse
+          Enjoy Hotel-Reverse
         </Text>
         <TextInput
           ref='1'
@@ -120,7 +119,7 @@ class HotelSignin extends Component {
           secureTextEntry={true}>
         </TextInput>
 
-        <View style={styles.logbox}>
+        <View style={{marginTop: 20}}>
           <View style={styles.padding}>
             <TouchableHighlight onPress={()=>this._handlePress('login')} style={styles.submitBtn}>
               <Text style={styles.buttonText}>
@@ -142,9 +141,10 @@ class HotelSignin extends Component {
               style={styles.submitBtn}
               onPress = {()=>this._signIn()}/>
           </View>
-            <Text style={styles.error}>
-              {this.state.error}
-            </Text>
+
+          <Text style={styles.error}>
+            {this.state.error}
+          </Text>
         </View>
       </View>
     )
@@ -167,27 +167,14 @@ let styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#48bbec'
   },
-  button: {
-    height: 50,
-    backgroundColor: '#48BBEC',
-    alignSelf: 'stretch',
-    marginTop: 10,
-    justifyContent: 'center'
-  },
-
-  padding : {
-    padding : 10,
+  padding: {
+    paddingTop: 5,
+    paddingBottom: 5,
   },
   submitBtn: {
-    width: width,
-    padding: 10,
+    width: width-20,
     height: 56,
     overflow: 'hidden',
-    marginTop: 0,
-    marginBottom: -15,
-    // borderColor: 'black',
-    // borderWidth: 2,
-    // borderStyle: 'solid',
     backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
@@ -197,10 +184,6 @@ let styles = StyleSheet.create({
     color: '#FFF',
     alignSelf: 'center'
   },
-  logbox : {
-    marginTop: 130,
-  },
-
   heading: {
     fontSize: 30,
   },
