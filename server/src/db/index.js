@@ -11,8 +11,8 @@ import mysql from 'mysql';
   2. Then connect to 'hotelreverse' database
  --------------------------------------------------------------------*/
 
-const sequelize = new Sequelize('hotelreverse', 'root', '1234', {
-  host: 'localhost',
+const sequelize = new Sequelize('hotelreverse', 'hotel', 'hotelreverse', {
+  host: 'hotel-reverse-db.cd1q4y4851fd.ap-northeast-2.rds.amazonaws.com',
   dialect: 'mysql',
   pool: {
     max: 5,
