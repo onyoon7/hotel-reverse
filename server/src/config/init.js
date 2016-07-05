@@ -10,9 +10,9 @@ var mysql = require('mysql');
  --------------------------------------------------------------------*/
 
 var connection = mysql.createConnection({
-  host: 'hotelreverse.ciwn6bqswuat.us-west-2.rds.amazonaws.com',
-  user: 'hotelreverse',
-  password: 'hotelreverse',
+  host: 'localhost',
+  user: 'root',
+  password: '1234',
   database: 'hotelreverse'
 });
 

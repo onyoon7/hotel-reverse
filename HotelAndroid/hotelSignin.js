@@ -99,15 +99,15 @@ class HotelSignin extends Component {
       <View style = {styles.container}>
 
         <Text style={styles.heading}>
-          💃 Enjoy Hotel-Reverse 💃
+            Enjoy Hotel-Reverse
         </Text>
         <TextInput
-        ref='1'
-        onChangeText={ (text)=> this.setState({client_Email: text}) }
-        keyboardType='email-address'
-        returnKeyType='next'
-        onSubmitEditing={()=> this.focusNextField('2')}
-        style={styles.input} placeholder="Email">
+          ref='1'
+          onChangeText={ (text)=> this.setState({client_Email: text}) }
+          keyboardType='email-address'
+          returnKeyType='next'
+          onSubmitEditing={()=> this.focusNextField('2')}
+          style={styles.input} placeholder="Email">
         </TextInput>
         <TextInput
           ref='2'
@@ -118,29 +118,33 @@ class HotelSignin extends Component {
           placeholder="Password"
           secureTextEntry={true}>
         </TextInput>
-        <View style={styles.padding}>
-        <TouchableHighlight onPress={()=>this._handlePress('login')} style={styles.submitBtn}>
-          <Text style={styles.buttonText}>
-            Log In
-          </Text>
-        </TouchableHighlight>
-        </View>
-        <View style={styles.padding}>
-        <TouchableHighlight
-          style={styles.submitBtn}
-          onPress = {()=>this._handlePress('register')}>
-          <Text style={styles.buttonText}>Register</Text>
-        </TouchableHighlight>
-        </View>
-        <View style={styles.padding}>
-        <GoogleSigninButton
-          style={styles.submitBtn}
-          onPress = {()=>this._signIn()}/>
-        </View>
-        <Text style={styles.error}>
-          {this.state.error}
-        </Text>
-
+        
+        <View style={styles.logbox}>
+          <View style={styles.padding}>
+            <TouchableHighlight onPress={()=>this._handlePress('login')} style={styles.submitBtn}>
+              <Text style={styles.buttonText}>
+                Log In
+              </Text>
+            </TouchableHighlight>
+          </View>
+          
+          <View style={styles.padding}>
+            <TouchableHighlight
+              style={styles.submitBtn}
+              onPress = {()=>this._handlePress('register')}>
+              <Text style={styles.buttonText}>Register</Text>
+            </TouchableHighlight>
+          </View>
+          
+          <View style={styles.padding}>
+            <GoogleSigninButton
+              style={styles.submitBtn}
+              onPress = {()=>this._signIn()}/>
+          </View>
+            <Text style={styles.error}>
+              {this.state.error}
+            </Text>
+        </View> 
       </View>
     )
   }
@@ -156,7 +160,7 @@ let styles = StyleSheet.create({
   },
   input: {
     height: 50,
-    marginTop: 10,
+    marginTop: 30,
     padding: 4,
     fontSize: 18,
     borderWidth: 1,
@@ -169,18 +173,21 @@ let styles = StyleSheet.create({
     marginTop: 10,
     justifyContent: 'center'
   },
+
   padding : {
     padding : 10,
   },
   submitBtn: {
-    width: width - 30,
+    width: width,
     padding: 10,
-    height: 40,
+    height: 56,
     overflow: 'hidden',
-    borderColor: 'black',
-    borderWidth: 2,
-    borderStyle: 'solid',
-    backgroundColor: 'green',
+    marginTop: 0,
+    marginBottom: -15,
+    // borderColor: 'black',
+    // borderWidth: 2,
+    // borderStyle: 'solid',
+    backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -189,6 +196,10 @@ let styles = StyleSheet.create({
     color: '#FFF',
     alignSelf: 'center'
   },
+  logbox : {
+    marginTop: 175,
+  },
+
   heading: {
     fontSize: 30,
   },

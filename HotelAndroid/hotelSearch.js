@@ -6,6 +6,7 @@ import {
   DatePickerAndroid,
   TouchableWithoutFeedback,
   Picker,
+  Image,
   ToastAndroid,
   Dimensions,
 } from 'react-native';
@@ -15,8 +16,8 @@ import areaInfo from './assets/areaInfo';
 
 const { width } = Dimensions.get('window');
 
-const checkInHolder = '체크인 날짜 선택';
-const checkOutHolder = '체크아웃 날짜 선택';
+const checkInHolder = 'Check in';
+const checkOutHolder = 'Chack out';
 
 class HotelSearch extends Component {
   constructor(props){
@@ -109,32 +110,60 @@ class HotelSearch extends Component {
 
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{flex: 1,backgroundColor: 'white'}}>
         <Text style={styles.title}>
-          호텔을 검색하세요
         </Text>
-
-        <View style={styles.rowContainer}>
-          <Text style={styles.label}>지역</Text>
-        </View>
-
-        <View style={styles.rowContainer}>
-          <Picker style={styles.dropdown}
-            selectedValue={this.state.mainArea_Name}
-            onValueChange={(value) => this.onValueChange('mainArea_Name', value)}
-            mode="dropdown">
-            {this.dropDowns}
-          </Picker>
+        <View style={[styles.centeredRow]}>
+          <View style={[styles.rowContainer]}>
+            <View style={[styles.datePickerLuggage]}>
+              <Image source={require('./assets/luggage.png')} />
+            </View>
+            <View style={[styles.datePickerRow]}>
+              <Image source={require('./assets/bed.png')} />              
+            </View>  
+            </View>
         </View>
 
         <View style={[styles.centeredRow]}>
+          <View style={[styles.view,styles.rowContainer,styles.datePickerRow]}>
+            <Picker style={styles.dropdown}
+              selectedValue={this.state.mainArea_Name}
+              onValueChange={(value) => this.onValueChange('mainArea_Name', value)}
+              mode="dropdown">
+              {this.dropDowns}
+            </Picker>
+          </View>
+
+          <View style={[styles.view,styles.rowContainer,styles.roomNumber]}>
+              
+            <View style={{marginRight: 25}}>
+              <Button style={styles.roomBtnText}
+                containerStyle={styles.roomBtn}
+                onPress={() => this._decRoomNumber()}>
+                -
+              </Button>
+            </View>
+            <Text style={styles.text}>{this.state.room_Number}</Text>
+            <View style={{marginLeft: 25}}>
+              <Button style={styles.roomBtnText}
+                containerStyle={styles.roomBtn}
+                onPress={() => this._incRoomNumber()}>
+                +
+              </Button>
+            </View>
+          </View>
+        
+        </View> 
+
+        <View style={[styles.centeredRow,styles.rowContainer]}>
           <View style={[styles.datePickerRow]}>
-            <Text style={[styles.label]}>체크인</Text>
+            <Image source={require('./assets/calendar.png')} />
           </View>
           <View style={[styles.datePickerRow]}>
-            <Text style={[styles.label]}>체크아웃</Text>
+            <Image source={require('./assets/calendar.png')} />
           </View>
         </View>
+
 
         <View style={[styles.centeredRow]}>
           <TouchableWithoutFeedback
@@ -143,7 +172,7 @@ class HotelSearch extends Component {
               minDate: new Date(),
               maxDate: new Date().setDate(new Date().getDate() + 14),
             })}>
-            <View style={styles.datePickerRow}>
+            <View style={[styles.view,styles.datePickerRow]}>
               <Text style={styles.text}>{this.state.checkInText}</Text>
             </View>
           </TouchableWithoutFeedback>
@@ -161,32 +190,14 @@ class HotelSearch extends Component {
                 maxDate: maxDate,
               };
               this.showPicker('checkOut', options)}}>
-              <View style={styles.datePickerRow}>
+              <View style={[styles.view,styles.datePickerRow]}>
                 <Text style={styles.text}>{this.state.checkOutText}</Text>
               </View>
             </TouchableWithoutFeedback>
           </View>
 
-          <View style={styles.rowContainer}>
-            <Text style={styles.label}>객실수</Text>
-            <View style={{marginRight: 15}}>
-              <Button style={styles.roomBtnText}
-                containerStyle={styles.roomBtn}
-                onPress={() => this._decRoomNumber()}>
-                -
-              </Button>
-            </View>
-            <Text style={styles.text}>{this.state.room_Number}</Text>
-            <View style={{marginLeft: 15}}>
-              <Button style={styles.roomBtnText}
-                containerStyle={styles.roomBtn}
-                onPress={() => this._incRoomNumber()}>
-                +
-              </Button>
-            </View>
-          </View>
 
-          <View style={[{marginTop: 50}, styles.centeredRow]}>
+          <View style={[styles.button, styles.centeredRow]}>
             <Button style={styles.submitBtnText}
               containerStyle={styles.submitBtn}
               onPress={() => this._handlePress()}>
@@ -204,12 +215,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     margin: 8,
-    marginLeft: 30,
-    marginRight: 30,
+    marginLeft: 20,
+    marginRight: 10,
   },
   centeredRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
@@ -218,23 +229,30 @@ const styles = StyleSheet.create({
     color: 'black',
     margin: 10,
     marginTop: 30,
-    marginBottom: 40,
+    marginBottom: 30,
   },
   label: {
-    width: 80,
+    width: 100,
     textAlign: 'left',
     color: 'grey',
-    fontSize: 15,
+    fontSize: 20,
+    
   },
+  view: {
+    // borderColor: 'black',
+    // borderWidth: 2,
+    // borderStyle: 'solid',
+  },
+
   submitBtn: {
-    width: width - 30,
+    width: width,
     padding: 10,
-    height: 40,
+    height: 60,
     overflow: 'hidden',
-    borderColor: 'black',
-    borderWidth: 2,
-    borderStyle: 'solid',
-    backgroundColor: 'green',
+    // borderColor: 'black',
+    // borderWidth: 2,
+    // borderStyle: 'solid',
+    backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -242,37 +260,59 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
   },
+
+  button: {
+    position: 'absolute',
+    bottom: 0,
+  },
+
   roomBtn: {
     width: 28,
     height: 28,
     overflow: 'hidden',
-    borderColor: 'green',
-    borderWidth: 2,
-    borderStyle: 'solid',
+    // borderColor: 'black',
+    // borderWidth: 1,
+    // borderStyle: 'solid',
     borderRadius: 100,
+    backgroundColor: '#CACACA',
     justifyContent: 'center',
     alignItems: 'center',
   },
+  roomNumber: {
+    marginLeft: 43,
+  },
   roomBtnText: {
     fontSize: 20,
-    color: 'green',
+    color: 'white',
   },
   text: {
-    fontSize: 17,
-    color: 'green',
+    fontSize: 18,
+    color: 'black',
+    textAlign: 'center',
+  },
+  dropdown: {
+    marginLeft: 10,
+    width: 120,
+    height: 30,
+    color: 'black',
   },
   datePickerRow: {
     width: width/2-60,
     marginTop: 8,
-    marginBottom: 8,
+    marginBottom: 10,
     marginLeft: 30,
     marginRight: 30,
+    padding: 5,
     justifyContent: 'flex-start',
   },
-  dropdown: {
-    width: 150,
-    height: 30,
-    color: 'green'
+  datePickerLuggage: {
+    width: width/2-60,
+    marginTop: 8,
+    marginBottom: 10,
+    marginLeft: 40,
+    marginRight: 20,
+    padding: 5,
+    justifyContent: 'flex-start',
   },
 });
 

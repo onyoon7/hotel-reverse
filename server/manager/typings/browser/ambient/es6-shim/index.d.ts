@@ -668,4 +668,3 @@ declare module "es6-shim" {
         function setPrototypeOf(target: any, proto: any): boolean;
     }
 }
-

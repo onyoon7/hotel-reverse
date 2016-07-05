@@ -201,10 +201,9 @@ class HotelBid extends Component {
             />
           </View>
 
-          <View style={[{marginTop: 50}, styles.rowContainer]}>
-            <Button
+          <View style={[styles.button, styles.centeredRow]}>
+            <Button style={styles.submitBtnText}
               containerStyle={styles.submitBtn}
-              style={styles.submitBtnText}
               onPress={() => this._handlePress()}>
               계속하기
             </Button>
@@ -250,14 +249,15 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   submitBtn: {
-    width: width - 30,
+    marginTop: 74,
+    width: width,
     padding: 10,
-    height: 40,
+    height: 60,
     overflow: 'hidden',
-    borderColor: 'black',
-    borderWidth: 2,
-    borderStyle: 'solid',
-    backgroundColor: 'green',
+    // borderColor: 'black',
+    // borderWidth: 2,
+    // borderStyle: 'solid',
+    backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -265,6 +265,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
   },
+
+  button: {
+    // position: 'absolute',
+    // bottom: 0,
+  },
+
   bubble: {
     backgroundColor: 'rgba(255,255,255,0.8)',
     borderRadius: 20,
@@ -278,7 +284,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 17,
-    color: 'green',
+    color: 'black',
   },
   fullMap: {
     width: width,
@@ -287,7 +293,7 @@ const styles = StyleSheet.create({
   dropdown: {
     width: 150,
     height: 30,
-    color: 'green'
+    color: 'black'
   },
 });
 
