@@ -103,7 +103,11 @@ class HotelAndroid extends Component {
     try {
       await AsyncStorage.removeItem('id_token');
       await AsyncStorage.removeItem('client_Email');
-      //this._googleSignOut();
+      let check = await AsyncStorage.getItem('googlesignin')
+      if (check === 'true') {
+        this._googleSignOut();
+        await AsyncStorage.removeItem('googlesignin');
+      }
     } catch(error) {
       console.log('signout error : ', error);
     }
@@ -189,7 +193,7 @@ class HotelAndroid extends Component {
     try {
       await GoogleSignin.hasPlayServices({ autoResolve: true });
       await GoogleSignin.configure({
-        webClientId: '532843314742-m0fiuleqdrnk86g5rqgs59horbri16jn.apps.googleusercontent.com',
+        webClientId: '370846469277-4eql800grbcgsf82s312bd7dhp2gtieu.apps.googleusercontent.com',
         offlineAccess: true
       });
     }

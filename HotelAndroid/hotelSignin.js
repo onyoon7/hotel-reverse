@@ -44,6 +44,7 @@ class HotelSignin extends Component {
       let user = await GoogleSignin.signIn()
       await AsyncStorage.setItem('id_token', user.id);
       await AsyncStorage.setItem('client_Email', user.email);
+      await AsyncStorage.setItem('googlesignin', 'true');
       ToastAndroid.show('로그인에 성공하였습니다', ToastAndroid.SHORT);
       this.movePAGE();
     }
