@@ -44,6 +44,7 @@ class HotelSignin extends Component {
       let user = await GoogleSignin.signIn()
       await AsyncStorage.setItem('id_token', user.id);
       await AsyncStorage.setItem('client_Email', user.email);
+      await AsyncStorage.setItem('googlesignin', 'true');
       ToastAndroid.show('로그인에 성공하였습니다', ToastAndroid.SHORT);
       this.movePAGE();
     }
@@ -118,7 +119,7 @@ class HotelSignin extends Component {
           placeholder="Password"
           secureTextEntry={true}>
         </TextInput>
-        
+
         <View style={styles.logbox}>
           <View style={styles.padding}>
             <TouchableHighlight onPress={()=>this._handlePress('login')} style={styles.submitBtn}>
@@ -127,7 +128,7 @@ class HotelSignin extends Component {
               </Text>
             </TouchableHighlight>
           </View>
-          
+
           <View style={styles.padding}>
             <TouchableHighlight
               style={styles.submitBtn}
@@ -135,7 +136,7 @@ class HotelSignin extends Component {
               <Text style={styles.buttonText}>Register</Text>
             </TouchableHighlight>
           </View>
-          
+
           <View style={styles.padding}>
             <GoogleSigninButton
               style={styles.submitBtn}
@@ -144,7 +145,7 @@ class HotelSignin extends Component {
             <Text style={styles.error}>
               {this.state.error}
             </Text>
-        </View> 
+        </View>
       </View>
     )
   }
@@ -197,7 +198,7 @@ let styles = StyleSheet.create({
     alignSelf: 'center'
   },
   logbox : {
-    marginTop: 175,
+    marginTop: 130,
   },
 
   heading: {
