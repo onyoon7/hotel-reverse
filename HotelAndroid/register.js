@@ -151,7 +151,7 @@ class Register extends Component {
           secureTextEntry={true}>
         </TextInput>
 
-        <TouchableHighlight style={[{marginTop: 35}, styles.submitBtn]} onPress={() => this._handlePress()}>
+        <TouchableHighlight style={[styles.submitBtn]} onPress={() => this._handlePress()}>
           <Text style={styles.submitBtnText}>
             Register
           </Text>
@@ -188,19 +188,16 @@ const styles = StyleSheet.create({
     borderColor : '#48bbec',
   },
   submitBtn: {
-    width: width - 30,
-    padding: 10,
-    height: 40,
+    width: width - 20,
+    height: 56,
     overflow: 'hidden',
-    borderColor: 'black',
-    borderWidth: 2,
-    borderStyle: 'solid',
-    backgroundColor: 'green',
+    backgroundColor: 'red',
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 30,
   },
   submitBtnText: {
-    fontSize: 18,
+    fontSize: 22,
     color: 'white',
   },
   heading : {
@@ -209,9 +206,6 @@ const styles = StyleSheet.create({
   error : {
     color : 'red',
     paddingTop : 10,
-  },
-  loader : {
-    marginTop : 20
   },
 });
 
