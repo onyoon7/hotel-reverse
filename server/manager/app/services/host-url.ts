@@ -1,2 +1,1 @@
-// export const hostUrl = 'http://55.24.66.8/';
-export const hostUrl = 'http://localhost:4444';
+export const hostUrl = 'http://52.78.70.114/';

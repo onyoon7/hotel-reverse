@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'rxjs/Rx'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './host-url'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx'], function(exports_
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1;
+    var core_1, http_1, host_url_1;
     var SignService;
     function mapHotels(response) {
         console.log("response is >>>>>> ");
@@ -43,13 +43,15 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx'], function(exports_
             function (http_1_1) {
                 http_1 = http_1_1;
             },
-            function (_1) {}],
+            function (_1) {},
+            function (host_url_1_1) {
+                host_url_1 = host_url_1_1;
+            }],
         execute: function() {
             SignService = (function () {
-                // private baseUrl: string = hostUrl + "hotel";
                 function SignService(_http) {
                     this._http = _http;
-                    this.baseUrl = 'http://localhost:4444/hotel';
+                    this.baseUrl = host_url_1.hostUrl + "hotel";
                 }
                 SignService.prototype.logIn = function (data) {
                     var hotel_ID = data.hotel_ID;
