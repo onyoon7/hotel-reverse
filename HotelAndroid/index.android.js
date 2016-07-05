@@ -59,6 +59,7 @@ class HotelAndroid extends Component {
     this.renderMenuItem = this.renderMenuItem.bind(this);
     this._pressRow = this._pressRow.bind(this);
     this._renderRow = this._renderRow.bind(this);
+    this.addBackPressEventListener = this.addBackPressEventListener.bind(this);
   }
 
   flagStateChanged(flag) {
@@ -155,6 +156,7 @@ class HotelAndroid extends Component {
     case '로그아웃':
       this._signOut();
       this.changeNaviView();
+      this.closeDrawer();
       break;
     case '회원가입':
       this.renderMenuItem('register');
@@ -199,6 +201,7 @@ class HotelAndroid extends Component {
   componentWillMount() {
     this._setupGoogleSignin();
     this.changeNaviView();
+    this.addBackPressEventListener();
   }
 
   _renderSeperator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
@@ -226,6 +229,8 @@ class HotelAndroid extends Component {
       <DrawerLayoutAndroid
         ref={(ref) => this._drawer = ref}
         drawerWidth={300}
+        onDrawerOpen={() => this.isDrawerOpen = true}
+        onDrawerClose={() => this.isDrawerOpen = false}
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         renderNavigationView={() => this.state.navigationView}>
         {_toolBar}
@@ -254,16 +259,23 @@ class HotelAndroid extends Component {
       </TouchableHighlight>
     );
   }
-}
 
-BackAndroid.addEventListener('hardwareBackPress', () => {
-  if (_navigator.getCurrentRoutes().length === 2) {
-    return false;
+  addBackPressEventListener() {
+    BackAndroid.addEventListener('hardwareBackPress', () => {
+      if (this.isDrawerOpen) {
+        this.closeDrawer();
+        return true;
+      }
+
+      if (_navigator.getCurrentRoutes().length === 2) {
+        return false;
+      }
+
+      _navigator.pop();
+      return true;
+    });
   }
-
-  _navigator.pop();
-  return true;
-});
+}
 
 AppRegistry.registerComponent('HotelAndroid', () => HotelAndroid);
 
