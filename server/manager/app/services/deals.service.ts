@@ -4,11 +4,11 @@ import { Observable } from 'rxjs/Rx';
 import 'rxjs/Rx';
 
 import { Deal } from '../model/deal';
-
+import { hostUrl } from './host-url';
 
 @Injectable()
 export class DealsService{
-  private baseUrl: string = 'http://localhost:4444/hotel/bid';
+  private baseUrl: string = hostUrl + 'hotel/bid';
 
   constructor(private _http: Http) { }
 
