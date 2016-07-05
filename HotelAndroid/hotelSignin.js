@@ -6,7 +6,6 @@ import {
   Text,
   TextInput,
   AsyncStorage,
-  Alert,
   ToastAndroid,
   Dimensions,
 } from 'react-native';
@@ -31,31 +30,12 @@ class HotelSignin extends Component {
     this._handlePress = this._handlePress.bind(this);
   }
 
-  componentDidMount() {
-    this._setupGoogleSignin();
-  }
-
   movePAGE(){
     let naviArr = this.props.navigator.getCurrentRoutes();
     if(naviArr[naviArr.length-2].id==='bid') {
       this.props.navigator.push({id : 'bidInfo'});
     } else {
       this.props.navigator.pop();
-    }
-  }
-
-  async _setupGoogleSignin() {
-    try {
-      await GoogleSignin.hasPlayServices({ autoResolve: true });
-      await GoogleSignin.configure({
-        webClientId: '370846469277-p2lvjnb4u0jcjt1br44h9pmpct82849c.apps.googleusercontent.com',
-        offlineAccess: true
-      });
-
-      const user = await GoogleSignin.currentUserAsync();
-    }
-    catch(err) {
-      console.log("Play services error", err.code, err.message);
     }
   }
 

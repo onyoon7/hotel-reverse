@@ -7,8 +7,11 @@ import {
   View,
   StyleSheet,
   AsyncStorage,
+  ListView,
+  RecyclerViewBackedScrollView,
+  TouchableHighlight,
+  Text,
 } from 'react-native';
-import Button from 'react-native-button';
 import ToolbarAndroid from 'ToolbarAndroid';
 
 
@@ -22,7 +25,7 @@ import HotelSignin from './hotelSignin';
 import Register from './register';
 import MyPage from './myPage';
 
-import { GoogleSignin, GoogleSigninButton } from 'react-native-google-signin';
+import { GoogleSignin } from 'react-native-google-signin';
 
 let _navigator;
 let _toolBar;
@@ -54,6 +57,9 @@ class HotelAndroid extends Component {
     this.openDrawer = this.openDrawer.bind(this);
     this.closeDrawer = this.closeDrawer.bind(this);
     this.renderMenuItem = this.renderMenuItem.bind(this);
+    this._pressRow = this._pressRow.bind(this);
+    this._renderRow = this._renderRow.bind(this);
+    this.addBackPressEventListener = this.addBackPressEventListener.bind(this);
   }
 
   flagStateChanged(flag) {
@@ -97,7 +103,7 @@ class HotelAndroid extends Component {
     try {
       await AsyncStorage.removeItem('id_token');
       await AsyncStorage.removeItem('client_Email');
-      this._googleSignOut();
+      //this._googleSignOut();
     } catch(error) {
       console.log('signout error : ', error);
     }
@@ -106,24 +112,24 @@ class HotelAndroid extends Component {
   navigatorRenderScene(route, navigator) {
     _navigator = navigator;
     switch (route.id) {
-      case 'splash':
-        return (<SplashPage navigator={navigator} />);
-      case 'search':
-        return (<HotelSearch navigator={navigator} onChange={this.searchStateChanged} onFlagChange={this.flagStateChanged} />);
-      case 'bid':
-        return (<HotelBid navigator={navigator} onChange={this.bidStateChanged} searchData={this.state.searchData}/>);
-      case 'signin':
-        return (<HotelSignin navigator={navigator} onChange={this.signinStateChanged} naviView={this.changeNaviView()}/>);
-      case 'register':
-        return (<Register navigator={navigator}/>);
-      case 'bidInfo':
-        return (<GetLatestBidInfo navigator={navigator} searchData={this.state.searchData} bidData={this.state.bidData} />);
-      case 'thanks':
-        return (<ThanksALot navigator={navigator}/>);
-      case 'tutorial':
-        return (<TutorialPage navigator={navigator}/>);
-      case 'mypage':
-        return (<MyPage navigator={navigator} />);
+    case 'splash':
+      return (<SplashPage navigator={navigator} />);
+    case 'search':
+      return (<HotelSearch navigator={navigator} onChange={this.searchStateChanged} onFlagChange={this.flagStateChanged} />);
+    case 'bid':
+      return (<HotelBid navigator={navigator} onChange={this.bidStateChanged} searchData={this.state.searchData}/>);
+    case 'signin':
+      return (<HotelSignin navigator={navigator} onChange={this.signinStateChanged} naviView={this.changeNaviView()}/>);
+    case 'register':
+      return (<Register navigator={navigator}/>);
+    case 'bidInfo':
+      return (<GetLatestBidInfo navigator={navigator} searchData={this.state.searchData} bidData={this.state.bidData} />);
+    case 'thanks':
+      return (<ThanksALot navigator={navigator}/>);
+    case 'tutorial':
+      return (<TutorialPage navigator={navigator}/>);
+    case 'mypage':
+      return (<MyPage navigator={navigator} />);
     }
   }
 
@@ -142,38 +148,72 @@ class HotelAndroid extends Component {
     this.closeDrawer();
   }
 
+  _pressRow(rowData: string) {
+    switch (rowData) {
+    case '결제 내역':
+      this.renderMenuItem('mypage');
+      break;
+    case '로그아웃':
+      this._signOut();
+      this.changeNaviView();
+      this.closeDrawer();
+      break;
+    case '회원가입':
+      this.renderMenuItem('register');
+      break;
+    case '로그인':
+      this.renderMenuItem('signin');
+      break;
+    }
+  }
+
   async changeNaviView() {
     let token = await AsyncStorage.getItem('id_token');
+    let dataSource;
     if(token) {
-      this.setState({navigationView : (
-        <View style={styles.navView}>
-          <Button
-            containerStyle={styles.drawerBtn}
-            style={styles.drawerBtnText}
-            onPress={() => {this.renderMenuItem('mypage')}}>결제 내역</Button>
-          <Button
-            containerStyle={styles.drawerBtn}
-            style={styles.drawerBtnText}
-            onPress={() => {this._signOut();this.changeNaviView();}}>로그아웃</Button>
-        </View>
-      )})
+      let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      dataSource = ds.cloneWithRows(['결제 내역', '로그아웃']);
     } else {
-      this.setState({navigationView : (
-      <View style={styles.navView}>
-        <Button
-          containerStyle={styles.drawerBtn}
-          style={styles.drawerBtnText}
-          onPress={() => {this.renderMenuItem('register')}}>회원가입</Button>
-        <Button
-          containerStyle={styles.drawerBtn}
-          style={styles.drawerBtnText}
-          onPress={() => {this.renderMenuItem('signin')}}>로그인</Button>
-      </View> )})
+      let ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+      dataSource = ds.cloneWithRows(['회원가입', '로그인']);
+    }
+    this.setState({navigationView:(<ListView
+      dataSource={dataSource}
+      renderRow={this._renderRow}
+      renderScrollComponent={props => <RecyclerViewBackedScrollView {...props} />}
+      renderSeparator={this._renderSeperator}
+    />)});
+  }
+
+  async _setupGoogleSignin() {
+    try {
+      await GoogleSignin.hasPlayServices({ autoResolve: true });
+      await GoogleSignin.configure({
+        webClientId: '532843314742-m0fiuleqdrnk86g5rqgs59horbri16jn.apps.googleusercontent.com',
+        offlineAccess: true
+      });
+    }
+    catch(err) {
+      console.log("Play services error", err.code, err.message);
     }
   }
 
   componentWillMount() {
+    this._setupGoogleSignin();
     this.changeNaviView();
+    this.addBackPressEventListener();
+  }
+
+  _renderSeperator(sectionID: number, rowID: number, adjacentRowHighlighted: bool) {
+    return (
+      <View
+        key={`${sectionID}-${rowID}`}
+        style={{
+          height: adjacentRowHighlighted ? 4 : 1,
+          backgroundColor: adjacentRowHighlighted ? '#3B5998' : '#CCCCCC',
+        }}
+      />
+    );
   }
 
   render() {
@@ -189,6 +229,8 @@ class HotelAndroid extends Component {
       <DrawerLayoutAndroid
         ref={(ref) => this._drawer = ref}
         drawerWidth={300}
+        onDrawerOpen={() => this.isDrawerOpen = true}
+        onDrawerClose={() => this.isDrawerOpen = false}
         drawerPosition={DrawerLayoutAndroid.positions.Left}
         renderNavigationView={() => this.state.navigationView}>
         {_toolBar}
@@ -200,16 +242,40 @@ class HotelAndroid extends Component {
       </DrawerLayoutAndroid>
     );
   }
-}
 
-BackAndroid.addEventListener('hardwareBackPress', () => {
-  if (_navigator.getCurrentRoutes().length === 2) {
-    return false;
+  _renderRow(rowData: string, sectionID: number, rowID: number, highlightRow: (sectionID: number, rowID: number) => void) {
+    return (
+      <TouchableHighlight onPress={() => {
+          this._pressRow(rowData);
+          highlightRow(sectionID, rowID);
+        }}>
+        <View>
+          <View style={styles.row}>
+            <Text style={styles.text}>
+              {rowData}
+            </Text>
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
   }
 
-  _navigator.pop();
-  return true;
-});
+  addBackPressEventListener() {
+    BackAndroid.addEventListener('hardwareBackPress', () => {
+      if (this.isDrawerOpen) {
+        this.closeDrawer();
+        return true;
+      }
+
+      if (_navigator.getCurrentRoutes().length === 2) {
+        return false;
+      }
+
+      _navigator.pop();
+      return true;
+    });
+  }
+}
 
 AppRegistry.registerComponent('HotelAndroid', () => HotelAndroid);
 
@@ -236,5 +302,15 @@ const styles = StyleSheet.create({
   toolbar: {
     backgroundColor: 'green',
     height: 56,
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 20,
+    backgroundColor: '#F6F6F6',
+  },
+  text: {
+    flex: 1,
+    fontSize: 18,
   },
 });
