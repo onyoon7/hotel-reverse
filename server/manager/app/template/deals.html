@@ -23,22 +23,48 @@
   <div id="container">
       <div class="row">
           <div class="col-lg-12">
-              <h1 class="page-header">Transaction(bidding)</h1>
+              <h1 class="page-header">거래(진행)</h1>
           </div>
       </div>
       <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-12 col-md-8">
+            <div *ngFor="#deal of deals" class="panel panel-primary">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-xs-1">
+                            <i class="fa fa-briefcase fa-4x"></i>
+                        </div>
+                        <div class="col-xs-2">
+                            <span class="huge" style="font-weight: bold;">거래 종료 시간</span>
+                            <div>{{deal.bid_EndTime | makeKoreanDateTime}}</div>
+                            <div>{{getRemainingBidTime(deal.bid_EndTime | makeKoreanDateTime)}}</div>
+                        </div>
+                        <div class="col-xs-6"> <!--text-right!-->
+                            <div class="huge" style="font-weight: bold;">소비자 희망 가격</div>
+                            <div>{{deal.bid_Price | number}}</div>
+                        </div>
+                    </div>
+                </div>
+                <a (click)="onSelect(deal)">
+                    <div class="panel-footer">
+                        <span class="pull-left">See Details</span>
+                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                        <div class="clearfix"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <!-- <div class="col-lg-12">
           <div class="panel panel-default">
-            <div class="panel-heading">Bidding List</div>
+            <div class="panel-heading">거래 리스트</div>
             <div class="panel-body">
               <ul class="bidding">
                 <li *ngFor="#deal of deals">
                   <h3 style="font-weight: bold">
-                    <!-- <span class="glyphicon glyphicon-briefcase" style="color:#337ab7"></span>&nbsp; -->
-                    <span class="label label-primary">Bid End_Time</span>
-                    : {{deal.bid_EndTime | makeKoreanDateTime}}&nbsp;
-                    <span class="label label-primary">Bid Price</span>
-                    : {{deal.bid_Price | number}}&nbsp;&nbsp;
+                    <span class="label label-primary">거래 종료 시간</span>
+                     {{getRemainingBidTime(deal.bid_EndTime | makeKoreanDateTime)}}&nbsp;
+                    <span class="label label-primary">소비자 희망 가격</span>
+                     &#8361;{{deal.bid_Price | number}}&nbsp;&nbsp;
                     <button class="btn btn-info pull-right" (click)="onSelect(deal)">See details</button>
                   </h3>
                 </li>
@@ -46,7 +72,7 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
   </div>
 </div>
 <!--

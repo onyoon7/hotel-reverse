@@ -67,6 +67,18 @@ System.register(['angular2/core', 'angular2/router', './deal-details.component',
                         }, function (error) { return console.error('Error: ' + error); }, function () { return console.log('Successfully fetched all Deals!', _this.deals); });
                     }
                 };
+                DealsComponent.prototype.getRemainingBidTime = function (bid_Endtime) {
+                    var now = new Date();
+                    var end = new Date(bid_Endtime);
+                    var interval = end - now;
+                    if (interval < 0) {
+                        return "거래 종료";
+                    }
+                    var totalMinutes = Math.floor(interval / 1000 / 60);
+                    var hours = Math.floor(totalMinutes / 60);
+                    var mins = totalMinutes % 60;
+                    return "남은 시간: " + hours + " 시간 " + mins + " 분";
+                };
                 DealsComponent.prototype.onSelect = function (deal) {
                     this.router.navigate(['Deal Details', { hotel_ID: this.hotel_ID, booking_Num: deal.booking_Num }]);
                 };

@@ -45,6 +45,7 @@ body {
 }
 
 .navbar-top-links .dropdown-menu li {
+    cursor: pointer;
     display: block;
 }
 

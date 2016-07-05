@@ -10,7 +10,8 @@ import { hostUrl } from './host-url';
 @Injectable()
 
 export class SignService {
-  private baseUrl: string = hostUrl + "hotel";
+  private baseUrl: string = 'http://localhost:4444/hotel'
+  // private baseUrl: string = hostUrl + "hotel";
 
   constructor(private _http: Http) { }
 
