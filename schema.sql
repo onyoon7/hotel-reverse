@@ -1,4 +1,3 @@
-DROP DATABASE hotelreverse;
 CREATE DATABASE hotelreverse;
 
 USE hotelreverse;

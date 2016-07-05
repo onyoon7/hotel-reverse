@@ -1,4 +1,4 @@
-System.register(['angular2/core', 'angular2/http', 'rxjs/Rx'], function(exports_1, context_1) {
+System.register(['angular2/core', 'angular2/http', 'rxjs/Rx', './host-url'], function(exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -10,7 +10,7 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx'], function(exports_
     var __metadata = (this && this.__metadata) || function (k, v) {
         if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
     };
-    var core_1, http_1;
+    var core_1, http_1, host_url_1;
     var DealsService;
     function mapDeals(response) {
         console.log("response is >>>>>> ");
@@ -46,12 +46,15 @@ System.register(['angular2/core', 'angular2/http', 'rxjs/Rx'], function(exports_
             function (http_1_1) {
                 http_1 = http_1_1;
             },
-            function (_1) {}],
+            function (_1) {},
+            function (host_url_1_1) {
+                host_url_1 = host_url_1_1;
+            }],
         execute: function() {
             DealsService = (function () {
                 function DealsService(_http) {
                     this._http = _http;
-                    this.baseUrl = 'http://localhost:4444/admin';
+                    this.baseUrl = host_url_1.hostUrl + 'admin';
                 }
                 DealsService.prototype.getAllDeals = function () {
                     var deals = this._http

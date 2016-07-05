@@ -37,7 +37,6 @@ System.register(['angular2/core', 'angular2/router', './deal-details.component',
                     this.dealsService
                         .getAllDeals()
                         .subscribe(function (d) { return _this.deals = d; }, function (error) { return console.error('Error: ' + error); }, function () { return console.log('Successfully fetched all Deals!', _this.deals); });
-                    ;
                 };
                 DealsComponent.prototype.selectDeal = function (deal) {
                     this.selectedDeal = deal;
