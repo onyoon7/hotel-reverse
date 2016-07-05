@@ -1,3 +1,6 @@
+.panel-footer {
+  cursor: pointer;
+}
 /*.bidding {
   margin: 0 6em 6em 3px;
   list-style-type: none;
