@@ -215,7 +215,7 @@ export default (express) => {
     })
     .catch((error) => {
       console.log("cannot update user information:", error);
-      res.status(500).send(error);      
+      res.status(500).send(error);
     })
   });
 

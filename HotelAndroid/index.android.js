@@ -280,8 +280,6 @@ class HotelAndroid extends Component {
   }
 }
 
-AppRegistry.registerComponent('HotelAndroid', () => HotelAndroid);
-
 const styles = StyleSheet.create({
   navView: {
     flex: 1,
@@ -317,3 +315,5 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
+
+AppRegistry.registerComponent('HotelAndroid', () => HotelAndroid);
